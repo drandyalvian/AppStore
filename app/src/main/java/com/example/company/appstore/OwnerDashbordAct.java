@@ -19,10 +19,12 @@ import com.google.firebase.database.ValueEventListener;
 
 public class OwnerDashbordAct extends AppCompatActivity {
 
-    TextView xnama;
+    TextView xnama, jml_C1, jml_C2, jml_C3;;
     LinearLayout gajik1,laporank1,datak1;
     Button logout, edit_toko;
     ImageView edit_owner;
+
+    DatabaseReference reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +38,61 @@ public class OwnerDashbordAct extends AppCompatActivity {
         edit_toko = findViewById(R.id.edit_toko);
         edit_owner = findViewById(R.id.edit_owner);
         xnama = findViewById(R.id.xnama);
+        jml_C1 = findViewById(R.id.ket_jmlc1);
+        jml_C2 = findViewById(R.id.ket_jmlc2);
+        jml_C3 = findViewById(R.id.ket_jmlc3);
 
+
+        //get count Karyawan cabang 1
+        reference = FirebaseDatabase.getInstance().getReference().child("Cabang").child("cabang1").child("Karyawan");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    Integer jml = (int) dataSnapshot.getChildrenCount();
+                    jml_C1.setText(Integer.toString(jml) + " Karyawan");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        //get Count Karyawan cabang 2
+        reference = FirebaseDatabase.getInstance().getReference().child("Cabang").child("cabang2").child("Karyawan");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    Integer jml = (int) dataSnapshot.getChildrenCount();
+                    jml_C2.setText(Integer.toString(jml) + " Karyawan");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        //get count karyawan cabang 3
+        reference = FirebaseDatabase.getInstance().getReference().child("Cabang").child("cabang3").child("Karyawan");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    Integer jml = (int) dataSnapshot.getChildrenCount();
+                    jml_C3.setText(Integer.toString(jml) + " Karyawan");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
 
 //Pindah activity

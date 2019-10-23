@@ -121,7 +121,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        tools:ignore="MissingConstraints">
 
 
                         <RelativeLayout
@@ -140,11 +141,11 @@
                                 android:fontFamily="@font/mregular"/>
 
                             <TextView
+                                android:id="@+id/ket_jmlc1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/mlight"
                                 android:textColor="#fff"
-                                android:text="7 Karyawan"
                                 android:layout_marginRight="30dp"
                                 android:layout_marginBottom="10dp"
                                 android:layout_alignParentRight="true"
@@ -278,7 +279,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        tools:ignore="MissingConstraints">
 
                         <RelativeLayout
                             android:layout_width="260dp"
@@ -296,11 +298,11 @@
                                 android:fontFamily="@font/mregular"/>
 
                             <TextView
+                                android:id="@+id/ket_jmlc2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/mlight"
                                 android:textColor="#fff"
-                                android:text="3 Karyawan"
                                 android:layout_marginRight="30dp"
                                 android:layout_marginBottom="10dp"
                                 android:layout_alignParentRight="true"
@@ -430,7 +432,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        tools:ignore="MissingConstraints">
 
 
                         <RelativeLayout
@@ -449,11 +452,11 @@
                                 android:fontFamily="@font/mregular"/>
 
                             <TextView
+                                android:id="@+id/ket_jmlc3"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/mlight"
                                 android:textColor="#fff"
-                                android:text="5 Karyawan"
                                 android:layout_marginRight="30dp"
                                 android:layout_marginBottom="10dp"
                                 android:layout_alignParentRight="true"
