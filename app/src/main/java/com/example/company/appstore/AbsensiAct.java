@@ -54,6 +54,9 @@ public class AbsensiAct extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         rvView.setLayoutManager(layoutManager);
 
+        //Coba Github
+        Toast.makeText(this, "Ini Toast Jon", Toast.LENGTH_SHORT).show();
+
         getUsernameLocal();
 //database
         reference = FirebaseDatabase.getInstance().getReference()
