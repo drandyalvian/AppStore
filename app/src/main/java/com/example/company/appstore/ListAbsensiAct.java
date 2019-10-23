@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -16,7 +17,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class ListAbsensiAct extends AppCompatActivity {
-
+    private static ListAbsensiAct instance;
     DatabaseReference reference;
     private RecyclerView rvView;
     private RecyclerView.Adapter adapter;
@@ -26,12 +27,13 @@ public class ListAbsensiAct extends AppCompatActivity {
     String USERNAME_KEY = "usernamekey";
     String username_key ="";
     String username_key_new ="";
+    String nKaryawan = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_absensi);
-
+        instance = this;
 
         rvView = (RecyclerView) findViewById(R.id.labsensi_place);
         rvView.setHasFixedSize(true);
@@ -43,6 +45,7 @@ public class ListAbsensiAct extends AppCompatActivity {
 //mengambil data dari intent
         Bundle bundle = getIntent().getExtras();
         final String nama_karyawan= bundle.getString("key");
+        nKaryawan = nama_karyawan;
 
 
 //database
@@ -70,6 +73,17 @@ public class ListAbsensiAct extends AppCompatActivity {
 
                     }
                 });
+    }
+
+    public static ListAbsensiAct getInstance() {
+        return instance;
+    }
+
+    //update absen
+    public void updateAbsen(String key, String keterangan){
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("Cabang").child(username_key_new).child("Karyawan").child(nKaryawan).child("Absensi").child(key);
+        ListAbsensiConst listAbsensiConst = new ListAbsensiConst(keterangan, key, key);
+        db.setValue(listAbsensiConst);
     }
 
 //mengambil data local
