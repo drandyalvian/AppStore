@@ -66,6 +66,23 @@ public class DashbordAct extends AppCompatActivity {
         String dateString = sdf.format(date);
         tglKeuangan.setText(dateString);
 
+//Get Jumlah Data Karyawan
+        reference = FirebaseDatabase.getInstance().getReference().
+                child("Cabang").child(username_key_new).child("Karyawan");
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Integer jml = (int) dataSnapshot.getChildrenCount();
+                jmlkaryawan.setText("Jumlah Karyawan :"+jml );
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
 //database
         reference= FirebaseDatabase.getInstance().getReference().
                 child("KepalaCabang").child(username_key_new);
