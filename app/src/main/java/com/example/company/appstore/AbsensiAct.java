@@ -56,9 +56,6 @@ public class AbsensiAct extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         rvView.setLayoutManager(layoutManager);
 
-        //Coba Github
-
-
         getUsernameLocal();
 //database
         reference = FirebaseDatabase.getInstance().getReference()
