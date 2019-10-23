@@ -1,6 +1,8 @@
 package com.example.company.appstore;
 
-public class LaporanUangConst {
+import java.io.Serializable;
+
+public class LaporanUangConst implements Serializable {
 
     String tanggal, nominal, key;
     public LaporanUangConst(){

@@ -31,7 +31,8 @@
         <activity android:name=".AddKaryawanAct" />
         <activity android:name=".LaporanOwnerAct" />
         <activity android:name=".GajiAct" />
-        <activity android:name=".ListAbsensiAct"></activity>
+        <activity android:name=".ListAbsensiAct" />
+        <activity android:name=".InputLaporanUangAct"></activity>
     </application>
 
 </manifest>
