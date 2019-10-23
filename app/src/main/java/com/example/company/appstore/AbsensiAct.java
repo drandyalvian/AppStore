@@ -55,7 +55,7 @@ public class AbsensiAct extends AppCompatActivity {
         rvView.setLayoutManager(layoutManager);
 
         //Coba Github
-        Toast.makeText(this, "Ini Toast Jon", Toast.LENGTH_SHORT).show();
+
 
         getUsernameLocal();
 //database
