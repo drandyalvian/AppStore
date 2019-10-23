@@ -31,8 +31,6 @@ public class LaporanUangAct extends AppCompatActivity implements LaporanUangAdap
     Button btnplus,btnsave,back;
     EditText txtsearch;
 
-    //lolllalsldlasld
-
     DatabaseReference reference;
     private RecyclerView rvView;
     private RecyclerView.Adapter adapter;
