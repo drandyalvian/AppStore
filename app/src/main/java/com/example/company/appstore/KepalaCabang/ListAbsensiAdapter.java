@@ -1,7 +1,6 @@
-package com.example.company.appstore;
+package com.example.company.appstore.KepalaCabang;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+
+import com.example.company.appstore.R;
 
 import java.util.ArrayList;
 

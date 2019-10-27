@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color1"
-    tools:context=".Login2Act">
+    tools:context=".Owner.Login2Act">
 
     <ImageView
         android:id="@+id/imageView2"
@@ -63,7 +63,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/username"
+        android:id="@+id/xusername"
         android:layout_width="320dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
@@ -81,7 +81,7 @@
         app:layout_constraintTop_toBottomOf="@+id/txt_owner" />
 
     <EditText
-        android:id="@+id/pass"
+        android:id="@+id/xpass"
         android:layout_width="320dp"
         android:layout_height="50dp"
         android:layout_marginStart="8dp"
@@ -97,7 +97,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username" />
+        app:layout_constraintTop_toBottomOf="@+id/xusername" />
 
     <Button
         android:id="@+id/btn_login"
@@ -114,6 +114,6 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pass" />
+        app:layout_constraintTop_toBottomOf="@+id/xpass" />
 
 </android.support.constraint.ConstraintLayout>

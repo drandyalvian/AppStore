@@ -17,22 +17,22 @@
             </intent-filter>
         </activity>
         <activity android:name=".StartAct" />
-        <activity android:name=".LoginAct" />
-        <activity android:name=".DashbordAct" />
-        <activity android:name=".LaporanUangAct" />
-        <activity android:name=".AbsensiAct" />
-        <activity android:name=".Login2Act" />
-        <activity android:name=".OwnerDashbordAct" />
-        <activity android:name=".EditOwnerAct" />
-        <activity android:name=".EditTokoAct" />
-        <activity android:name=".DataKaryawanAct" />
-        <activity android:name=".ProfileKaryawanAct" />
-        <activity android:name=".EditKaryawanAct" />
-        <activity android:name=".AddKaryawanAct" />
-        <activity android:name=".LaporanOwnerAct" />
-        <activity android:name=".GajiAct" />
-        <activity android:name=".ListAbsensiAct" />
-        <activity android:name=".InputLaporanUangAct"></activity>
+        <activity android:name=".KepalaCabang.LoginAct" />
+        <activity android:name=".KepalaCabang.DashbordAct" />
+        <activity android:name=".KepalaCabang.LaporanUangAct" />
+        <activity android:name=".KepalaCabang.AbsensiAct" />
+        <activity android:name=".Owner.Login2Act" />
+        <activity android:name=".Owner.OwnerDashbordAct" />
+        <activity android:name=".Owner.EditOwnerAct" />
+        <activity android:name=".Owner.EditTokoAct" />
+        <activity android:name=".Owner.DataKaryawanAct" />
+        <activity android:name=".Owner.ProfileKaryawanAct" />
+        <activity android:name=".Owner.EditKaryawanAct" />
+        <activity android:name=".Owner.AddKaryawanAct" />
+        <activity android:name=".Owner.LaporanOwnerAct" />
+        <activity android:name=".Owner.GajiAct" />
+        <activity android:name=".KepalaCabang.ListAbsensiAct" />
+        <activity android:name=".KepalaCabang.InputLaporanUangAct"></activity>
     </application>
 
 </manifest>

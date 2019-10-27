@@ -7,7 +7,7 @@
     android:paddingRight="10dp"
     android:paddingLeft="10dp"
     android:background="@color/color1"
-    tools:context=".LoginAct">
+    tools:context=".KepalaCabang.LoginAct">
 
     <ImageView
         android:id="@+id/imageView2"

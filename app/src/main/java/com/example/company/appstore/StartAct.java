@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.company.appstore.KepalaCabang.LoginAct;
 import com.example.company.appstore.sqllite.SqlLiteHelper;
 
 public class StartAct extends AppCompatActivity {

@@ -1,4 +1,4 @@
-package com.example.company.appstore;
+package com.example.company.appstore.Owner;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,10 +7,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.company.appstore.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -19,17 +21,22 @@ import com.google.firebase.database.ValueEventListener;
 
 public class OwnerDashbordAct extends AppCompatActivity {
 
-    TextView xnama, jml_C1, jml_C2, jml_C3;;
+    TextView xnama, jml_C1, jml_C2, jml_C3;
     LinearLayout gajik1,laporank1,datak1;
     Button logout, edit_toko;
     ImageView edit_owner;
 
-    DatabaseReference reference;
+    DatabaseReference reference, reference2;
+    String USERNAME_KEY = "usernamekey";
+    String username_key = "";
+    String username_key_new ="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_owner_dashbord);
+
+        getUsernameLocal();
 
         gajik1 = findViewById(R.id.gajik1);
         laporank1 = findViewById(R.id.laporank1);
@@ -43,8 +50,22 @@ public class OwnerDashbordAct extends AppCompatActivity {
         jml_C3 = findViewById(R.id.ket_jmlc3);
 
 
-        //get count Karyawan cabang 1
         reference = FirebaseDatabase.getInstance().getReference().child("Cabang").child("cabang1").child("Karyawan");
+        reference2 = FirebaseDatabase.getInstance().getReference().child("Admin");
+
+        reference2.child(username_key_new).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                xnama.setText(dataSnapshot.child("nama_lengkap").getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        //get count Karyawan cabang 1
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -61,7 +82,6 @@ public class OwnerDashbordAct extends AppCompatActivity {
         });
 
         //get Count Karyawan cabang 2
-        reference = FirebaseDatabase.getInstance().getReference().child("Cabang").child("cabang2").child("Karyawan");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -78,7 +98,6 @@ public class OwnerDashbordAct extends AppCompatActivity {
         });
 
         //get count karyawan cabang 3
-        reference = FirebaseDatabase.getInstance().getReference().child("Cabang").child("cabang3").child("Karyawan");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -134,7 +153,9 @@ public class OwnerDashbordAct extends AppCompatActivity {
         edit_toko.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String s = "cabang1";
                 Intent go = new Intent(OwnerDashbordAct.this,EditTokoAct.class);
+                go.putExtra("nama", s);
                 startActivity(go);
 
             }
@@ -148,5 +169,12 @@ public class OwnerDashbordAct extends AppCompatActivity {
 
             }
         });
+    }
+
+//fungsi mengambil username local sesuai login
+    public void getUsernameLocal(){
+        SharedPreferences sharedPreferences = getSharedPreferences(USERNAME_KEY, MODE_PRIVATE);
+        username_key_new =sharedPreferences.getString(username_key, "");
+
     }
 }

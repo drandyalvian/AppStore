@@ -1,4 +1,4 @@
-package com.example.company.appstore;
+package com.example.company.appstore.Owner;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+
+import com.example.company.appstore.R;
 
 public class DataKaryawanAct extends AppCompatActivity {
 

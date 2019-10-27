@@ -1,6 +1,5 @@
-package com.example.company.appstore;
+package com.example.company.appstore.KepalaCabang;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
@@ -14,8 +13,8 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
+import com.example.company.appstore.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -29,8 +28,6 @@ public class AbsensiAct extends AppCompatActivity {
 
     Button btnsave2,back;
     EditText txtsearch;
-
-    //coba
 
     DatabaseReference reference;
     private RecyclerView rvView;
@@ -101,11 +98,11 @@ public class AbsensiAct extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-//                if(!s.toString().isEmpty()){
-//                    search(s.toString());
-//                }else {
-//                    search("");
-//                }
+                if(!s.toString().isEmpty()){
+                    search(s.toString());
+                }else {
+                    search("");
+                }
 
 
             }
@@ -132,32 +129,32 @@ public class AbsensiAct extends AppCompatActivity {
     }
 
 //search fungsi
-//    private void search(String s) {
-//
-//        Query query = reference.orderByChild("nama")
-//                .startAt(s)
-//                .endAt(s+"\uf8ff");
-//        query.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                if(dataSnapshot.hasChildren()){
-//                    absensiConsts.clear();
-//                    for (DataSnapshot dss: dataSnapshot.getChildren()){
-//                        final AbsensiConst absensi = dss.getValue(AbsensiConst.class);
-//                        absensiConsts.add(absensi);
-//                    }
-//
-//                    AbsensiAdapter adapter = new AbsensiAdapter(absensiConsts,AbsensiAct.this);
-//                    rvView.setAdapter(adapter);
-//                    adapter.notifyDataSetChanged();
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
+    private void search(String s) {
+
+        Query query = reference.orderByChild("nama")
+                .startAt(s)
+                .endAt(s+"\uf8ff");
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChildren()){
+                    absensiConsts.clear();
+                    for (DataSnapshot dss: dataSnapshot.getChildren()){
+                        final AbsensiConst absensi = dss.getValue(AbsensiConst.class);
+                        absensiConsts.add(absensi);
+                    }
+
+                    AbsensiAdapter adapter = new AbsensiAdapter(absensiConsts,AbsensiAct.this);
+                    rvView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 }

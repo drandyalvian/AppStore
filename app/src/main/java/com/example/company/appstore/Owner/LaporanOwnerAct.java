@@ -1,4 +1,4 @@
-package com.example.company.appstore;
+package com.example.company.appstore.Owner;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -6,21 +6,23 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class ProfileKaryawanAct extends AppCompatActivity {
+import com.example.company.appstore.R;
 
-    Button btnedit;
+public class LaporanOwnerAct extends AppCompatActivity {
+
+    Button back;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile_karyawan);
+        setContentView(R.layout.activity_laporan_owner);
 
-        btnedit = findViewById(R.id.btnedit);
+        back = findViewById(R.id.back);
 
-        btnedit.setOnClickListener(new View.OnClickListener() {
+        back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent go = new Intent(ProfileKaryawanAct.this,EditKaryawanAct.class);
+                Intent go = new Intent(LaporanOwnerAct.this,OwnerDashbordAct.class);
                 startActivity(go);
 
             }

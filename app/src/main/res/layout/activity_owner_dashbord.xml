@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color6"
-    tools:context=".OwnerDashbordAct">
+    tools:context=".Owner.OwnerDashbordAct">
 
     <ImageView
         android:id="@+id/imageView6"
@@ -40,7 +40,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="68dp"
         android:fontFamily="@font/mmedium"
-        android:text="Steve Jobs"
+        android:text=""
         android:textColor="#fff"
         android:textSize="18sp"
         app:layout_constraintStart_toEndOf="@+id/edit_owner"

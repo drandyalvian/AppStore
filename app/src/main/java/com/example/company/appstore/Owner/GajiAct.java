@@ -1,4 +1,4 @@
-package com.example.company.appstore;
+package com.example.company.appstore.Owner;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+
+import com.example.company.appstore.R;
 
 public class GajiAct extends AppCompatActivity {
 

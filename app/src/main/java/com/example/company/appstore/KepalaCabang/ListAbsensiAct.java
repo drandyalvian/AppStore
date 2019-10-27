@@ -1,4 +1,4 @@
-package com.example.company.appstore;
+package com.example.company.appstore.KepalaCabang;
 
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
@@ -6,8 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Toast;
 
+import com.example.company.appstore.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;

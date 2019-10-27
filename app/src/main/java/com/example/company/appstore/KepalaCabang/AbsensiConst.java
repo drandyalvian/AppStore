@@ -1,4 +1,4 @@
-package com.example.company.appstore;
+package com.example.company.appstore.KepalaCabang;
 
 import java.io.Serializable;
 
