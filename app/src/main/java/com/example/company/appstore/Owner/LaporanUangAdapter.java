@@ -1,4 +1,4 @@
-package com.example.company.appstore.KepalaCabang;
+package com.example.company.appstore.Owner;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -8,7 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.company.appstore.KepalaCabang.LaporanUangConst;
 import com.example.company.appstore.R;
 
 import java.text.NumberFormat;
@@ -16,9 +18,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class LaporanUangAdapter extends RecyclerView.Adapter<LaporanUangAdapter.MyViewHolder> {
-
-    //listener untuk delete
-    FirebaseDataListener listener;
+    LaporanOwnerAct listener;
 
     Context context;
     ArrayList<LaporanUangConst> laporanUangConsts;
@@ -26,7 +26,7 @@ public class LaporanUangAdapter extends RecyclerView.Adapter<LaporanUangAdapter.
         context = c;
         laporanUangConsts = p;
 
-        listener = (LaporanUangAct) b;
+        listener = (LaporanOwnerAct) b;
     }
 
     @NonNull
@@ -63,8 +63,7 @@ public class LaporanUangAdapter extends RecyclerView.Adapter<LaporanUangAdapter.
         return laporanUangConsts.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder{
-
+    public class MyViewHolder extends RecyclerView.ViewHolder {
         TextView xtgl,  xnominal;
         Button delete;
 
@@ -78,8 +77,6 @@ public class LaporanUangAdapter extends RecyclerView.Adapter<LaporanUangAdapter.
 
         }
     }
-
-//delete listener
     public interface FirebaseDataListener{
         void onDeleteData(LaporanUangConst laporanUangConst, int i);
     }

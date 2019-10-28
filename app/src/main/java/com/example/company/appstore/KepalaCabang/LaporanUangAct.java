@@ -116,6 +116,7 @@ public class LaporanUangAct extends AppCompatActivity implements LaporanUangAdap
 
                 Intent go = new Intent(LaporanUangAct.this,InputLaporanUangAct.class);
                 startActivity(go);
+                finish();
 
 //                final Dialog dialog = new Dialog(LaporanUangAct.this);
 //                dialog.setContentView(R.layout.dialogview_keuangan);

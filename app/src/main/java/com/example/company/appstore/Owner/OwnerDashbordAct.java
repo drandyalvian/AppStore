@@ -21,12 +21,12 @@ import com.google.firebase.database.ValueEventListener;
 
 public class OwnerDashbordAct extends AppCompatActivity {
 
-    TextView xnama, jml_C1, jml_C2, jml_C3;
-    LinearLayout gajik1,laporank1,datak1;
+    TextView xnama, jml_C1, jml_C2, jml_C3, tgl_cabang1, tgl_cabang2, tgl_cabang3;
+    LinearLayout gajik1,laporank1,datak1, laporank2, laporank3, datak2, datak3;
     Button logout, edit_toko;
     ImageView edit_owner;
 
-    DatabaseReference reference, reference2;
+    DatabaseReference reference, reference2, reference3, reference4, reference5;
     String USERNAME_KEY = "usernamekey";
     String username_key = "";
     String username_key_new ="";
@@ -40,7 +40,11 @@ public class OwnerDashbordAct extends AppCompatActivity {
 
         gajik1 = findViewById(R.id.gajik1);
         laporank1 = findViewById(R.id.laporank1);
+        laporank2 = findViewById(R.id.laporank2);
+        laporank3 = findViewById(R.id.laporank3);
         datak1 = findViewById(R.id.datak1);
+        datak2 = findViewById(R.id.datak2);
+        datak3 = findViewById(R.id.datak3);
         logout = findViewById(R.id.logout);
         edit_toko = findViewById(R.id.edit_toko);
         edit_owner = findViewById(R.id.edit_owner);
@@ -128,6 +132,7 @@ public class OwnerDashbordAct extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent go = new Intent(OwnerDashbordAct.this,LaporanOwnerAct.class);
+                go.putExtra("cabang","cabang1");
                 startActivity(go);
 
             }
@@ -136,6 +141,7 @@ public class OwnerDashbordAct extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent go = new Intent(OwnerDashbordAct.this,DataKaryawanAct.class);
+                go.putExtra("cabang", "cabang1");
                 startActivity(go);
 
             }
@@ -169,6 +175,57 @@ public class OwnerDashbordAct extends AppCompatActivity {
 
             }
         });
+
+        laporank2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent go = new Intent(OwnerDashbordAct.this,LaporanOwnerAct.class);
+                go.putExtra("cabang","cabang2");
+                startActivity(go);
+            }
+        });
+
+        laporank3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent go = new Intent(OwnerDashbordAct.this,LaporanOwnerAct.class);
+                go.putExtra("cabang","cabang3");
+                startActivity(go);
+            }
+        });
+
+        datak2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent go = new Intent(OwnerDashbordAct.this,DataKaryawanAct.class);
+                go.putExtra("cabang", "cabang2");
+                startActivity(go);
+            }
+        });
+
+        datak3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent go = new Intent(OwnerDashbordAct.this,DataKaryawanAct.class);
+                go.putExtra("cabang", "cabang3");
+                startActivity(go);
+            }
+        });
+
+//        reference3 = FirebaseDatabase.getInstance().getReference().child("Cabang").child("cabang1").child("LaporanUang");
+//        reference3.orderByKey().limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                tgl_cabang1 = findViewById(R.id.tgl_cabang1);
+//                tgl_cabang1.setText(dataSnapshot.child("tanggal").getValue().toString());
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+
     }
 
 //fungsi mengambil username local sesuai login

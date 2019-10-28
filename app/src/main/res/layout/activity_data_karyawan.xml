@@ -11,7 +11,8 @@
         android:id="@+id/imageView4"
         android:layout_width="match_parent"
         android:layout_height="240dp"
-        android:background="@color/color1" />
+        android:background="@color/color1"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/textView3"
@@ -93,232 +94,19 @@
             <!--</android.support.v7.widget.RecyclerView>-->
 
             <LinearLayout
-                android:id="@+id/profilk"
                 android:layout_width="match_parent"
-                android:layout_height="90dp"
-                android:paddingLeft="30dp"
-                android:orientation="horizontal"
-                android:background="@drawable/bg_list">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="100dp">
 
-                <ImageView
-                    android:layout_marginTop="16dp"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:background="@drawable/icon_absenuser"/>
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/karyawan_place">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="20dp"
-                    android:layout_marginTop="15dp"
-                    android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/mregular"
-                        android:text="Sapa Nama"
-                        android:textSize="18sp"
-                        android:textColor="@color/color5"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/mregular"
-                        android:text="Sukoharjo"
-                        android:textSize="16sp"
-                        android:layout_marginTop="6dp"
-                        android:textColor="@color/color4"/>
-                </LinearLayout>
+                </android.support.v7.widget.RecyclerView>
 
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="90dp"
-                android:paddingLeft="30dp"
-                android:orientation="horizontal"
-                android:background="@drawable/bg_list">
-
-                <ImageView
-                    android:layout_marginTop="16dp"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:background="@drawable/icon_absenuser"/>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="20dp"
-                    android:layout_marginTop="15dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/mregular"
-                        android:text="Sapa Nama"
-                        android:textSize="18sp"
-                        android:textColor="@color/color5"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/mregular"
-                        android:text="Sukoharjo"
-                        android:textSize="16sp"
-                        android:layout_marginTop="6dp"
-                        android:textColor="@color/color4"/>
-                </LinearLayout>
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="90dp"
-                android:paddingLeft="30dp"
-                android:orientation="horizontal"
-                android:background="@drawable/bg_list">
-
-                <ImageView
-                    android:layout_marginTop="16dp"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:background="@drawable/icon_absenuser"/>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="20dp"
-                    android:layout_marginTop="15dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/mregular"
-                        android:text="Sapa Nama"
-                        android:textSize="18sp"
-                        android:textColor="@color/color5"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/mregular"
-                        android:text="Sukoharjo"
-                        android:textSize="16sp"
-                        android:layout_marginTop="6dp"
-                        android:textColor="@color/color4"/>
-                </LinearLayout>
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="90dp"
-                android:paddingLeft="30dp"
-                android:orientation="horizontal"
-                android:background="@drawable/bg_list">
-
-                <ImageView
-                    android:layout_marginTop="16dp"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:background="@drawable/icon_absenuser"/>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="20dp"
-                    android:layout_marginTop="15dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/mregular"
-                        android:text="Sapa Nama"
-                        android:textSize="18sp"
-                        android:textColor="@color/color5"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/mregular"
-                        android:text="Sukoharjo"
-                        android:textSize="16sp"
-                        android:layout_marginTop="6dp"
-                        android:textColor="@color/color4"/>
-                </LinearLayout>
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="90dp"
-                android:paddingLeft="30dp"
-                android:orientation="horizontal"
-                android:background="@drawable/bg_list">
-
-                <ImageView
-                    android:layout_marginTop="16dp"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:background="@drawable/icon_absenuser"/>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="20dp"
-                    android:layout_marginTop="15dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/mregular"
-                        android:text="Sapa Nama"
-                        android:textSize="18sp"
-                        android:textColor="@color/color5"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/mregular"
-                        android:text="Sukoharjo"
-                        android:textSize="16sp"
-                        android:layout_marginTop="6dp"
-                        android:textColor="@color/color4"/>
-                </LinearLayout>
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="90dp"
-                android:paddingLeft="30dp"
-                android:orientation="horizontal"
-                android:background="@drawable/bg_list">
-
-                <ImageView
-                    android:layout_marginTop="16dp"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:background="@drawable/icon_absenuser"/>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="20dp"
-                    android:layout_marginTop="15dp"
-                    android:orientation="vertical">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/mregular"
-                        android:text="Sapa Nama"
-                        android:textSize="18sp"
-                        android:textColor="@color/color5"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/mregular"
-                        android:text="Sukoharjo"
-                        android:textSize="16sp"
-                        android:layout_marginTop="6dp"
-                        android:textColor="@color/color4"/>
-                </LinearLayout>
 
             </LinearLayout>
 

@@ -81,6 +81,7 @@ public class InputLaporanUangAct extends AppCompatActivity  {
 
                 Intent go = new Intent(InputLaporanUangAct.this,LaporanUangAct.class);
                 startActivity(go);
+                finish();
 
             }
         });

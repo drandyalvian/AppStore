@@ -11,7 +11,8 @@
         android:id="@+id/imageView6"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:background="@drawable/bg_dashbord" />
+        android:background="@drawable/bg_dashbord"
+        tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/logout"
@@ -162,12 +163,14 @@
                             android:background="@drawable/card_bottom">
 
                             <TextView
+                                android:id="@+id/tgl_cabang1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Jumat 11 Oktober 2019"
                                 android:layout_marginTop="20dp"
                                 android:textColor="@color/color5"/>
                             <TextView
+                                android:id="@+id/noimal_cabang1"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/mregular"
@@ -319,12 +322,14 @@
                             android:background="@drawable/card_bottom">
 
                             <TextView
+                                android:id="@+id/tgl_cabang2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Jumat 11 Oktober 2019"
                                 android:layout_marginTop="20dp"
                                 android:textColor="@color/color5"/>
                             <TextView
+                                android:id="@+id/nominal_cabang2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/mregular"
@@ -334,6 +339,7 @@
                                 android:text="Rp. 2.000.000"/>
 
                             <LinearLayout
+                                android:id="@+id/datak2"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
@@ -358,6 +364,7 @@
                             </LinearLayout>
 
                             <LinearLayout
+                                android:id="@+id/laporank2"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:orientation="horizontal"
@@ -473,12 +480,14 @@
                             android:background="@drawable/card_bottom">
 
                             <TextView
+                                android:id="@+id/tgl_cabang3"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Jumat 11 Oktober 2019"
                                 android:layout_marginTop="20dp"
                                 android:textColor="@color/color5"/>
                             <TextView
+                                android:id="@+id/nominal_cabang3"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/mregular"
@@ -487,53 +496,60 @@
                                 android:textColor="@color/color4"
                                 android:text="Rp. 2.000.000"/>
 
+
+
                             <LinearLayout
+                                android:id="@+id/datak3"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
+                                android:layout_height="69dp"
                                 android:layout_marginTop="20dp"
-                                android:padding="10dp"
-                                android:background="@drawable/bg_card">
+                                android:background="@drawable/bg_card"
+                                android:orientation="horizontal"
+                                android:padding="10dp">
 
                                 <ImageView
                                     android:layout_width="50dp"
                                     android:layout_height="50dp"
-                                    android:background="@drawable/icon_employer"/>
+                                    android:background="@drawable/icon_employer" />
+
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Data \nKaryawan"
-                                    android:fontFamily="@font/mregular"
-                                    android:textSize="12sp"
-                                    android:textColor="@color/color5"
+                                    android:layout_marginLeft="10dp"
                                     android:layout_marginTop="10dp"
-                                    android:layout_marginLeft="10dp"/>
+                                    android:fontFamily="@font/mregular"
+                                    android:text="Data \nKaryawan"
+                                    android:textColor="@color/color5"
+                                    android:textSize="12sp" />
 
                             </LinearLayout>
 
                             <LinearLayout
+                                android:id="@+id/laporank3"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
                                 android:layout_marginTop="10dp"
-                                android:padding="10dp"
-                                android:background="@drawable/bg_card">
+                                android:background="@drawable/bg_card"
+                                android:orientation="horizontal"
+                                android:padding="10dp">
 
                                 <ImageView
                                     android:layout_width="50dp"
                                     android:layout_height="50dp"
-                                    android:background="@drawable/icon_keuangan2"/>
+                                    android:background="@drawable/icon_keuangan2" />
+
                                 <TextView
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:text="Laporan\nKeuangan"
-                                    android:fontFamily="@font/mregular"
-                                    android:textSize="12sp"
-                                    android:textColor="@color/color5"
+                                    android:layout_marginLeft="10dp"
                                     android:layout_marginTop="10dp"
-                                    android:layout_marginLeft="10dp"/>
+                                    android:fontFamily="@font/mregular"
+                                    android:text="Laporan\nKeuangan"
+                                    android:textColor="@color/color5"
+                                    android:textSize="12sp" />
 
                             </LinearLayout>
+
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"

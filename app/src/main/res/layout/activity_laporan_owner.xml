@@ -12,7 +12,8 @@
         android:id="@+id/imageView4"
         android:layout_width="match_parent"
         android:layout_height="240dp"
-        android:background="@color/color1" />
+        android:background="@color/color1"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/textView3"
@@ -90,228 +91,22 @@
 
 
             <!--</android.support.v7.widget.RecyclerView>-->
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="90dp"
-                android:background="@drawable/bg_list">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="100dp">
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="30dp"
-                    android:layout_marginTop="15dp"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/mlight"
-                        android:text="9 Oktober 2019"
-                        android:textSize="14sp"
-                        android:textColor="@color/color5"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/mregular"
-                        android:text="Rp. 2000.000"
-                        android:textSize="18sp"
-                        android:layout_marginTop="6dp"
-                        android:textColor="@color/color4"/>
-                </LinearLayout>
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/laporan_uang_place">
 
-                <Button
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_marginTop="28dp"
-                    android:layout_marginRight="24dp"
-                    android:layout_alignParentRight="true"
-                    android:background="@drawable/icon_x"/>
 
-            </RelativeLayout>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="90dp"
-                android:background="@drawable/bg_list">
+                </android.support.v7.widget.RecyclerView>
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="30dp"
-                    android:layout_marginTop="15dp"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/mlight"
-                        android:text="9 Oktober 2019"
-                        android:textSize="14sp"
-                        android:textColor="@color/color5"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/mregular"
-                        android:text="Rp. 2000.000"
-                        android:textSize="18sp"
-                        android:layout_marginTop="6dp"
-                        android:textColor="@color/color4"/>
-                </LinearLayout>
 
-                <Button
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_marginTop="28dp"
-                    android:layout_marginRight="24dp"
-                    android:layout_alignParentRight="true"
-                    android:background="@drawable/icon_x"/>
-
-            </RelativeLayout>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="90dp"
-                android:background="@drawable/bg_list">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="30dp"
-                    android:layout_marginTop="15dp"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/mlight"
-                        android:text="9 Oktober 2019"
-                        android:textSize="14sp"
-                        android:textColor="@color/color5"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/mregular"
-                        android:text="Rp. 2000.000"
-                        android:textSize="18sp"
-                        android:layout_marginTop="6dp"
-                        android:textColor="@color/color4"/>
-                </LinearLayout>
-
-                <Button
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_marginTop="28dp"
-                    android:layout_marginRight="24dp"
-                    android:layout_alignParentRight="true"
-                    android:background="@drawable/icon_x"/>
-
-            </RelativeLayout>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="90dp"
-                android:background="@drawable/bg_list">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="30dp"
-                    android:layout_marginTop="15dp"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/mlight"
-                        android:text="9 Oktober 2019"
-                        android:textSize="14sp"
-                        android:textColor="@color/color5"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/mregular"
-                        android:text="Rp. 2000.000"
-                        android:textSize="18sp"
-                        android:layout_marginTop="6dp"
-                        android:textColor="@color/color4"/>
-                </LinearLayout>
-
-                <Button
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_marginTop="28dp"
-                    android:layout_marginRight="24dp"
-                    android:layout_alignParentRight="true"
-                    android:background="@drawable/icon_x"/>
-
-            </RelativeLayout>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="90dp"
-                android:background="@drawable/bg_list">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="30dp"
-                    android:layout_marginTop="15dp"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/mlight"
-                        android:text="9 Oktober 2019"
-                        android:textSize="14sp"
-                        android:textColor="@color/color5"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/mregular"
-                        android:text="Rp. 2000.000"
-                        android:textSize="18sp"
-                        android:layout_marginTop="6dp"
-                        android:textColor="@color/color4"/>
-                </LinearLayout>
-
-                <Button
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_marginTop="28dp"
-                    android:layout_marginRight="24dp"
-                    android:layout_alignParentRight="true"
-                    android:background="@drawable/icon_x"/>
-
-            </RelativeLayout>
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="90dp"
-                android:background="@drawable/bg_list">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="30dp"
-                    android:layout_marginTop="15dp"
-                    android:orientation="vertical">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/mlight"
-                        android:text="9 Oktober 2019"
-                        android:textSize="14sp"
-                        android:textColor="@color/color5"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/mregular"
-                        android:text="Rp. 2000.000"
-                        android:textSize="18sp"
-                        android:layout_marginTop="6dp"
-                        android:textColor="@color/color4"/>
-                </LinearLayout>
-
-                <Button
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_marginTop="28dp"
-                    android:layout_marginRight="24dp"
-                    android:layout_alignParentRight="true"
-                    android:background="@drawable/icon_x"/>
-
-            </RelativeLayout>
+            </LinearLayout>
 
 
         </LinearLayout>
