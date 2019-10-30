@@ -17,11 +17,18 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 public class OwnerDashbordAct extends AppCompatActivity {
 
-    TextView xnama, jml_C1, jml_C2, jml_C3, tgl_cabang1, tgl_cabang2, tgl_cabang3;
+    TextView xnama, jml_C1, jml_C2, jml_C3, tgl_cabang1, tgl_cabang2, tgl_cabang3, nc1, nc2, nc3;
     LinearLayout gajik1,laporank1,datak1, laporank2, laporank3, datak2, datak3;
     Button logout, edit_toko;
     ImageView edit_owner;
@@ -30,6 +37,11 @@ public class OwnerDashbordAct extends AppCompatActivity {
     String USERNAME_KEY = "usernamekey";
     String username_key = "";
     String username_key_new ="";
+    private String outputDateStr = "";
+
+    public static final SimpleDateFormat ymdFormat = new SimpleDateFormat("dd MMM yyyy", Locale.US);
+
+    public static final SimpleDateFormat EEEddMMMyyyy = new SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.US);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +98,7 @@ public class OwnerDashbordAct extends AppCompatActivity {
         });
 
         //get Count Karyawan cabang 2
+        reference = FirebaseDatabase.getInstance().getReference().child("Cabang").child("cabang2").child("Karyawan");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -102,6 +115,7 @@ public class OwnerDashbordAct extends AppCompatActivity {
         });
 
         //get count karyawan cabang 3
+        reference = FirebaseDatabase.getInstance().getReference().child("Cabang").child("cabang3").child("Karyawan");
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -212,21 +226,95 @@ public class OwnerDashbordAct extends AppCompatActivity {
             }
         });
 
-//        reference3 = FirebaseDatabase.getInstance().getReference().child("Cabang").child("cabang1").child("LaporanUang");
-//        reference3.orderByKey().limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                tgl_cabang1 = findViewById(R.id.tgl_cabang1);
-//                tgl_cabang1.setText(dataSnapshot.child("tanggal").getValue().toString());
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
+        reference3 = FirebaseDatabase.getInstance().getReference().child("Cabang").child("cabang1").child("LaporanUang");
+        Query last = reference3.orderByKey().limitToLast(1);
+
+        Locale localeID = new Locale("in", "ID");
+        final NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
+
+        last.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+
+                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                    tgl_cabang1 = findViewById(R.id.tgl_cabang1);
+                    nc1 = findViewById(R.id.nominal_cabang1);
+                    double nominal = Double.parseDouble(ds.child("nominal").getValue().toString());
+                    String tanggal = parseDate(ds.child("tanggal").getValue().toString(), ymdFormat, EEEddMMMyyyy);
+                    nc1.setText(formatRupiah.format ((double)nominal));
+                    tgl_cabang1.setText(tanggal);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        reference4 = FirebaseDatabase.getInstance().getReference().child("Cabang").child("cabang2").child("LaporanUang");
+        Query last2 = reference4.orderByKey().limitToLast(1);
+        last2.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                    tgl_cabang2 = findViewById(R.id.tgl_cabang2);
+                    nc2 = findViewById(R.id.nominal_cabang2);
+                    double nominal = Double.parseDouble(ds.child("nominal").getValue().toString());
+                    String tanggal = parseDate(ds.child("tanggal").getValue().toString(), ymdFormat, EEEddMMMyyyy);
+                    nc2.setText(formatRupiah.format ((double)nominal));
+                    tgl_cabang2.setText(tanggal);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        reference5 = FirebaseDatabase.getInstance().getReference().child("Cabang").child("cabang3").child("LaporanUang");
+        Query last3 = reference5.orderByKey().limitToLast(1);
+        last3.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                    tgl_cabang3 = findViewById(R.id.tgl_cabang3);
+                    nc3 = findViewById(R.id.nominal_cabang3);
+                    double nominal = Double.parseDouble(ds.child("nominal").getValue().toString());
+                    String tanggal = parseDate(ds.child("tanggal").getValue().toString(), ymdFormat, EEEddMMMyyyy);
+                    nc3.setText(formatRupiah.format ((double)nominal));
+                    tgl_cabang3.setText(tanggal);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
     }
+
+
+
+
+
+    public static String parseDate(String inputDateString, SimpleDateFormat inputDateFormat, SimpleDateFormat outputDateFormat) {
+        Date date = null;
+        String outputDateString = null;
+        try {
+            date = inputDateFormat.parse(inputDateString);
+            outputDateString = outputDateFormat.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return outputDateString;
+    }
+
+
 
 //fungsi mengambil username local sesuai login
     public void getUsernameLocal(){
