@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.company.appstore.R;
 import com.google.firebase.database.DataSnapshot;
@@ -29,7 +30,7 @@ import java.util.Locale;
 public class OwnerDashbordAct extends AppCompatActivity {
 
     TextView xnama, jml_C1, jml_C2, jml_C3, tgl_cabang1, tgl_cabang2, tgl_cabang3, nc1, nc2, nc3;
-    LinearLayout gajik1,laporank1,datak1, laporank2, laporank3, datak2, datak3;
+    LinearLayout gajik1, gajik2, gajik3, laporank1,datak1, laporank2, laporank3, datak2, datak3;
     Button logout, edit_toko;
     ImageView edit_owner;
 
@@ -51,6 +52,8 @@ public class OwnerDashbordAct extends AppCompatActivity {
         getUsernameLocal();
 
         gajik1 = findViewById(R.id.gajik1);
+        gajik2 = findViewById(R.id.gajik2);
+        gajik3 = findViewById(R.id.gajik3);
         laporank1 = findViewById(R.id.laporank1);
         laporank2 = findViewById(R.id.laporank2);
         laporank3 = findViewById(R.id.laporank3);
@@ -133,20 +136,37 @@ public class OwnerDashbordAct extends AppCompatActivity {
 
 
 //Pindah activity
-        gajik1.setOnClickListener(new View.OnClickListener() {
+       gajik1.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View v) {
+               Intent go = new Intent(OwnerDashbordAct.this, GajiAct.class);
+               go.putExtra("cabang", "cabang1");
+               startActivity(go);
+           }
+       });
+        gajik2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent go = new Intent(OwnerDashbordAct.this,GajiAct.class);
+                Intent go = new Intent(OwnerDashbordAct.this, GajiAct.class);
+                go.putExtra("cabang", "cabang2");
                 startActivity(go);
-
             }
         });
+        gajik3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent go = new Intent(OwnerDashbordAct.this, GajiAct.class);
+                go.putExtra("cabang", "cabang3");
+                startActivity(go);
+            }
+        });
+
 
         laporank1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent go = new Intent(OwnerDashbordAct.this,LaporanOwnerAct.class);
-                go.putExtra("cabang","cabang1");
+                go.putExtra("cabang", "cabang1");
                 startActivity(go);
 
             }

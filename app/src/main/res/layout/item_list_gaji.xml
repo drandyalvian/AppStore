@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/inputgaji"
+    android:layout_width="match_parent"
+    android:layout_height="90dp"
+    android:background="@drawable/bg_list"
+    android:orientation="horizontal"
+    android:paddingLeft="30dp"
+    android:paddingRight="30dp">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="0dp"
+            android:layout_marginTop="15dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tNama"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/mregular"
+                android:text="Sapa Nama"
+                android:textSize="18sp"
+                android:textColor="@color/color5"/>
+            <TextView
+                android:id="@+id/tGaji"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/mregular"
+                android:text="Rp. 1.500.000"
+                android:textSize="18sp"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/color4"/>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:layout_marginTop="15dp">
+
+            <TextView
+                android:id="@+id/tgl1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/mlight"
+                android:text="11/09/2019"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="30dp"
+                android:textSize="12sp"
+                android:textColor="@color/color5"/>
+            <Button
+                android:id="@+id/print"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_below="@+id/tgl1"
+                android:layout_marginTop="15dp"
+                android:textColor="@color/color4"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="30dp"
+                android:background="@drawable/printer"/>
+        </RelativeLayout>
+</RelativeLayout>
