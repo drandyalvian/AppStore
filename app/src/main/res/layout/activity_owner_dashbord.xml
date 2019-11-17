@@ -421,6 +421,7 @@
                     </LinearLayout>
 
                     <Button
+                        android:id="@+id/edit_toko2"
                         android:layout_width="45dp"
                         android:layout_height="45dp"
                         android:layout_marginStart="24dp"
@@ -584,6 +585,7 @@
                     </LinearLayout>
 
                     <Button
+                        android:id="@+id/edit_toko3"
                         android:layout_width="45dp"
                         android:layout_height="45dp"
                         android:layout_marginStart="24dp"

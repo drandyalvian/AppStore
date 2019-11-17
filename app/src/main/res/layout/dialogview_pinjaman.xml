@@ -8,44 +8,44 @@
     android:padding="30dp"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:text="Gaji Pinjaman"
-        android:fontFamily="@font/mregular"
-        android:textColor="@color/color5"
-        android:layout_marginBottom="10dp"/>
+<!--    <TextView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:textSize="18sp"-->
+<!--        android:text="Gaji Pinjaman"-->
+<!--        android:fontFamily="@font/mregular"-->
+<!--        android:textColor="@color/color5"-->
+<!--        android:layout_marginBottom="10dp"/>-->
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/color6"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/mlight"
-        android:textSize="16sp"
-        android:textColor="@color/color5"
-        android:layout_marginTop="30dp"
-        android:text="Nominal"/>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+<!--    <TextView-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:fontFamily="@font/mlight"-->
+<!--        android:textSize="16sp"-->
+<!--        android:textColor="@color/color5"-->
+<!--        android:layout_marginTop="30dp"-->
+<!--        android:text="Nominal"/>-->
+<!--    <LinearLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal">-->
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
-            android:fontFamily="@font/mlight"
-            android:textSize="16sp"
-            android:paddingLeft="8dp"
-            android:text="200.000"
-            android:textColor="@color/color4"
-            android:background="@drawable/bg_square"/>
+<!--        <EditText-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="30dp"-->
+<!--            android:layout_marginRight="10dp"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:fontFamily="@font/mlight"-->
+<!--            android:textSize="16sp"-->
+<!--            android:paddingLeft="8dp"-->
+<!--            android:text="200.000"-->
+<!--            android:textColor="@color/color4"-->
+<!--            android:background="@drawable/bg_square"/>-->
 
-    </LinearLayout>
+<!--    </LinearLayout>-->
 
 
 

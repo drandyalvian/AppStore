@@ -43,13 +43,15 @@ public class DataKaryawanAdapter extends RecyclerView.Adapter<DataKaryawanAdapte
         myViewHolder.xnama.setText(absensiConsts.get(i).getNama());
         myViewHolder.xalamat.setText(absensiConsts.get(i).getAlamat());
 
-        final String getkey = absensiConsts.get(i).getKey();
+        final String cabang = absensiConsts.get(i).getNama_cabang();
+        final String key = absensiConsts.get(i).getKey();
 
         myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent go = new Intent(context, ListAbsensiAct.class);
-                go.putExtra("key",getkey); //Lempar key
+                Intent go = new Intent(context, EditKaryawanAct.class);
+                go.putExtra("keyCabang",cabang); //Lempar key
+                go.putExtra("key",key); //Lempar key
                 context.startActivity(go);
             }
         });

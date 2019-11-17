@@ -11,7 +11,10 @@
         android:id="@+id/imageView4"
         android:layout_width="match_parent"
         android:layout_height="240dp"
-        android:background="@color/color1" />
+        android:background="@color/color1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView3"
@@ -89,6 +92,7 @@
                     android:textSize="16sp" />
 
                 <EditText
+                    android:id="@+id/xcabangtoko"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginTop="10dp"
@@ -110,6 +114,7 @@
                     android:textSize="16sp" />
 
                 <EditText
+                    android:id="@+id/xnama"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginTop="10dp"
@@ -160,6 +165,7 @@
                     android:textSize="16sp" />
 
                 <EditText
+                    android:id="@+id/xumur"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginTop="10dp"
@@ -182,6 +188,7 @@
                     android:textSize="16sp" />
 
                 <EditText
+                    android:id="@+id/xalamat"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginTop="10dp"
@@ -204,6 +211,30 @@
                     android:textSize="16sp" />
 
                 <EditText
+                    android:id="@+id/xnohp"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/bg_form"
+                    android:fontFamily="@font/mregular"
+                    android:paddingLeft="20dp"
+                    android:text="08133452561"
+                    android:textStyle="bold"
+                    android:textColor="@color/color5"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:fontFamily="@font/mregular"
+                    android:textColor="@color/color4"
+                    android:textStyle="bold"
+                    android:text="Gaji Pokok"
+                    android:textSize="16sp" />
+
+                <EditText
+                    android:id="@+id/xgajipokok"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginTop="10dp"
@@ -211,7 +242,7 @@
                     android:background="@drawable/bg_form"
                     android:fontFamily="@font/mregular"
                     android:paddingLeft="20dp"
-                    android:text="08133452561"
+                    android:text=""
                     android:textStyle="bold"
                     android:textColor="@color/color5"
                     android:textSize="16sp" />

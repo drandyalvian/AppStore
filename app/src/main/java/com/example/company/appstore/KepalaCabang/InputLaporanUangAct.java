@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -49,6 +51,9 @@ public class InputLaporanUangAct extends AppCompatActivity  {
         addtgl = findViewById(R.id.addtgl);
         xnominal = findViewById(R.id.xnominal);
         btnsave = findViewById(R.id.btnsave);
+
+        xtgl.addTextChangedListener(loginTextWatcher);
+        xnominal.addTextChangedListener(loginTextWatcher);
 
         reference = FirebaseDatabase.getInstance().getReference().child("Cabang")
                 .child(username_key_new).child("LaporanUang");
@@ -118,5 +123,27 @@ public class InputLaporanUangAct extends AppCompatActivity  {
         username_key_new =sharedPreferences.getString(username_key, "");
 
     }
+
+
+    private TextWatcher loginTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            String tglInput = xtgl.getText().toString().trim();
+            String nominalInput = xnominal.getText().toString().trim();
+
+            btnsave.setEnabled(!tglInput.isEmpty() && !nominalInput.isEmpty());
+
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
 
 }
