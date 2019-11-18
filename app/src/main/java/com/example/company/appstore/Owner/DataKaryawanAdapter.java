@@ -61,7 +61,7 @@ public class DataKaryawanAdapter extends RecyclerView.Adapter<DataKaryawanAdapte
         });
 
     }
-
+//
     @Override
     public int getItemCount() {
         return absensiConsts.size();
