@@ -1,5 +1,7 @@
 package com.example.company.appstore.Owner;
 
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -38,12 +40,12 @@ public class DataKaryawanAdapter extends RecyclerView.Adapter<DataKaryawanAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DataKaryawanAdapter.MyViewHolder myViewHolder, int i) {
+    public void onBindViewHolder(@NonNull final DataKaryawanAdapter.MyViewHolder myViewHolder, int i) {
 
         myViewHolder.xnama.setText(absensiConsts.get(i).getNama());
         myViewHolder.xalamat.setText(absensiConsts.get(i).getAlamat());
 
-        final String cabang = absensiConsts.get(i).getNama_cabang();
+        final String cabang = absensiConsts.get(i).getCabang();
         final String key = absensiConsts.get(i).getKey();
 
         myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -53,6 +55,8 @@ public class DataKaryawanAdapter extends RecyclerView.Adapter<DataKaryawanAdapte
                 go.putExtra("keyCabang",cabang); //Lempar key
                 go.putExtra("key",key); //Lempar key
                 context.startActivity(go);
+                ((Activity) context).finish();
+
             }
         });
 

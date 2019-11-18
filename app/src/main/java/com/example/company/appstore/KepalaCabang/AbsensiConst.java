@@ -4,13 +4,13 @@ import java.io.Serializable;
 
 public class AbsensiConst implements Serializable {
 
-    String nama,posisi,alamat,gender,nama_cabang, umur, telepon, key;
+    String nama,posisi,alamat,gender,nama_cabang, umur, telepon, key, cabang;
 
     public AbsensiConst() {
     }
 
     public AbsensiConst(String nama, String posisi, String alamat,
-                        String gender, String nama_cabang, String umur, String telepon, String key) {
+                        String gender, String nama_cabang, String umur, String telepon, String key, String cabang) {
         this.nama = nama;
         this.posisi = posisi;
         this.alamat = alamat;
@@ -19,6 +19,7 @@ public class AbsensiConst implements Serializable {
         this.umur = umur;
         this.telepon = telepon;
         this.key = key;
+        this.cabang = cabang;
     }
 
     public String getNama() {
@@ -83,5 +84,13 @@ public class AbsensiConst implements Serializable {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public String getCabang() {
+        return cabang;
+    }
+
+    public void setCabang(String cabang) {
+        this.cabang = cabang;
     }
 }
