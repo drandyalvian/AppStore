@@ -29,8 +29,8 @@ import java.util.Locale;
 public class OwnerDashbordAct extends AppCompatActivity {
 
     TextView xnama, jml_C1, jml_C2, jml_C3, tgl_cabang1, tgl_cabang2, tgl_cabang3, nc1, nc2, nc3;
-    LinearLayout gajik1,laporank1,datak1, laporank2, laporank3, datak2, datak3;
-    Button logout, edit_toko;
+    LinearLayout gajik1,gajik2, gajik3, laporank1, laporank2, laporank3,datak1, datak2, datak3;
+    Button logout, edit_toko, edit_toko2, edit_toko3;
     ImageView edit_owner;
 
     DatabaseReference reference, reference2, reference3, reference4, reference5;
@@ -51,6 +51,8 @@ public class OwnerDashbordAct extends AppCompatActivity {
         getUsernameLocal();
 
         gajik1 = findViewById(R.id.gajik1);
+        gajik2 = findViewById(R.id.gajik2);
+        gajik3 = findViewById(R.id.gajik3);
         laporank1 = findViewById(R.id.laporank1);
         laporank2 = findViewById(R.id.laporank2);
         laporank3 = findViewById(R.id.laporank3);
@@ -59,6 +61,8 @@ public class OwnerDashbordAct extends AppCompatActivity {
         datak3 = findViewById(R.id.datak3);
         logout = findViewById(R.id.logout);
         edit_toko = findViewById(R.id.edit_toko);
+        edit_toko2 = findViewById(R.id.edit_toko2);
+        edit_toko3 = findViewById(R.id.edit_toko3);
         edit_owner = findViewById(R.id.edit_owner);
         xnama = findViewById(R.id.xnama);
         jml_C1 = findViewById(R.id.ket_jmlc1);
@@ -137,6 +141,25 @@ public class OwnerDashbordAct extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent go = new Intent(OwnerDashbordAct.this,GajiAct.class);
+                go.putExtra("cabang","cabang1");
+                startActivity(go);
+
+            }
+        });
+        gajik2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent go = new Intent(OwnerDashbordAct.this,GajiAct.class);
+                go.putExtra("cabang","cabang2");
+                startActivity(go);
+
+            }
+        });
+        gajik3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent go = new Intent(OwnerDashbordAct.this,GajiAct.class);
+                go.putExtra("cabang","cabang3");
                 startActivity(go);
 
             }
@@ -151,11 +174,47 @@ public class OwnerDashbordAct extends AppCompatActivity {
 
             }
         });
+        laporank2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent go = new Intent(OwnerDashbordAct.this,LaporanOwnerAct.class);
+                go.putExtra("cabang","cabang2");
+                startActivity(go);
+
+            }
+        });
+        laporank3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent go = new Intent(OwnerDashbordAct.this,LaporanOwnerAct.class);
+                go.putExtra("cabang","cabang3");
+                startActivity(go);
+
+            }
+        });
         datak1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent go = new Intent(OwnerDashbordAct.this,DataKaryawanAct.class);
                 go.putExtra("cabang", "cabang1");
+                startActivity(go);
+
+            }
+        });
+        datak2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent go = new Intent(OwnerDashbordAct.this,DataKaryawanAct.class);
+                go.putExtra("cabang", "cabang2");
+                startActivity(go);
+
+            }
+        });
+        datak3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent go = new Intent(OwnerDashbordAct.this,DataKaryawanAct.class);
+                go.putExtra("cabang", "cabang3");
                 startActivity(go);
 
             }
@@ -173,9 +232,26 @@ public class OwnerDashbordAct extends AppCompatActivity {
         edit_toko.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String s = "cabang1";
                 Intent go = new Intent(OwnerDashbordAct.this,EditTokoAct.class);
-                go.putExtra("nama", s);
+                go.putExtra("nama", "cabang1");
+                startActivity(go);
+
+            }
+        });
+        edit_toko2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent go = new Intent(OwnerDashbordAct.this,EditTokoAct.class);
+                go.putExtra("nama", "cabang2");
+                startActivity(go);
+
+            }
+        });
+        edit_toko3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent go = new Intent(OwnerDashbordAct.this,EditTokoAct.class);
+                go.putExtra("nama", "cabang3");
                 startActivity(go);
 
             }

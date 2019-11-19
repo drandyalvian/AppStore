@@ -1,5 +1,6 @@
 package com.example.company.appstore.Owner;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -7,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.company.appstore.KepalaCabang.AbsensiConst;
@@ -43,30 +45,37 @@ public class GajiAdapter  extends RecyclerView.Adapter<GajiAdapter.MyViewHolder>
     public void onBindViewHolder(@NonNull final GajiAdapter.MyViewHolder myViewHolder, int i) {
 
         myViewHolder.tNama.setText(gajiConst.get(i).getNama());
+        myViewHolder.tGaji.setText(gajiConst.get(i).getGaji_pokok());
+        myViewHolder.tgl1.setText(gajiConst.get(i).getTgl_gaji());
 
         final String getkey = gajiConst.get(i).getKey();
+        final String cabangkey = gajiConst.get(i).getCabang();
 
-//        myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent go = new Intent(context, ListAbsensiAct.class);
-//                go.putExtra("key",getkey); //Lempar key
-//                context.startActivity(go);
-//            }
-//        });
-
-        //get nominal gaji
-        String cabang = gajiConst.get(i).getNama_cabang();
-        reference = FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabang).child("Karyawan")
-                .child(gajiConst.get(i).getKey()).child("Gaji").child("Rincian");
-        reference.addValueEventListener(new ValueEventListener() {
+        myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                myViewHolder.tGaji.setText(dataSnapshot.child("gaji_pokok").getValue().toString());
+            public void onClick(View v) {
+                Intent go = new Intent(context, InputGajiAct.class);
+                go.putExtra("key",getkey); //Lempar key
+                go.putExtra("cabang",cabangkey);
+                context.startActivity(go);
             }
+        });
 
+        myViewHolder.print.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+            public void onClick(View view) {
+
+                final Dialog dialog = new Dialog(context);
+                dialog.setContentView(R.layout.dialogview_pinjaman);
+                dialog.show();
+
+                Button btnprint = dialog.findViewById(R.id.btnprint);
+                btnprint.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
 
             }
         });
@@ -80,7 +89,8 @@ public class GajiAdapter  extends RecyclerView.Adapter<GajiAdapter.MyViewHolder>
 
     class MyViewHolder extends RecyclerView.ViewHolder{
 
-        TextView tNama,  tGaji;
+        TextView tNama,tGaji, tgl1;
+        Button print;
 
 
         public MyViewHolder(@NonNull View itemView){
@@ -88,6 +98,8 @@ public class GajiAdapter  extends RecyclerView.Adapter<GajiAdapter.MyViewHolder>
 
             tNama = itemView.findViewById(R.id.tNama);
             tGaji = itemView.findViewById(R.id.tGaji);
+            tgl1 = itemView.findViewById(R.id.tgl1);
+            print = itemView.findViewById(R.id.print);
 
         }
     }

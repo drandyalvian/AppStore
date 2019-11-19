@@ -36,6 +36,7 @@ public class LaporanOwnerAct extends AppCompatActivity implements LaporanUangAda
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_laporan_owner);
 
+
         String cabang = getIntent().getStringExtra("cabang");
 
         rvView = (RecyclerView) findViewById(R.id.laporan_uang_place);

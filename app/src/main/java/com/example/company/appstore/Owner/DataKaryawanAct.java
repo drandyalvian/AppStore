@@ -47,7 +47,7 @@ public class DataKaryawanAct extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         rvView.setLayoutManager(layoutManager);
 
-        String cabang = getIntent().getStringExtra("cabang");
+        final String cabang = getIntent().getStringExtra("cabang");
 
         reference = FirebaseDatabase.getInstance().getReference()
                 .child("Cabang").child(cabang).child("Karyawan");
@@ -88,7 +88,8 @@ public class DataKaryawanAct extends AppCompatActivity {
         btnplus2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent go = new Intent(DataKaryawanAct.this,EditKaryawanAct.class);
+                Intent go = new Intent(DataKaryawanAct.this,AddKaryawanAct.class);
+                go.putExtra("cabang",cabang);
                 startActivity(go);
 
             }

@@ -31,8 +31,9 @@
         <activity android:name=".Owner.AddKaryawanAct" />
         <activity android:name=".Owner.LaporanOwnerAct" />
         <activity android:name=".Owner.GajiAct" />
+        <activity android:name=".Owner.InputGajiAct" />
         <activity android:name=".KepalaCabang.ListAbsensiAct" />
-        <activity android:name=".KepalaCabang.InputLaporanUangAct"></activity>
+        <activity android:name=".KepalaCabang.InputLaporanUangAct" />
     </application>
 
 </manifest>
