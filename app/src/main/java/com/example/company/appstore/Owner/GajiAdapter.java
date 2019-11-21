@@ -16,13 +16,20 @@ import android.widget.Toast;
 
 import com.example.company.appstore.FileUtils;
 import com.example.company.appstore.R;
+import com.example.company.appstore.permission.PermissionsActivity;
+import com.example.company.appstore.permission.PermissionsChecker;
 import com.google.firebase.database.DatabaseReference;
 
 import java.util.ArrayList;
 
+import static com.example.company.appstore.permission.PermissionsActivity.PERMISSION_REQUEST_CODE;
+import static com.example.company.appstore.permission.PermissionsChecker.REQUIRED_PERMISSION;
+
 public class GajiAdapter  extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> {
 
     private DatabaseReference reference;
+
+    PermissionsChecker checker;
 
     Context context, mContext;
     ArrayList<GajiConst> gajiConst;
@@ -85,11 +92,17 @@ public class GajiAdapter  extends RecyclerView.Adapter<GajiAdapter.MyViewHolder>
                 Integer gajiDiterima = gajiTotal - Integer.parseInt(pinjaman);
                 String namaCabang  = gajiConst.get(i).getNama_cabang();
 
+                checker = new PermissionsChecker(context);
 
-                mContext = context.getApplicationContext();
-                Toast.makeText(context, FileUtils.getAppPath(mContext)+" "+nama, Toast.LENGTH_SHORT).show();
-                ExportAct exportAct = new ExportAct();
-                exportAct.createPdf(FileUtils.getAppPath(mContext) + "cek.pdf", nama, komisi, gajiPokok, pinjaman, uangMakan, gajiTotal, gajiDiterima, namaCabang);
+                if (checker.lacksPermissions(REQUIRED_PERMISSION)) {
+                    PermissionsActivity.startActivityForResult((Activity) context, PERMISSION_REQUEST_CODE, REQUIRED_PERMISSION);
+                } else {
+                    mContext = context.getApplicationContext();
+                    Toast.makeText(context, FileUtils.getAppPath(mContext)+" "+nama, Toast.LENGTH_SHORT).show();
+                    ExportAct exportAct = new ExportAct();
+                    exportAct.createPdf(FileUtils.getAppPath(mContext) + "cek.pdf", nama, komisi, gajiPokok, pinjaman, uangMakan, gajiTotal, gajiDiterima, namaCabang);
+                }
+
 //                Intent intent = new Intent(context, ExportAct.class);
 //                intent.putExtra("cabang",cabangkey);
 //                intent.putExtra("key", getkey);
