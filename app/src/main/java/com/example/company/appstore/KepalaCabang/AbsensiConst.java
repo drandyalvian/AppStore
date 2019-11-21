@@ -4,7 +4,15 @@ import java.io.Serializable;
 
 public class AbsensiConst implements Serializable {
 
-    String nama,posisi,alamat,gender,nama_cabang, umur, telepon, key, cabang;
+    String nama;
+    String posisi;
+    String alamat;
+    String gender;
+    String nama_cabang;
+    String umur;
+    String telepon;
+    static String key;
+    String cabang;
 
     public AbsensiConst() {
     }
@@ -78,7 +86,8 @@ public class AbsensiConst implements Serializable {
         this.telepon = telepon;
     }
 
-    public String getKey() {
+
+    public static String getKey() {
         return key;
     }
 

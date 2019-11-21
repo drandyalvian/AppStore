@@ -23,7 +23,7 @@ public class AddKaryawanAct extends AppCompatActivity {
 
     Button back, save;
     Spinner xspiner;
-    EditText  xnama, xumur, xalamat, xnohp, xgajipokok, xusername;
+    EditText  xnama, xumur, xalamat, xnohp, xgajipokok, xusername, xposisi;
     String cabangx, karyawanx;
 
     DatabaseReference reference;
@@ -43,6 +43,7 @@ public class AddKaryawanAct extends AppCompatActivity {
         xnohp = findViewById(R.id.xnohp);
         xgajipokok = findViewById(R.id.xgajipokok);
         xspiner = findViewById(R.id.xspiner);
+        xposisi = findViewById(R.id.xposisi);
 
 //        spinner
         final ArrayAdapter pilihGender=ArrayAdapter.createFromResource(this, R.array.pilih_gender, android.R.layout.simple_spinner_dropdown_item);
@@ -62,13 +63,16 @@ public class AddKaryawanAct extends AppCompatActivity {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         try {
+
                             dataSnapshot.getRef().child("nama").setValue(xnama.getText().toString());
+                            dataSnapshot.getRef().child("posisi").setValue(xposisi.getText().toString());
                             dataSnapshot.getRef().child("key").setValue(xusername.getText().toString());
                             dataSnapshot.getRef().child("umur").setValue(xumur.getText().toString());
                             dataSnapshot.getRef().child("alamat").setValue(xalamat.getText().toString());
                             dataSnapshot.getRef().child("telepon").setValue(xnohp.getText().toString());
                             dataSnapshot.getRef().child("gaji_pokok").setValue(xgajipokok.getText().toString());
                             dataSnapshot.getRef().child("gender").setValue(xspiner.getSelectedItem().toString());
+                            dataSnapshot.getRef().child("cabang").setValue(cabangx);
                         }catch (Exception e){
                             Toast.makeText(AddKaryawanAct.this, ""+reference.getRef(), Toast.LENGTH_SHORT).show();
                         }

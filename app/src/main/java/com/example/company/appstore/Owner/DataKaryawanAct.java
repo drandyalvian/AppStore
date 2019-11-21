@@ -9,11 +9,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.company.appstore.KepalaCabang.AbsensiAct;
 import com.example.company.appstore.KepalaCabang.AbsensiAdapter;
 import com.example.company.appstore.KepalaCabang.AbsensiConst;
+import com.example.company.appstore.KepalaCabang.LaporanUangConst;
 import com.example.company.appstore.R;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -22,7 +25,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class DataKaryawanAct extends AppCompatActivity {
+public class DataKaryawanAct extends AppCompatActivity implements DataKaryawanAdapter.FirebaseDataListener {
+
 
     Button back, btnplus2;
     LinearLayout profilk;
@@ -63,7 +67,7 @@ public class DataKaryawanAct extends AppCompatActivity {
                     absensiConsts.add(aConst);
 
                 }
-                adapter = new DataKaryawanAdapter(absensiConsts, DataKaryawanAct.this);
+                adapter = new DataKaryawanAdapter(absensiConsts, DataKaryawanAct.this, DataKaryawanAct.this);
                 rvView.setAdapter(adapter);
             }
 
@@ -83,8 +87,6 @@ public class DataKaryawanAct extends AppCompatActivity {
             }
         });
 
-
-
         btnplus2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,5 +96,19 @@ public class DataKaryawanAct extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onDeleteData(AbsensiConst absensiConsts, int i) {
+        if(reference!=null){
+            reference.child(AbsensiConst.getKey()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+
+                    Toast.makeText(DataKaryawanAct.this,"success delete", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        }
     }
 }
