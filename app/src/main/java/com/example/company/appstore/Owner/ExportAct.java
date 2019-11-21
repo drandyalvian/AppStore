@@ -96,7 +96,7 @@ public class ExportAct extends AppCompatActivity {
 
     }
 
-    public void createPdf(String dest, String nama, String komisi, String gajiPokok, String pinjaman, String uangMakan, Integer gajiTotal, Integer gajiDiterima, String cabang) {
+    public void createPdf(String dest, String nama, String komisi, String gajiPokok, String pinjaman, String uangMakan, Integer gajiTotal, Integer gajiDiterima, String namaCabang) {
 
         if (new File(dest).exists()) {
             new File(dest).delete();
@@ -145,7 +145,7 @@ public class ExportAct extends AppCompatActivity {
             document.add(mOrderDetailsTitleParagraph);
 
             Font mOrderDetailsTitleFont2 = new Font(urName, 29.0f, Font.NORMAL, BaseColor.BLACK);
-            Chunk mOrderDetailsTitleChunk2 = new Chunk(cabang+"", mOrderDetailsTitleFont2);
+            Chunk mOrderDetailsTitleChunk2 = new Chunk(namaCabang+"", mOrderDetailsTitleFont2);
             Paragraph mOrderDetailsTitleParagraph2 = new Paragraph(mOrderDetailsTitleChunk2);
             mOrderDetailsTitleParagraph2.setAlignment(Element.ALIGN_CENTER);
             document.add(mOrderDetailsTitleParagraph2);

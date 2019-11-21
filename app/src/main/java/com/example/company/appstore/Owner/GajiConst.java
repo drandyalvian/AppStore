@@ -11,8 +11,7 @@ public class GajiConst implements Serializable {
 
     }
 
-    public GajiConst(String nama, String posisi, String alamat, String gender, String nama_cabang, String cabang, String umur, String telepon, String key,
-                     String gaji_lembur, String gaji_pokok, String kompensasi, String pinjaman, String uang_makan, String tgl_gaji) {
+    public GajiConst(String nama, String posisi, String alamat, String gender, String nama_cabang, String cabang, String umur, String telepon, String key, String gaji_lembur, String gaji_pokok, String kompensasi, String pinjaman, String uang_makan, String tgl_gaji) {
         this.nama = nama;
         this.posisi = posisi;
         this.alamat = alamat;

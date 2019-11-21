@@ -60,7 +60,7 @@ public class GajiAct extends AppCompatActivity {
 
                     GajiConst aConst = dataSnapshot1.getValue(GajiConst.class);
                     aConst.setKey(dataSnapshot1.getKey());
-                    aConst.setNama_cabang(cabang);
+                    aConst.setCabang(cabang);
                     gajiConsts.add(aConst);
 
                 }

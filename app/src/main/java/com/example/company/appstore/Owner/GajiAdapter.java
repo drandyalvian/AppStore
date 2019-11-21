@@ -18,7 +18,11 @@ import com.example.company.appstore.FileUtils;
 import com.example.company.appstore.R;
 import com.example.company.appstore.permission.PermissionsActivity;
 import com.example.company.appstore.permission.PermissionsChecker;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -50,7 +54,7 @@ public class GajiAdapter  extends RecyclerView.Adapter<GajiAdapter.MyViewHolder>
     public void onBindViewHolder(@NonNull final GajiAdapter.MyViewHolder myViewHolder, final int i) {
 
         myViewHolder.tNama.setText(gajiConst.get(i).getNama());
-        myViewHolder.tGaji.setText(gajiConst.get(i).getGaji_pokok());
+        myViewHolder.tGaji.setText(gajiConst.get(i).getNama_cabang());
         myViewHolder.tgl1.setText(gajiConst.get(i).getTgl_gaji());
 
         final String getkey = gajiConst.get(i).getKey();
@@ -83,14 +87,15 @@ public class GajiAdapter  extends RecyclerView.Adapter<GajiAdapter.MyViewHolder>
 //                        dialog.dismiss();
 //                    }
 //                });
-                String nama = gajiConst.get(i).getNama();
-                String komisi = gajiConst.get(i).getKompensasi();
-                String gajiPokok = gajiConst.get(i).getGaji_pokok();
-                String uangMakan = gajiConst.get(i).getUang_makan();
-                String pinjaman = gajiConst.get(i).getPinjaman();
-                Integer gajiTotal = Integer.parseInt(gajiPokok) + Integer.parseInt(uangMakan) + Integer.parseInt(komisi);
-                Integer gajiDiterima = gajiTotal - Integer.parseInt(pinjaman);
-                String namaCabang  = gajiConst.get(i).getNama_cabang();
+                final String nama = gajiConst.get(i).getNama();
+                final String komisi = gajiConst.get(i).getKompensasi();
+                final String gajiPokok = gajiConst.get(i).getGaji_pokok();
+                final String uangMakan = gajiConst.get(i).getUang_makan();
+                final String pinjaman = gajiConst.get(i).getPinjaman();
+                final Integer gajiTotal = Integer.parseInt(gajiPokok) + Integer.parseInt(uangMakan) + Integer.parseInt(komisi);
+                final Integer gajiDiterima = gajiTotal - Integer.parseInt(pinjaman);
+                final String namaCabang = gajiConst.get(i).getNama_cabang();
+
 
                 checker = new PermissionsChecker(context);
                 mContext = context.getApplicationContext();
@@ -105,6 +110,8 @@ public class GajiAdapter  extends RecyclerView.Adapter<GajiAdapter.MyViewHolder>
 
 
                 }
+
+
 
 //                Intent intent = new Intent(context, ExportAct.class);
 //                intent.putExtra("cabang",cabangkey);
