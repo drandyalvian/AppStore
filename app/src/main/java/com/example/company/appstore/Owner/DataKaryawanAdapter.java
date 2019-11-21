@@ -23,12 +23,15 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class DataKaryawanAdapter extends RecyclerView.Adapter<DataKaryawanAdapter.MyViewHolder> {
+    DataKaryawanAct listener;
 
     Context context;
     ArrayList<AbsensiConst> absensiConsts;
-    public DataKaryawanAdapter(ArrayList<AbsensiConst> p, Context c){
+    public DataKaryawanAdapter(ArrayList<AbsensiConst> p, Context c, Context b){
         context = c;
         absensiConsts = p;
+
+        listener = (DataKaryawanAct) b;
     }
 
     @NonNull
@@ -40,7 +43,7 @@ public class DataKaryawanAdapter extends RecyclerView.Adapter<DataKaryawanAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final DataKaryawanAdapter.MyViewHolder myViewHolder, int i) {
+    public void onBindViewHolder(@NonNull final DataKaryawanAdapter.MyViewHolder myViewHolder, final int i) {
 
         myViewHolder.xnama.setText(absensiConsts.get(i).getNama());
         myViewHolder.xalamat.setText(absensiConsts.get(i).getAlamat());
@@ -60,6 +63,15 @@ public class DataKaryawanAdapter extends RecyclerView.Adapter<DataKaryawanAdapte
             }
         });
 
+        myViewHolder.delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                listener.onDeleteData(absensiConsts.get(i), i);
+
+            }
+        });
+
     }
 //
     @Override
@@ -69,15 +81,19 @@ public class DataKaryawanAdapter extends RecyclerView.Adapter<DataKaryawanAdapte
 
     class MyViewHolder extends RecyclerView.ViewHolder{
 
-        TextView xnama,  xalamat;
-
+        TextView xnama,  xalamat, delete;
 
         public MyViewHolder(@NonNull View itemView){
             super(itemView);
 
             xnama = itemView.findViewById(R.id.xnama);
             xalamat = itemView.findViewById(R.id.xalamat);
+            delete = itemView.findViewById(R.id.delete);
 
         }
+    }
+
+    public interface FirebaseDataListener{
+        void onDeleteData(AbsensiConst absensiConsts, int i);
     }
 }
