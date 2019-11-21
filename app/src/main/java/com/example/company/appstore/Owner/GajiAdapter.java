@@ -1,5 +1,6 @@
 package com.example.company.appstore.Owner;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -10,15 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.company.appstore.KepalaCabang.AbsensiConst;
-import com.example.company.appstore.KepalaCabang.ListAbsensiAct;
+
+import com.example.company.appstore.FileUtils;
 import com.example.company.appstore.R;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -26,7 +24,7 @@ public class GajiAdapter  extends RecyclerView.Adapter<GajiAdapter.MyViewHolder>
 
     private DatabaseReference reference;
 
-    Context context;
+    Context context, mContext;
     ArrayList<GajiConst> gajiConst;
     public GajiAdapter(ArrayList<GajiConst> p, Context c){
         context = c;
@@ -42,7 +40,7 @@ public class GajiAdapter  extends RecyclerView.Adapter<GajiAdapter.MyViewHolder>
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final GajiAdapter.MyViewHolder myViewHolder, int i) {
+    public void onBindViewHolder(@NonNull final GajiAdapter.MyViewHolder myViewHolder, final int i) {
 
         myViewHolder.tNama.setText(gajiConst.get(i).getNama());
         myViewHolder.tGaji.setText(gajiConst.get(i).getGaji_pokok());
@@ -50,6 +48,8 @@ public class GajiAdapter  extends RecyclerView.Adapter<GajiAdapter.MyViewHolder>
 
         final String getkey = gajiConst.get(i).getKey();
         final String cabangkey = gajiConst.get(i).getCabang();
+
+        
 
         myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,18 +65,36 @@ public class GajiAdapter  extends RecyclerView.Adapter<GajiAdapter.MyViewHolder>
             @Override
             public void onClick(View view) {
 
-                final Dialog dialog = new Dialog(context);
-                dialog.setContentView(R.layout.dialogview_pinjaman);
-                dialog.show();
+//                final Dialog dialog = new Dialog(context);
+//                dialog.setContentView(R.layout.dialogview_pinjaman);
+//                dialog.show();
+//
+//                Button btnprint = dialog.findViewById(R.id.btnprint);
+//                btnprint.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        dialog.dismiss();
+//                    }
+//                });
+                String nama = gajiConst.get(i).getNama();
+                String komisi = gajiConst.get(i).getKompensasi();
+                String gajiPokok = gajiConst.get(i).getGaji_pokok();
+                String uangMakan = gajiConst.get(i).getUang_makan();
+                String pinjaman = gajiConst.get(i).getPinjaman();
+                Integer gajiTotal = Integer.parseInt(gajiPokok) + Integer.parseInt(uangMakan) + Integer.parseInt(komisi);
+                Integer gajiDiterima = gajiTotal - Integer.parseInt(pinjaman);
+                String namaCabang  = gajiConst.get(i).getNama_cabang();
 
-                Button btnprint = dialog.findViewById(R.id.btnprint);
-                btnprint.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
 
+                mContext = context.getApplicationContext();
+                Toast.makeText(context, FileUtils.getAppPath(mContext)+" "+nama, Toast.LENGTH_SHORT).show();
+                ExportAct exportAct = new ExportAct();
+                exportAct.createPdf(FileUtils.getAppPath(mContext) + "cek.pdf", nama, komisi, gajiPokok, pinjaman, uangMakan, gajiTotal, gajiDiterima, namaCabang);
+//                Intent intent = new Intent(context, ExportAct.class);
+//                intent.putExtra("cabang",cabangkey);
+//                intent.putExtra("key", getkey);
+//                context.startActivity(intent);
+//                ((Activity) context).finish();
             }
         });
 

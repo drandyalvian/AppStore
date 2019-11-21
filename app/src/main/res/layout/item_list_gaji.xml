@@ -46,21 +46,22 @@
                 android:id="@+id/tgl1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/mlight"
-                android:text=""
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="30dp"
-                android:textSize="12sp"
-                android:textColor="@color/color5"/>
+                android:fontFamily="@font/mlight"
+                android:text=""
+                android:textColor="@color/color5"
+                android:textSize="12sp" />
+
             <Button
                 android:id="@+id/print"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_below="@+id/tgl1"
-                android:layout_marginTop="15dp"
-                android:textColor="@color/color4"
                 android:layout_alignParentRight="true"
+                android:layout_marginTop="4dp"
                 android:layout_marginRight="30dp"
-                android:background="@drawable/printer"/>
+                android:background="@drawable/printer"
+                android:textColor="@color/color4" />
         </RelativeLayout>
 </RelativeLayout>
