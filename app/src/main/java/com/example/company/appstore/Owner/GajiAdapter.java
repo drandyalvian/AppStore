@@ -24,7 +24,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import static com.example.company.appstore.permission.PermissionsActivity.PERMISSION_REQUEST_CODE;
 import static com.example.company.appstore.permission.PermissionsChecker.REQUIRED_PERMISSION;
@@ -54,7 +56,7 @@ public class GajiAdapter  extends RecyclerView.Adapter<GajiAdapter.MyViewHolder>
     public void onBindViewHolder(@NonNull final GajiAdapter.MyViewHolder myViewHolder, final int i) {
 
         myViewHolder.tNama.setText(gajiConst.get(i).getNama());
-        myViewHolder.tGaji.setText(gajiConst.get(i).getNama_cabang());
+        myViewHolder.tGaji.setText(gajiConst.get(i).getGaji_pokok());
         myViewHolder.tgl1.setText(gajiConst.get(i).getTgl_gaji());
 
         final String getkey = gajiConst.get(i).getKey();
@@ -92,32 +94,34 @@ public class GajiAdapter  extends RecyclerView.Adapter<GajiAdapter.MyViewHolder>
                 final String gajiPokok = gajiConst.get(i).getGaji_pokok();
                 final String uangMakan = gajiConst.get(i).getUang_makan();
                 final String pinjaman = gajiConst.get(i).getPinjaman();
-                final Integer gajiTotal = Integer.parseInt(gajiPokok) + Integer.parseInt(uangMakan) + Integer.parseInt(komisi);
-                final Integer gajiDiterima = gajiTotal - Integer.parseInt(pinjaman);
+                final Double gajiTotal = Double.parseDouble(gajiPokok) + Double.parseDouble(uangMakan) + Double.parseDouble(komisi);
+                final Double gajiDiterima = gajiTotal - Double.parseDouble(pinjaman);
                 final String namaCabang = gajiConst.get(i).getNama_cabang();
+
+                Locale localeID = new Locale("in", "ID");
+                NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
+
 
 
                 checker = new PermissionsChecker(context);
                 mContext = context.getApplicationContext();
                 ExportAct exportAct = new ExportAct();
-                if (checker.lacksPermissions(REQUIRED_PERMISSION)) {
-                    PermissionsActivity.startActivityForResult((Activity) context, PERMISSION_REQUEST_CODE, REQUIRED_PERMISSION);
-                    Toast.makeText(context, FileUtils.getAppPath(mContext)+" "+nama, Toast.LENGTH_SHORT).show();
-                    exportAct.createPdf(FileUtils.getAppPath(mContext) + nama+".pdf", nama, komisi, gajiPokok, pinjaman, uangMakan, gajiTotal, gajiDiterima, namaCabang);
-                } else {
-                    exportAct.createPdf(FileUtils.getAppPath(mContext) + nama+".pdf", nama, komisi, gajiPokok, pinjaman, uangMakan, gajiTotal, gajiDiterima, namaCabang);
-                    Toast.makeText(context, FileUtils.getAppPath(mContext)+" "+nama, Toast.LENGTH_SHORT).show();
+//                if (checker.lacksPermissions(REQUIRED_PERMISSION)) {
+//                    PermissionsActivity.startActivityForResult((Activity) context, PERMISSION_REQUEST_CODE, REQUIRED_PERMISSION);
+//                    Toast.makeText(context, FileUtils.getAppPath(mContext)+" "+nama, Toast.LENGTH_SHORT).show();
+//                    exportAct.createPdf(FileUtils.getAppPath(mContext) + nama+".pdf", nama, formatRupiah.format(Double.parseDouble(komisi)), formatRupiah.format(Double.parseDouble(gajiPokok)), formatRupiah.format(Double.parseDouble(pinjaman)), formatRupiah.format(Double.parseDouble(uangMakan)), formatRupiah.format(gajiTotal), formatRupiah.format((double)gajiDiterima), namaCabang);
+//                } else {
+//                    exportAct.createPdf(FileUtils.getAppPath(mContext) + nama+".pdf", nama, formatRupiah.format(Double.parseDouble(komisi)), formatRupiah.format(Double.parseDouble(gajiPokok)), formatRupiah.format(Double.parseDouble(pinjaman)), formatRupiah.format(Double.parseDouble(uangMakan)), formatRupiah.format(gajiTotal), formatRupiah.format((double)gajiDiterima), namaCabang);
+//                    Toast.makeText(context, FileUtils.getAppPath(mContext)+" "+nama, Toast.LENGTH_SHORT).show();
+//
+//
+//                }
 
 
-                }
 
-
-
-//                Intent intent = new Intent(context, ExportAct.class);
-//                intent.putExtra("cabang",cabangkey);
-//                intent.putExtra("key", getkey);
-//                context.startActivity(intent);
-//                ((Activity) context).finish();
+                Intent intent = new Intent(context, PrintAct.class);
+                context.startActivity(intent);
+                ((Activity) context).finish();
             }
         });
 

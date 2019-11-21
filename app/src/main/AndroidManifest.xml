@@ -3,6 +3,8 @@
     package="com.example.company.appstore">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
 
     <application
         android:allowBackup="true"
@@ -11,7 +13,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Owner.ExportAct"></activity>
+        <activity android:name=".Owner.PrintAct"></activity>
+        <activity android:name=".Owner.ExportAct" />
         <activity android:name=".Splash_Act">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,7 +25,6 @@
         <activity
             android:name=".permission.PermissionsActivity"
             android:screenOrientation="portrait" />
-
         <activity android:name=".StartAct" />
         <activity android:name=".KepalaCabang.LoginAct" />
         <activity android:name=".KepalaCabang.DashbordAct" />
@@ -40,6 +42,7 @@
         <activity android:name=".Owner.GajiAct" />
         <activity android:name=".Owner.InputGajiAct" />
         <activity android:name=".KepalaCabang.ListAbsensiAct" />
+        <activity android:name=".Owner.DeviceAct" />
         <activity android:name=".KepalaCabang.InputLaporanUangAct" /> <!-- File Provider -->
         <provider
             android:name="android.support.v4.content.FileProvider"

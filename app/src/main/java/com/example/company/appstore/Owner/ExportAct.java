@@ -4,12 +4,10 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.example.company.appstore.FileUtils;
 import com.example.company.appstore.R;
 import com.example.company.appstore.permission.PermissionsActivity;
 import com.example.company.appstore.permission.PermissionsChecker;
@@ -96,7 +94,7 @@ public class ExportAct extends AppCompatActivity {
 
     }
 
-    public void createPdf(String dest, String nama, String komisi, String gajiPokok, String pinjaman, String uangMakan, Integer gajiTotal, Integer gajiDiterima, String namaCabang) {
+    public void createPdf(String dest, String nama, String komisi, String gajiPokok, String pinjaman, String uangMakan, String gajiTotal, String gajiDiterima, String namaCabang) {
 
         if (new File(dest).exists()) {
             new File(dest).delete();
