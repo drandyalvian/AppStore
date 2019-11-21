@@ -93,14 +93,16 @@ public class GajiAdapter  extends RecyclerView.Adapter<GajiAdapter.MyViewHolder>
                 String namaCabang  = gajiConst.get(i).getNama_cabang();
 
                 checker = new PermissionsChecker(context);
-
+                mContext = context.getApplicationContext();
+                ExportAct exportAct = new ExportAct();
                 if (checker.lacksPermissions(REQUIRED_PERMISSION)) {
                     PermissionsActivity.startActivityForResult((Activity) context, PERMISSION_REQUEST_CODE, REQUIRED_PERMISSION);
-                } else {
-                    mContext = context.getApplicationContext();
                     Toast.makeText(context, FileUtils.getAppPath(mContext)+" "+nama, Toast.LENGTH_SHORT).show();
-                    ExportAct exportAct = new ExportAct();
                     exportAct.createPdf(FileUtils.getAppPath(mContext) + "cek.pdf", nama, komisi, gajiPokok, pinjaman, uangMakan, gajiTotal, gajiDiterima, namaCabang);
+                } else {
+                    exportAct.createPdf(FileUtils.getAppPath(mContext) + "cek.pdf", nama, komisi, gajiPokok, pinjaman, uangMakan, gajiTotal, gajiDiterima, namaCabang);
+                    exportAct.createPdf(FileUtils.getAppPath(mContext) + "cek.pdf", nama, komisi, gajiPokok, pinjaman, uangMakan, gajiTotal, gajiDiterima, namaCabang);
+
                 }
 
 //                Intent intent = new Intent(context, ExportAct.class);
