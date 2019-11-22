@@ -11,7 +11,10 @@
         android:id="@+id/imageView4"
         android:layout_width="match_parent"
         android:layout_height="240dp"
-        android:background="@color/color1" />
+        android:background="@color/color1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView3"
@@ -78,6 +81,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="18dp"
@@ -101,22 +105,33 @@
 
             <!--</android.support.v7.widget.RecyclerView>-->
             <android.support.v7.widget.RecyclerView
+                android:id="@+id/gaji_place"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/gaji_place">
+                android:layout_height="match_parent">
 
 
             </android.support.v7.widget.RecyclerView>
 
 
-
-
-
         </LinearLayout>
 
 
-
-
     </ScrollView>
+
+    <TextView
+        android:id="@+id/tv_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/mlight"
+        android:gravity="center"
+        android:text="status"
+        android:textColor="#ffff"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editText"
+        app:layout_constraintVertical_bias="0.005" />
 
 </android.support.constraint.ConstraintLayout>
