@@ -6,6 +6,12 @@
         <item>Perempuan</item>
     </string-array>
 
+    <string-array name="cabangToko">
+        <item>Toko Cabang 1</item>
+        <item>Toko Cabang 2</item>
+        <item>Toko Cabang 3</item>
+    </string-array>
+
     <string name="action_settings">Settings</string>
 
     <!-- strings for dialog -->

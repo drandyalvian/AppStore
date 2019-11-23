@@ -25,9 +25,9 @@ import org.w3c.dom.Text;
 public class EditKaryawanAct extends AppCompatActivity {
 
     Button back, save;
-    Spinner xspiner;
+    Spinner xspiner, xcabangtoko;
     TextView xusername;
-    EditText xcabangtoko, xnama, xumur, xalamat, xnohp, xgajipokok;
+    EditText xnama, xumur, xalamat, xnohp, xgajipokok;
     String cabangx, karyawanx;
 
     DatabaseReference reference;
@@ -60,6 +60,9 @@ public class EditKaryawanAct extends AppCompatActivity {
         final ArrayAdapter pilihGender=ArrayAdapter.createFromResource(this, R.array.pilih_gender, android.R.layout.simple_spinner_dropdown_item);
         xspiner.setAdapter(pilihGender);
 
+        final ArrayAdapter cabangToko=ArrayAdapter.createFromResource(this, R.array.cabangToko, android.R.layout.simple_spinner_dropdown_item);
+        xcabangtoko.setAdapter(cabangToko);
+
 //mengambil data dari intent
         Bundle bundle = getIntent().getExtras();
         cabangx= bundle.getString("keyCabang");
@@ -71,7 +74,7 @@ public class EditKaryawanAct extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 xnama.setText(dataSnapshot.child("nama").getValue().toString());
-                xcabangtoko.setText(dataSnapshot.child("nama_cabang").getValue().toString());
+                xcabangtoko.setSelection(cabangToko.getPosition(dataSnapshot.child("nama_cabang").getValue().toString()));
                 xusername.setText(dataSnapshot.child("key").getValue().toString());
                 xumur.setText(dataSnapshot.child("umur").getValue().toString());
                 xalamat.setText(dataSnapshot.child("alamat").getValue().toString());
@@ -95,7 +98,7 @@ public class EditKaryawanAct extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                         dataSnapshot.getRef().child("nama").setValue(xnama.getText().toString());
-                        dataSnapshot.getRef().child("nama_cabang").setValue(xcabangtoko.getText().toString());
+                        dataSnapshot.getRef().child("nama_cabang").setValue(xcabangtoko.getSelectedItem().toString());
                         dataSnapshot.getRef().child("umur").setValue(xumur.getText().toString());
                         dataSnapshot.getRef().child("alamat").setValue(xalamat.getText().toString());
                         dataSnapshot.getRef().child("telepon").setValue(xnohp.getText().toString());

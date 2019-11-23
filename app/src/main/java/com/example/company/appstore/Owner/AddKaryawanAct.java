@@ -27,9 +27,9 @@ import java.util.Map;
 public class AddKaryawanAct extends AppCompatActivity {
 
     Button back, save;
-    Spinner xspiner;
-    EditText  xnama, xumur, xalamat, xnohp, xgajipokok, xusername, xposisi, xcabangtoko;
-    String cabangx, karyawanx;
+    Spinner xspiner, xcabangtoko;
+    EditText  xnama, xumur, xalamat, xnohp, xgajipokok, xusername, xposisi;
+    String cabangx, karyawanx, cabangToko;
 
     DatabaseReference reference;
 
@@ -52,151 +52,80 @@ public class AddKaryawanAct extends AppCompatActivity {
         xposisi = findViewById(R.id.xposisi);
 
 //        spinner
-        final ArrayAdapter pilihGender=ArrayAdapter.createFromResource(this, R.array.pilih_gender, android.R.layout.simple_spinner_dropdown_item);
+        final ArrayAdapter pilihGender = ArrayAdapter.createFromResource(this, R.array.pilih_gender, android.R.layout.simple_spinner_dropdown_item);
         xspiner.setAdapter(pilihGender);
+
+//        final ArrayAdapter pilihCabang = ArrayAdapter.createFromResource(this, R.array.cabangToko, android.R.layout.simple_spinner_dropdown_item);
+//        xcabangtoko.setAdapter(pilihCabang);
 
 //      mengambil data dari intent
         Bundle bundle = getIntent().getExtras();
-        cabangx= bundle.getString("cabang");
+        cabangx = bundle.getString("cabang");
 
         reference = FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabangx).child("Karyawan");
 
-        //save data
+        //add karyawan
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                reference.child(xusername.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String str = xnama.getText().toString();
+                String[] arrOfStr = str.split(" ");
 
-                        dataSnapshot.getRef().child("nama").setValue(xnama.getText().toString());
-                        dataSnapshot.getRef().child("nama_cabang").setValue(cabangx);
-                        dataSnapshot.getRef().child("cabang").setValue(cabangx);
-                        dataSnapshot.getRef().child("posisi").setValue(xposisi.getText().toString());
-                        dataSnapshot.getRef().child("key").setValue(xusername.getText().toString());
-                        dataSnapshot.getRef().child("umur").setValue(xumur.getText().toString());
-                        dataSnapshot.getRef().child("alamat").setValue(xalamat.getText().toString());
-                        dataSnapshot.getRef().child("telepon").setValue(xnohp.getText().toString());
-                        dataSnapshot.getRef().child("gaji_pokok").setValue(xgajipokok.getText().toString());
-                        dataSnapshot.getRef().child("gaji_lembur").setValue("0");
-                        dataSnapshot.getRef().child("kompensasi").setValue("0");
-                        dataSnapshot.getRef().child("pinjaman").setValue("0");
-                        dataSnapshot.getRef().child("uang_makan").setValue("0");
-                        dataSnapshot.getRef().child("tgl_gaji").setValue("");
-                        dataSnapshot.getRef().child("gender").setValue(xspiner.getSelectedItem().toString());
-
-//                        try {
-//                            dataSnapshot.getRef().child("nama").setValue(xnama.getText().toString());
-//                            dataSnapshot.getRef().child("nama_cabang").setValue(xcabangtoko.getText().toString());
-//                            dataSnapshot.getRef().child("posisi").setValue(xposisi.getText().toString());
-//                            dataSnapshot.getRef().child("key").setValue(xusername.getText().toString());
-//                            dataSnapshot.getRef().child("umur").setValue(xumur.getText().toString());
-//                            dataSnapshot.getRef().child("alamat").setValue(xalamat.getText().toString());
-//                            dataSnapshot.getRef().child("telepon").setValue(xnohp.getText().toString());
-//                            dataSnapshot.getRef().child("gaji_pokok").setValue(xgajipokok.getText().toString());
-//                            dataSnapshot.getRef().child("gender").setValue(xspiner.getSelectedItem().toString());
-//                        }catch (Exception e){
-//                            Toast.makeText(AddKaryawanAct.this, ""+reference.getRef(), Toast.LENGTH_SHORT).show();
-//                        }
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-//                        Toast.makeText(AddKaryawanAct.this, ""+reference.getRef(), Toast.LENGTH_SHORT).show();
-                    }
+                if (cabangx.equals("cabang1")){
+                    cabangToko = "Toko Cabang 1";
+                }else if (cabangx.equals("cabang2")){
+                    cabangToko = "Toko Cabang 2";
+                }else{
+                    cabangToko = "Toko Cabang 3";
+                }
 
 
-                });
+                GajiConst gajiConst = new GajiConst(
+                        xnama.getText().toString(),
+                        xposisi.getText().toString(),
+                        xalamat.getText().toString(),
+                        xspiner.getSelectedItem().toString(),
+                        cabangToko,
+                        cabangx,
+                        xumur.getText().toString(),
+                        xnohp.getText().toString(),
+                        arrOfStr[0],
+                        "0",
+                        xgajipokok.getText().toString(),
+                        "0",
+                        "0",
+                        "0",
+                        "0");
 
-                Intent go = new Intent(AddKaryawanAct.this,DataKaryawanAct.class);
-                go.putExtra("cabang", cabangx);
-                startActivity(go);
-//                finish();
+                if (xnama.length() == 0) {
+                    xnama.setError("Masukan nama karyawan");
+                    xnama.requestFocus();
+                } else if (xposisi.length() == 0) {
+                    xposisi.setError("Masukan posisi karyawan");
+                    xposisi.requestFocus();
+                } else if (xumur.length() == 0) {
+                    xumur.setError("Masukan umur karyawan");
+                    xumur.requestFocus();
+                } else if (xalamat.length() == 0) {
+                    xalamat.setError("Masukan alamat");
+                    xalamat.requestFocus();
+                } else if (xnohp.length() == 0) {
+                    xnohp.requestFocus();
+                    xnohp.setError("Masukan No.Hp");
+                } else if (xgajipokok.length() == 0) {
+                    xgajipokok.setError("Masukan gaji pokok");
+                    xgajipokok.requestFocus();
+                } else {
+
+                    reference.child(arrOfStr[0]).setValue(gajiConst);
+
+                    Intent go = new Intent(AddKaryawanAct.this, DataKaryawanAct.class);
+                    go.putExtra("cabang", cabangx);
+                    startActivity(go);
+                    finish();
+                }
+
             }
-
-//        //save data
-//        save.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                String str = xnama.getText().toString();
-//                String[] arrOfStr = str.split(" ");
-//
-//
-//                GajiConst gajiConst = new GajiConst(
-//                        xnama.getText().toString(),
-//                        xposisi.getText().toString(),
-//                        xalamat.getText().toString(),
-//                        xspiner.getSelectedItem().toString(),
-//                        cabangx,
-//                        cabangx,
-//                        xumur.getText().toString(),
-//                        xnohp.getText().toString(),
-//                        arrOfStr[0],
-//                        "",
-//                        xgajipokok.getText().toString(),
-//                        "",
-//                        "",
-//                        "",
-//                        "");
-//
-//
-//                reference.child("Karyawan").child(arrOfStr[0]).setValue(gajiConst);
-         //       reference.child(arrOfStr[0]).addListenerForSingleValueEvent(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                        if (xnama.length() == 0){
-//                            xnama.setError("Masukan nama karyawan");
-//                            xnama.requestFocus();
-//                        }else if(xposisi.length() == 0){
-//                            xposisi.setError("Masukan posisi karyawan");
-//                            xposisi.requestFocus();
-//                        }else if (xumur.length() == 0){
-//                            xumur.setError("Masukan umur karyawan");
-//                            xumur.requestFocus();
-//                        }else if (xalamat.length() == 0){
-//                            xalamat.setError("Masukan alamat");
-//                            xalamat.requestFocus();
-//                        }else if (xnohp.length() == 0){
-//                            xnohp.requestFocus();
-//                            xnohp.setError("Masukan No.Hp");
-//                        }else if (xgajipokok.length()==0){
-//                            xgajipokok.setError("Masukan gaji pokok");
-//                            xgajipokok.requestFocus();
-//                        }else {
-////                            try {
-////                                dataSnapshot.getRef().child("nama").setValue(xnama.getText().toString());
-////                                dataSnapshot.getRef().child("posisi").setValue(xposisi.getText().toString());
-////                                dataSnapshot.getRef().child("key").setValue(arrOfStr[0]);
-////                                dataSnapshot.getRef().child("umur").setValue(xumur.getText().toString());
-////                                dataSnapshot.getRef().child("alamat").setValue(xalamat.getText().toString());
-////                                dataSnapshot.getRef().child("telepon").setValue(xnohp.getText().toString());
-////                                dataSnapshot.getRef().child("gaji_pokok").setValue(xgajipokok.getText().toString());
-////                                dataSnapshot.getRef().child("gender").setValue(xspiner.getSelectedItem().toString());
-////                                dataSnapshot.getRef().child("cabang").setValue(cabangx);
-////                            } catch (Exception e) {
-////                                Toast.makeText(AddKaryawanAct.this, "" + reference.getRef(), Toast.LENGTH_SHORT).show();
-////                            }
-//                            Toast.makeText(AddKaryawanAct.this, arrOfStr[0], Toast.LENGTH_SHORT).show();
-//
-//                            Intent go = new Intent(AddKaryawanAct.this,DataKaryawanAct.class);
-//                            go.putExtra("cabang", cabangx);
-//                            startActivity(go);
-//                            finish();
-//                        }
-//
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(@NonNull DatabaseError databaseError) {
-//                        Toast.makeText(AddKaryawanAct.this, ""+reference.getRef(), Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//
-//                });
-//
-//            }
-//
 
         });
     }
