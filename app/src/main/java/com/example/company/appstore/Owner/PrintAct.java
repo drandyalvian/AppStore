@@ -6,21 +6,17 @@ import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.Intent;
-import android.os.Environment;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.company.appstore.BluetoothHandler;
 import com.example.company.appstore.PrinterCommands;
 import com.example.company.appstore.R;
 import com.zj.btsdk.BluetoothService;
-import com.zj.btsdk.PrintPic;
 
 import java.util.List;
 
@@ -31,10 +27,8 @@ import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
 @SuppressLint("SetTextI18n")
-public class PrintAct extends AppCompatActivity implements EasyPermissions.PermissionCallbacks, BluetoothHandler.HandlerInterface{
+public class PrintAct extends AppCompatActivity implements EasyPermissions.PermissionCallbacks, BluetoothHandler.HandlerInterface {
 
-    @BindView(R.id.et_text)
-    EditText etText;
     @BindView(R.id.tv_status)
     TextView tvStatus;
 
@@ -42,6 +36,8 @@ public class PrintAct extends AppCompatActivity implements EasyPermissions.Permi
     public static final int RC_BLUETOOTH = 0;
     public static final int RC_CONNECT_DEVICE = 1;
     public static final int RC_ENABLE_BLUETOOTH = 2;
+    @BindView(R.id.viewPrint)
+    TextView viewPrint;
 
     private BluetoothService mService = null;
     private boolean isPrinterReady = false;
@@ -52,6 +48,22 @@ public class PrintAct extends AppCompatActivity implements EasyPermissions.Permi
         setContentView(R.layout.activity_print);
         ButterKnife.bind(this);
         setupBluetooth();
+
+        String coba4 = "Toko Andhika\n" +
+                "Cabang 1\n" +
+                "\nGaji Pokok:\n" +
+                "30 x 20.000 :       600.000"+
+                "\nKomisi:\n" +
+                "                    100.000" +
+                "\nUang Makan:\n" +
+                "30 x 20.000 :       600.000\n" +
+                "--------------------------------\n" +
+                "Total Gaji :        1.200.000\n" +
+                "Pijaman :           0\n" +
+                "--------------------------------\n" +
+                "Gaji Diterima :     1.200.0000";
+
+        viewPrint.setText(coba4);
     }
 
     @AfterPermissionGranted(RC_BLUETOOTH)
@@ -118,15 +130,11 @@ public class PrintAct extends AppCompatActivity implements EasyPermissions.Permi
 
     @OnClick(R.id.btn_print_text)
     public void printText(@Nullable View view) {
-        if (!mService.isAvailable()) {
-            Log.i(TAG, "printText: perangkat tidak support bluetooth");
-            return;
-        }
+//        if (!mService.isAvailable()) {
+//            Log.i(TAG, "printText: perangkat tidak support bluetooth");
+//            return;
+//        }
         if (isPrinterReady) {
-            if (etText.getText().toString().isEmpty()) {
-                Toast.makeText(this, "Cant print null text", Toast.LENGTH_SHORT).show();
-                return;
-            }
             String coba = "Toko Andhika\n" +
                     "Cabang 1\n" +
                     "-------------------------------";
@@ -135,7 +143,7 @@ public class PrintAct extends AppCompatActivity implements EasyPermissions.Permi
 
 
             String coba4 = "\nGaji Pokok:\n" +
-                    "30 x 20.000 :       600.000"+
+                    "30 x 20.000 :       600.000" +
                     "\nKomisi:\n" +
                     "                    100.000" +
                     "\nUang Makan:\n" +
@@ -157,16 +165,39 @@ public class PrintAct extends AppCompatActivity implements EasyPermissions.Permi
         }
     }
 
-    @OnClick(R.id.btn_print_image)
-    public void printImage(View view) {
+    public void print(View view) {
+        if (!mService.isAvailable()) {
+            Log.i(TAG, "printText: perangkat tidak support bluetooth");
+            return;
+        }
         if (isPrinterReady) {
-            PrintPic pg = new PrintPic();
-            pg.initCanvas(400);
-            pg.initPaint();
-            pg.drawImage(0, 0, Environment.getExternalStorageDirectory().getAbsolutePath() + "/Londree/struk_londree.png");
-            byte[] sendData = pg.printDraw();
+            String coba = "Toko Andhika\n" +
+                    "Cabang 1\n" +
+                    "-------------------------------";
             mService.write(PrinterCommands.ESC_ALIGN_CENTER);
-            mService.write(sendData);
+            mService.sendMessage(coba, "");
+
+
+            String coba4 = "\nGaji Pokok:\n" +
+                    "30 x 20.000 :       600.000" +
+                    "\nKomisi:\n" +
+                    "                    100.000" +
+                    "\nUang Makan:\n" +
+                    "30 x 20.000 :       600.000\n" +
+                    "--------------------------------\n" +
+                    "Total Gaji :        1.200.000\n" +
+                    "Pijaman :           0\n" +
+                    "--------------------------------\n" +
+                    "Gaji Diterima :     1.200.0000";
+
+            mService.write(PrinterCommands.ESC_ALIGN_LEFT);
+            mService.sendMessage(coba4, "");
+            mService.write(PrinterCommands.ESC_ENTER);
+        } else {
+            if (mService.isBTopen())
+                startActivityForResult(new Intent(this, DeviceAct.class), RC_CONNECT_DEVICE);
+            else
+                requestBluetooth();
         }
     }
 

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.company.appstore.R;
 
@@ -41,6 +42,7 @@ public class AbsensiAdapter extends RecyclerView.Adapter<AbsensiAdapter.MyViewHo
         myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast.makeText(context, absensiConsts.get(i).getKey(), Toast.LENGTH_SHORT).show();
                 Intent go = new Intent(context, ListAbsensiAct.class);
                 go.putExtra("key",getkey); //Lempar key
                 context.startActivity(go);

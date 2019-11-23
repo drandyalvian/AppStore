@@ -21,11 +21,20 @@
         android:id="@+id/title_paired_devices"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_square2"
         android:padding="8dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:textSize="17sp"
         android:text="Perangkat terpasang"
-        android:textColor="@color/color5"
-        android:visibility="gone"/>
+        android:background="@color/color7"
+        android:visibility="visible"/>
+
+    <View
+        android:layout_height="3dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginStart="4dp"
+        android:background="@color/color1"
+        style="@style/Divider.Horizontal"/>
 
     <ListView
         android:id="@+id/paired_devices"
@@ -34,16 +43,10 @@
         android:paddingLeft="10dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="0"
         android:drawSelectorOnTop="true"/>
 
-    <Button
-        android:id="@+id/button_scan"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="15dp"
-        android:text="Cari Perangkat"
-        android:background="@drawable/bg_square2"/>
+
 
     <TextView
         android:id="@+id/title_new_devices"
@@ -63,6 +66,14 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"/>
 
+    <Button
+        android:id="@+id/button_scan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:text="Cari Perangkat"
+        android:visibility="visible"
+        android:background="@drawable/bg_square2"/>
 
 
 </LinearLayout>

@@ -6,4 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".Owner.ExportAct">
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="PDF"
+        android:id="@+id/bPdf"
+        />
+
 </android.support.constraint.ConstraintLayout>

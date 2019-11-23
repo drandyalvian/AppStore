@@ -1,5 +1,6 @@
 package com.example.company.appstore.Owner;
 
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -39,6 +40,7 @@ public class DeviceAct extends AppCompatActivity {
     @BindView(R.id.button_scan)
     Button buttonScan;
 
+    private ProgressDialog progressBar;
 
     private BluetoothService mService = null;
     private ArrayAdapter<String> newDeviceAdapter;
@@ -51,12 +53,10 @@ public class DeviceAct extends AppCompatActivity {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
                     newDeviceAdapter.add(device.getName() + "\n" + device.getAddress());
-                } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
-                    setTitle("Pilih Perangkat");
-                    if (newDeviceAdapter.getCount() == 0) {
-                        newDeviceAdapter.add("Perangkat tidak ditemukan");
-                    }
                 }
+            }else{
+                progressBar.hide();
+                buttonScan.setVisibility(View.VISIBLE);
             }
         }
     };
@@ -67,6 +67,7 @@ public class DeviceAct extends AppCompatActivity {
         setContentView(R.layout.activity_device);
         setTitle("Perangkat Bluetooth");
         ButterKnife.bind(this);
+
 
         ArrayAdapter<String> pairedDeviceAdapter = new ArrayAdapter<>(this, R.layout.device_name);
         lvPairedDevice.setAdapter(pairedDeviceAdapter);
@@ -98,6 +99,12 @@ public class DeviceAct extends AppCompatActivity {
     }
 
 
+    @OnClick(R.id.button_scan)
+    public void scan(View view) {
+        doDiscovery();
+        view.setVisibility(View.GONE);
+    }
+
     private AdapterView.OnItemClickListener mDeviceClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -115,13 +122,13 @@ public class DeviceAct extends AppCompatActivity {
     };
 
     private void doDiscovery() {
-        setTitle("Mencari perangkat...");
         tvNewDevice.setVisibility(View.VISIBLE);
+
 
         if (mService.isDiscovering()) {
             mService.cancelDiscovery();
         }
-
+        newDeviceAdapter.clear();
         mService.startDiscovery();
     }
 
@@ -132,7 +139,8 @@ public class DeviceAct extends AppCompatActivity {
             mService.cancelDiscovery();
         }
         mService = null;
-        unregisterReceiver(mReceiver);
+
+
     }
 
 
@@ -140,5 +148,13 @@ public class DeviceAct extends AppCompatActivity {
     public void onViewClicked(View view) {
         doDiscovery();
         view.setVisibility(View.GONE);
+
+        progressBar = new ProgressDialog(this);
+        progressBar.setCancelable(true);
+        progressBar.setMessage("Mencari...");
+        progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressBar.setProgress(0);
+        progressBar.setMax(100);
+        progressBar.show();
     }
 }

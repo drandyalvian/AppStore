@@ -6,8 +6,11 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.company.appstore.FileUtils;
 import com.example.company.appstore.R;
 import com.example.company.appstore.permission.PermissionsActivity;
 import com.example.company.appstore.permission.PermissionsChecker;
@@ -54,41 +57,36 @@ public class ExportAct extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_export);
 
+        Button pdf = (Button) findViewById(R.id.bPdf);
+
         mContext = getApplicationContext();
 
         checker = new PermissionsChecker(this);
+
+        pdf.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (checker.lacksPermissions(REQUIRED_PERMISSION)) {
+                    PermissionsActivity.startActivityForResult(ExportAct.this, PERMISSION_REQUEST_CODE, REQUIRED_PERMISSION);
+                } else {
+                    createPdf(FileUtils.getAppPath(mContext),"","","","","","","","");
+                }
+
+
+            }
+        });
+
 
         Bundle bundle = getIntent().getExtras();
         String cabangx= bundle.getString("cabang");
         String key = bundle.getString("key");
 
 
-        Intent go = new Intent(this, GajiAct.class);
-        go.putExtra("cabang", cabangx);
-        startActivity(go);
-        finish();
-
-        reference = FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabangx).child("Karyawan").child(key);
-        reference.addValueEventListener(new ValueEventListener() {
-
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                nama = dataSnapshot.child("nama").getValue().toString();
-                //createPdf(FileUtils.getAppPath(mContext) + dataSnapshot.child("nama").getValue().toString() +".pdf");
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
 
         if (checker.lacksPermissions(REQUIRED_PERMISSION)) {
             PermissionsActivity.startActivityForResult(ExportAct.this, PERMISSION_REQUEST_CODE, REQUIRED_PERMISSION);
         } else {
-            //createPdf(FileUtils.getAppPath(mContext) + "123.pdf");
+
         }
 
 
@@ -245,7 +243,7 @@ public class ExportAct extends AppCompatActivity {
 
             document.close();
 
-            //Toast.makeText(, "Created... :)", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(mContext, "Created... :)", Toast.LENGTH_SHORT).show();
 //            if (new File(dest).exists()) {
 //                FileUtils.openFile(mContext, new File(dest));
 //            }

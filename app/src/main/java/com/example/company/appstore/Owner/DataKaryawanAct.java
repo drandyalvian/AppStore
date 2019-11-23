@@ -59,11 +59,12 @@ public class DataKaryawanAct extends AppCompatActivity implements DataKaryawanAd
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 absensiConsts = new ArrayList<>();
+
                 for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-
                     AbsensiConst aConst = dataSnapshot1.getValue(AbsensiConst.class);
-                    aConst.setKey(dataSnapshot1.getKey());
 
+                     aConst.setKey(dataSnapshot1.child("key").getValue().toString());
+//
                     absensiConsts.add(aConst);
 
                 }
