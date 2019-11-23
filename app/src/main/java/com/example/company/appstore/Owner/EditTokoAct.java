@@ -61,7 +61,7 @@ public class EditTokoAct extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                reference.child(xusername.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         dataSnapshot.getRef().child("password").setValue(xpass.getText().toString());

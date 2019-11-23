@@ -35,7 +35,7 @@ public class DataKaryawanAct extends AppCompatActivity implements DataKaryawanAd
     private RecyclerView rvView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<AbsensiConst> absensiConsts;
+    private ArrayList<DataKaryawanConst> dataKaryawanConsts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,18 +58,20 @@ public class DataKaryawanAct extends AppCompatActivity implements DataKaryawanAd
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                absensiConsts = new ArrayList<>();
+                dataKaryawanConsts = new ArrayList<>();
 
                 for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
-                    AbsensiConst aConst = dataSnapshot1.getValue(AbsensiConst.class);
 
-                     aConst.setKey(dataSnapshot1.child("key").getValue().toString());
-//
-                    absensiConsts.add(aConst);
+                    DataKaryawanConst kConst = dataSnapshot1.getValue(DataKaryawanConst.class);
 
+                    kConst.setKey(dataSnapshot1.getKey());
+
+                    dataKaryawanConsts.add(kConst);
                 }
-                adapter = new DataKaryawanAdapter(absensiConsts, DataKaryawanAct.this, DataKaryawanAct.this);
+
+                adapter = new DataKaryawanAdapter(dataKaryawanConsts, DataKaryawanAct.this, DataKaryawanAct.this);
                 rvView.setAdapter(adapter);
+
             }
 
             @Override
@@ -99,17 +101,19 @@ public class DataKaryawanAct extends AppCompatActivity implements DataKaryawanAd
         });
     }
 
+
     @Override
-    public void onDeleteData(AbsensiConst absensiConsts, int i) {
-        if(reference!=null){
-            reference.child(AbsensiConst.getKey()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
+    public void onDeleteData(DataKaryawanConst dataKaryawanConst, int i) {
 
-                    Toast.makeText(DataKaryawanAct.this,"success delete", Toast.LENGTH_SHORT).show();
-                }
-            });
+        if (reference!=null){
 
+//            reference.child(DataKaryawanConst.getKey()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+//                @Override
+//                public void onSuccess(Void aVoid) {
+//
+//                    Toast.makeText(DataKaryawanAct.this,"success delete", Toast.LENGTH_SHORT).show();
+//                }
+//            });
         }
     }
 }

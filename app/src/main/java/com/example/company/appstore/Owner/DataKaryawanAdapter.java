@@ -23,13 +23,14 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 public class DataKaryawanAdapter extends RecyclerView.Adapter<DataKaryawanAdapter.MyViewHolder> {
+
     DataKaryawanAct listener;
 
     Context context;
-    ArrayList<AbsensiConst> absensiConsts;
-    public DataKaryawanAdapter(ArrayList<AbsensiConst> p, Context c, Context b){
+    ArrayList<DataKaryawanConst> dataKaryawanConsts;
+    public DataKaryawanAdapter(ArrayList<DataKaryawanConst> p, Context c, Context b){
         context = c;
-        absensiConsts = p;
+        dataKaryawanConsts = p;
 
         listener = (DataKaryawanAct) b;
     }
@@ -45,11 +46,11 @@ public class DataKaryawanAdapter extends RecyclerView.Adapter<DataKaryawanAdapte
     @Override
     public void onBindViewHolder(@NonNull final DataKaryawanAdapter.MyViewHolder myViewHolder, final int i) {
 
-        myViewHolder.xnama.setText(absensiConsts.get(i).getNama());
-        myViewHolder.xalamat.setText(absensiConsts.get(i).getAlamat());
+        myViewHolder.xnama.setText(dataKaryawanConsts.get(i).getNama());
+        myViewHolder.xalamat.setText(dataKaryawanConsts.get(i).getAlamat());
 
-        final String cabang = absensiConsts.get(i).getCabang();
-        final String key = absensiConsts.get(i).getKey();
+        final String cabang = dataKaryawanConsts.get(i).getCabang();
+        final String key = dataKaryawanConsts.get(i).getKey();
 
         myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,16 +59,16 @@ public class DataKaryawanAdapter extends RecyclerView.Adapter<DataKaryawanAdapte
                 go.putExtra("keyCabang",cabang); //Lempar key
                 go.putExtra("key",key); //Lempar key
                 context.startActivity(go);
-                ((Activity) context).finish();
 
             }
         });
 
-        myViewHolder.delete.setOnClickListener(new View.OnClickListener() {
+        myViewHolder.delete.setOnClickListener(
+                new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                listener.onDeleteData(absensiConsts.get(i), i);
+                listener.onDeleteData(dataKaryawanConsts.get(i), i);
 
             }
         });
@@ -76,7 +77,7 @@ public class DataKaryawanAdapter extends RecyclerView.Adapter<DataKaryawanAdapte
 //
     @Override
     public int getItemCount() {
-        return absensiConsts.size();
+        return dataKaryawanConsts.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder{
@@ -94,6 +95,6 @@ public class DataKaryawanAdapter extends RecyclerView.Adapter<DataKaryawanAdapte
     }
 
     public interface FirebaseDataListener{
-        void onDeleteData(AbsensiConst absensiConsts, int i);
+        void onDeleteData(DataKaryawanConst dataKaryawanConst, int i);
     }
 }

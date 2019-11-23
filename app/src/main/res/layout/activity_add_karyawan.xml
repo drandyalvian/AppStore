@@ -76,126 +76,129 @@
                         android:layout_height="100dp"
                         android:layout_centerHorizontal="true"
                         android:layout_marginBottom="20dp"
-                        android:background="@drawable/icon_profiluser2"/>
+                        android:background="@drawable/icon_profiluser2" />
 
 
                 </RelativeLayout>
 
-<!--                <TextView-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="20dp"-->
-<!--                    android:fontFamily="@font/mregular"-->
-<!--                    android:text="Cabang Toko"-->
-<!--                    android:textStyle="bold"-->
-<!--                    android:textColor="@color/color4"-->
-<!--                    android:textSize="16sp" />-->
+                <!--                <TextView-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:layout_marginTop="20dp"-->
+                <!--                    android:fontFamily="@font/mregular"-->
+                <!--                    android:text="Cabang Toko"-->
+                <!--                    android:textStyle="bold"-->
+                <!--                    android:textColor="@color/color4"-->
+                <!--                    android:textSize="16sp" />-->
 
-<!--                <EditText-->
-<!--                    android:id="@+id/xcabangtoko"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="40dp"-->
-<!--                    android:layout_marginTop="10dp"-->
-<!--                    android:background="@drawable/bg_form"-->
-<!--                    android:fontFamily="@font/mregular"-->
-<!--                    android:paddingLeft="20dp"-->
-<!--                    android:layout_marginBottom="20dp"-->
-<!--                    android:text="Toko Cabang 1"-->
-<!--                    android:textStyle="bold"-->
-<!--                    android:textColor="@color/color5"-->
-<!--                    android:textSize="16sp" />-->
+                <!--                <EditText-->
+                <!--                    android:id="@+id/xcabangtoko"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="40dp"-->
+                <!--                    android:layout_marginTop="10dp"-->
+                <!--                    android:background="@drawable/bg_form"-->
+                <!--                    android:fontFamily="@font/mregular"-->
+                <!--                    android:paddingLeft="20dp"-->
+                <!--                    android:layout_marginBottom="20dp"-->
+                <!--                    android:text="Toko Cabang 1"-->
+                <!--                    android:textStyle="bold"-->
+                <!--                    android:textColor="@color/color5"-->
+                <!--                    android:textSize="16sp" />-->
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/mregular"
                     android:text="Nama"
-                    android:textStyle="bold"
                     android:textColor="@color/color4"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <EditText
                     android:id="@+id/xnama"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp"
                     android:background="@drawable/bg_form"
                     android:fontFamily="@font/mregular"
                     android:paddingLeft="20dp"
-                    android:layout_marginBottom="20dp"
                     android:text=""
-                    android:textStyle="bold"
                     android:textColor="@color/color5"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/mregular"
                     android:text="Username"
-                    android:textStyle="bold"
                     android:textColor="@color/color4"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <EditText
                     android:id="@+id/xusername"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:paddingTop="8dp"
                     android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp"
                     android:background="@drawable/bg_form"
                     android:fontFamily="@font/mregular"
                     android:paddingLeft="20dp"
-                    android:layout_marginBottom="20dp"
+                    android:paddingTop="8dp"
                     android:text=""
-                    android:textStyle="bold"
                     android:textColor="@color/color5"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/mregular"
                     android:text="Posisi"
-                    android:textStyle="bold"
                     android:textColor="@color/color4"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <EditText
                     android:id="@+id/xposisi"
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
-                    android:paddingTop="8dp"
                     android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp"
                     android:background="@drawable/bg_form"
                     android:fontFamily="@font/mregular"
                     android:paddingLeft="20dp"
-                    android:layout_marginBottom="20dp"
+                    android:paddingTop="8dp"
                     android:text=""
-                    android:textStyle="bold"
                     android:textColor="@color/color5"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/mregular"
                     android:text="Gender"
-                    android:textStyle="bold"
                     android:textColor="@color/color4"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:background="@drawable/bg_form">
+
                     <Spinner
                         android:id="@+id/xspiner"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
+                        android:drawSelectorOnTop="true"
                         android:fontFamily="@font/mlight"
                         android:paddingLeft="10dp"
-                        android:drawSelectorOnTop="true"
                         android:textColor="@color/color4"
-                        android:textSize="14sp"/>
+                        android:textSize="14sp" />
 
                 </LinearLayout>
 
@@ -206,9 +209,9 @@
                     android:layout_marginTop="20dp"
                     android:fontFamily="@font/mregular"
                     android:text="Umur"
-                    android:textStyle="bold"
                     android:textColor="@color/color4"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <EditText
                     android:id="@+id/xumur"
@@ -218,20 +221,21 @@
                     android:background="@drawable/bg_form"
                     android:fontFamily="@font/mregular"
                     android:paddingLeft="20dp"
+                    android:inputType="number"
                     android:text=""
-                    android:textStyle="bold"
                     android:textColor="@color/color5"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:fontFamily="@font/mregular"
-                    android:textColor="@color/color4"
                     android:text="Alamat"
-                    android:textStyle="bold"
-                    android:textSize="16sp" />
+                    android:textColor="@color/color4"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <EditText
                     android:id="@+id/xalamat"
@@ -242,19 +246,19 @@
                     android:fontFamily="@font/mregular"
                     android:paddingLeft="20dp"
                     android:text=""
-                    android:textStyle="bold"
                     android:textColor="@color/color5"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:fontFamily="@font/mregular"
-                    android:textColor="@color/color4"
-                    android:textStyle="bold"
                     android:text="No. Hp"
-                    android:textSize="16sp" />
+                    android:textColor="@color/color4"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <EditText
                     android:id="@+id/xnohp"
@@ -265,19 +269,20 @@
                     android:fontFamily="@font/mregular"
                     android:paddingLeft="20dp"
                     android:text=""
-                    android:textStyle="bold"
+                    android:inputType="number"
                     android:textColor="@color/color5"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:fontFamily="@font/mregular"
-                    android:textColor="@color/color4"
-                    android:textStyle="bold"
                     android:text="Gaji Pokok"
-                    android:textSize="16sp" />
+                    android:textColor="@color/color4"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
                 <EditText
                     android:id="@+id/xgajipokok"
@@ -288,10 +293,11 @@
                     android:background="@drawable/bg_form"
                     android:fontFamily="@font/mregular"
                     android:paddingLeft="20dp"
+                    android:inputType="number"
                     android:text=""
-                    android:textStyle="bold"
                     android:textColor="@color/color5"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
 
             </LinearLayout>

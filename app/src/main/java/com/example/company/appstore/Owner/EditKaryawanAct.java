@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.company.appstore.R;
@@ -19,22 +20,25 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 public class EditKaryawanAct extends AppCompatActivity {
 
     Button back, save;
     Spinner xspiner;
+    TextView xusername;
     EditText xcabangtoko, xnama, xumur, xalamat, xnohp, xgajipokok;
     String cabangx, karyawanx;
 
     DatabaseReference reference;
 
-    @Override
-    public void onBackPressed() {
-        Intent go = new Intent(EditKaryawanAct.this,DataKaryawanAct.class);
-        go.putExtra("cabang", cabangx);
-        startActivity(go);
-        finish();
-    }
+//    @Override
+//    public void onBackPressed() {
+//        Intent go = new Intent(EditKaryawanAct.this,DataKaryawanAct.class);
+//        go.putExtra("cabang", cabangx);
+//        startActivity(go);
+//        finish();
+//    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +48,7 @@ public class EditKaryawanAct extends AppCompatActivity {
         back = findViewById(R.id.back);
         save = findViewById(R.id.btnsave);
         xnama = findViewById(R.id.xnama);
+        xusername = findViewById(R.id.xusername);
         xcabangtoko = findViewById(R.id.xcabangtoko);
         xumur = findViewById(R.id.xumur);
         xalamat = findViewById(R.id.xalamat);
@@ -67,6 +72,7 @@ public class EditKaryawanAct extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 xnama.setText(dataSnapshot.child("nama").getValue().toString());
                 xcabangtoko.setText(dataSnapshot.child("nama_cabang").getValue().toString());
+                xusername.setText(dataSnapshot.child("key").getValue().toString());
                 xumur.setText(dataSnapshot.child("umur").getValue().toString());
                 xalamat.setText(dataSnapshot.child("alamat").getValue().toString());
                 xnohp.setText(dataSnapshot.child("telepon").getValue().toString());
@@ -87,17 +93,19 @@ public class EditKaryawanAct extends AppCompatActivity {
                 reference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        try {
-                            dataSnapshot.getRef().child("nama").setValue(xnama.getText().toString());
-                            dataSnapshot.getRef().child("nama_cabang").setValue(xcabangtoko.getText().toString());
-                            dataSnapshot.getRef().child("umur").setValue(xumur.getText().toString());
-                            dataSnapshot.getRef().child("alamat").setValue(xalamat.getText().toString());
-                            dataSnapshot.getRef().child("telepon").setValue(xnohp.getText().toString());
-                            dataSnapshot.getRef().child("gaji_pokok").setValue(xgajipokok.getText().toString());
-                            dataSnapshot.getRef().child("gender").setValue(xspiner.getSelectedItem().toString());
-                        }catch (Exception e){
-                            Toast.makeText(EditKaryawanAct.this, ""+reference.getRef(), Toast.LENGTH_SHORT).show();
-                        }
+
+                        dataSnapshot.getRef().child("nama").setValue(xnama.getText().toString());
+                        dataSnapshot.getRef().child("nama_cabang").setValue(xcabangtoko.getText().toString());
+                        dataSnapshot.getRef().child("umur").setValue(xumur.getText().toString());
+                        dataSnapshot.getRef().child("alamat").setValue(xalamat.getText().toString());
+                        dataSnapshot.getRef().child("telepon").setValue(xnohp.getText().toString());
+                        dataSnapshot.getRef().child("gaji_pokok").setValue(xgajipokok.getText().toString());
+                        dataSnapshot.getRef().child("gender").setValue(xspiner.getSelectedItem().toString());
+//                        try {
+//
+//                        }catch (Exception e){
+//                            Toast.makeText(EditKaryawanAct.this, ""+reference.getRef(), Toast.LENGTH_SHORT).show();
+//                        }
 
                     }
 
@@ -105,13 +113,17 @@ public class EditKaryawanAct extends AppCompatActivity {
                     public void onCancelled(@NonNull DatabaseError databaseError) {
                         Toast.makeText(EditKaryawanAct.this, ""+reference.getRef(), Toast.LENGTH_SHORT).show();
                     }
+
+
                 });
+
                 Intent go = new Intent(EditKaryawanAct.this,DataKaryawanAct.class);
                 go.putExtra("cabang", cabangx);
                 startActivity(go);
-                finish();
-
+//                finish();
             }
+
+
 
 
         });
@@ -124,7 +136,7 @@ public class EditKaryawanAct extends AppCompatActivity {
                 Intent go = new Intent(EditKaryawanAct.this,DataKaryawanAct.class);
                 go.putExtra("cabang", cabangx);
                 startActivity(go);
-                finish();
+//                finish();
 
             }
         });

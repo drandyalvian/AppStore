@@ -1,8 +1,9 @@
-package com.example.company.appstore.KepalaCabang;
+package com.example.company.appstore.Owner;
+
 
 import java.io.Serializable;
 
-public class AbsensiConst implements Serializable {
+public class DataKaryawanConst implements Serializable {
 
     String nama;
     String posisi;
@@ -14,11 +15,12 @@ public class AbsensiConst implements Serializable {
     String key;
     String cabang;
 
-    public AbsensiConst() {
+    public DataKaryawanConst () {
+
     }
 
-    public AbsensiConst(String nama, String posisi, String alamat,
-                        String gender, String nama_cabang, String umur, String telepon, String key, String cabang) {
+    public DataKaryawanConst(String nama, String posisi, String alamat, String gender,
+                             String nama_cabang, String umur, String telepon, String key, String cabang) {
         this.nama = nama;
         this.posisi = posisi;
         this.alamat = alamat;
@@ -85,7 +87,6 @@ public class AbsensiConst implements Serializable {
     public void setTelepon(String telepon) {
         this.telepon = telepon;
     }
-
 
     public String getKey() {
         return key;
