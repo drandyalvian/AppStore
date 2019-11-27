@@ -131,7 +131,7 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
 
     @AfterPermissionGranted(RC_BLUETOOTH)
     private void setupBluetooth() {
-        String[] params = {Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN};
+        String[] params = {Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN, Manifest.permission.ACCESS_COARSE_LOCATION};
         if (!EasyPermissions.hasPermissions(this, params)) {
             EasyPermissions.requestPermissions(this, "You need bluetooth permission",
                     RC_BLUETOOTH, params);

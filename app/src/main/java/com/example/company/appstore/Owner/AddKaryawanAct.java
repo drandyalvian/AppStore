@@ -12,6 +12,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.company.appstore.KepalaCabang.ListAbsensiConst;
 import com.example.company.appstore.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -19,10 +20,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class AddKaryawanAct extends AppCompatActivity {
 
@@ -55,9 +60,6 @@ public class AddKaryawanAct extends AppCompatActivity {
         final ArrayAdapter pilihGender = ArrayAdapter.createFromResource(this, R.array.pilih_gender, android.R.layout.simple_spinner_dropdown_item);
         xspiner.setAdapter(pilihGender);
 
-//        final ArrayAdapter pilihCabang = ArrayAdapter.createFromResource(this, R.array.cabangToko, android.R.layout.simple_spinner_dropdown_item);
-//        xcabangtoko.setAdapter(pilihCabang);
-
 //      mengambil data dari intent
         Bundle bundle = getIntent().getExtras();
         cabangx = bundle.getString("cabang");
@@ -70,6 +72,7 @@ public class AddKaryawanAct extends AppCompatActivity {
             public void onClick(View v) {
                 String str = xnama.getText().toString();
                 String[] arrOfStr = str.split(" ");
+                final String[] keyKaryawan = new String[1];
 
                 if (cabangx.equals("cabang1")){
                     cabangToko = "Toko Cabang 1";
@@ -89,7 +92,7 @@ public class AddKaryawanAct extends AppCompatActivity {
                         cabangx,
                         xumur.getText().toString(),
                         xnohp.getText().toString(),
-                        arrOfStr[0],
+                        keyKaryawan[0],
                         "0",
                         xgajipokok.getText().toString(),
                         "0",
@@ -97,33 +100,76 @@ public class AddKaryawanAct extends AppCompatActivity {
                         "0",
                         "0");
 
-                if (xnama.length() == 0) {
-                    xnama.setError("Masukan nama karyawan");
-                    xnama.requestFocus();
-                } else if (xposisi.length() == 0) {
-                    xposisi.setError("Masukan posisi karyawan");
-                    xposisi.requestFocus();
-                } else if (xumur.length() == 0) {
-                    xumur.setError("Masukan umur karyawan");
-                    xumur.requestFocus();
-                } else if (xalamat.length() == 0) {
-                    xalamat.setError("Masukan alamat");
-                    xalamat.requestFocus();
-                } else if (xnohp.length() == 0) {
-                    xnohp.requestFocus();
-                    xnohp.setError("Masukan No.Hp");
-                } else if (xgajipokok.length() == 0) {
-                    xgajipokok.setError("Masukan gaji pokok");
-                    xgajipokok.requestFocus();
-                } else {
+                DateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
+                Date date = new Date();
+                dateFormat.setTimeZone(TimeZone.getTimeZone("UTC+7"));
 
-                    reference.child(arrOfStr[0]).setValue(gajiConst);
+                ListAbsensiConst absensiConst = new ListAbsensiConst(
+                        "Alpha",
+                        dateFormat.format(date),
+                        dateFormat.format(date)
 
-                    Intent go = new Intent(AddKaryawanAct.this, DataKaryawanAct.class);
-                    go.putExtra("cabang", cabangx);
-                    startActivity(go);
-                    finish();
-                }
+                );
+
+//                if (xnama.length() == 0) {
+//                    xnama.setError("Masukan nama karyawan");
+//                    xnama.requestFocus();
+//                } else if (xposisi.length() == 0) {
+//                    xposisi.setError("Masukan posisi karyawan");
+//                    xposisi.requestFocus();
+//                } else if (xumur.length() == 0) {
+//                    xumur.setError("Masukan umur karyawan");
+//                    xumur.requestFocus();
+//                } else if (xalamat.length() == 0) {
+//                    xalamat.setError("Masukan alamat");
+//                    xalamat.requestFocus();
+//                } else if (xnohp.length() == 0) {
+//                    xnohp.requestFocus();
+//                    xnohp.setError("Masukan No.Hp");
+//                } else if (xgajipokok.length() == 0) {
+//                    xgajipokok.setError("Masukan gaji pokok");
+//                    xgajipokok.requestFocus();
+//                } else {
+
+//                    if (reference.child(arrOfStr[0]).getKey().toString().equals(arrOfStr[0])){
+
+
+//                    }else if (!reference.child(arrOfStr[0]).getKey().toString().equals(arrOfStr[0])){
+//                        reference.child(arrOfStr[0]).setValue(gajiConst);
+//                        reference.child(arrOfStr[0]).child("Absensi").child(dateFormat.format(date)).setValue(absensiConst);
+//                    }
+                reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.hasChild(arrOfStr[0])) {
+                            DateFormat dateFormat2 = new SimpleDateFormat("yyyymmddmmss");
+                            Date date2 = new Date();
+                            dateFormat2.setTimeZone(TimeZone.getTimeZone("UTC+7"));
+                            keyKaryawan[0] = (dateFormat2.format(date2)).toString();
+                            reference.child(keyKaryawan[0]).setValue(gajiConst);
+                            reference.child(arrOfStr[0]).child("Absensi").child(dateFormat.format(date)).setValue(absensiConst);
+                            Toast.makeText(AddKaryawanAct.this, "sudah ada", Toast.LENGTH_SHORT).show();
+
+                        }else {
+                            reference.child(arrOfStr[0]).setValue(gajiConst);
+                            reference.child(arrOfStr[0]).child("Absensi").child(dateFormat.format(date)).setValue(absensiConst);
+                            Toast.makeText(AddKaryawanAct.this, "belum ada", Toast.LENGTH_SHORT).show();
+                        }
+                        Intent go = new Intent(AddKaryawanAct.this, DataKaryawanAct.class);
+                        go.putExtra("cabang", cabangx);
+                        startActivity(go);
+                        finish();
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+
+
+                //}
 
             }
 

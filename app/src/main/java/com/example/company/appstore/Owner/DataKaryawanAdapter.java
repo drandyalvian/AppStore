@@ -11,12 +11,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.company.appstore.KepalaCabang.AbsensiAdapter;
 import com.example.company.appstore.KepalaCabang.AbsensiConst;
 import com.example.company.appstore.KepalaCabang.LaporanUangConst;
 import com.example.company.appstore.KepalaCabang.ListAbsensiAct;
 import com.example.company.appstore.R;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -28,6 +31,9 @@ public class DataKaryawanAdapter extends RecyclerView.Adapter<DataKaryawanAdapte
 
     Context context;
     ArrayList<DataKaryawanConst> dataKaryawanConsts;
+
+    DatabaseReference reference;
+
     public DataKaryawanAdapter(ArrayList<DataKaryawanConst> p, Context c, Context b){
         context = c;
         dataKaryawanConsts = p;
@@ -67,9 +73,12 @@ public class DataKaryawanAdapter extends RecyclerView.Adapter<DataKaryawanAdapte
                 new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                reference = FirebaseDatabase.getInstance().getReference()
+                        .child("Cabang").child(cabang).child("Karyawan");
+                reference.child(dataKaryawanConsts.get(i).getKey()).removeValue();
+//                listener.onDeleteData(dataKaryawanConsts.get(i), i);
 
-                listener.onDeleteData(dataKaryawanConsts.get(i), i);
-
+                Toast.makeText(listener, "", Toast.LENGTH_SHORT).show();
             }
         });
 
