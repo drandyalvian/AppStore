@@ -44,6 +44,7 @@ public class AbsensiAdapter extends RecyclerView.Adapter<AbsensiAdapter.MyViewHo
             public void onClick(View v) {
                 Intent go = new Intent(context, ListAbsensiAct.class);
                 go.putExtra("key",getkey); //Lempar key
+                go.putExtra("cabang", absensiConsts.get(i).getCabang());
                 context.startActivity(go);
             }
         });

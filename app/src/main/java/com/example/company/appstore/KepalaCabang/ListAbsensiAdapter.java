@@ -6,11 +6,15 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.company.appstore.R;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
@@ -18,9 +22,12 @@ public class ListAbsensiAdapter extends RecyclerView.Adapter<ListAbsensiAdapter.
 
     Context context;
     ArrayList<ListAbsensiConst> labsensiConsts;
-    public ListAbsensiAdapter(ArrayList<ListAbsensiConst> p, Context c){
+    DatabaseReference reference;
+    String key;
+    public ListAbsensiAdapter(ArrayList<ListAbsensiConst> p, Context c, String cabang){
         labsensiConsts = p;
         context = c;
+        key = cabang;
     }
 
     @NonNull
@@ -35,24 +42,14 @@ public class ListAbsensiAdapter extends RecyclerView.Adapter<ListAbsensiAdapter.
     public void onBindViewHolder(@NonNull ListAbsensiAdapter.MyViewHolder myViewHolder, final int i) {
 
         myViewHolder.xtgl.setText(labsensiConsts.get(i).getTanggal());
-        if (labsensiConsts.get(i).getKeterangan().equals("Hadir")){
-            myViewHolder.xboxhadir.setChecked(true);
-        }else{
-            myViewHolder.xboxhadir.setChecked(false);
-        }
 
-        myViewHolder.xboxhadir.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        myViewHolder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (!isChecked){
-                    ListAbsensiAct.getInstance().updateAbsen(labsensiConsts.get(i).getKey(), "Alpha");
-
-                }else{
-                    ListAbsensiAct.getInstance().updateAbsen(labsensiConsts.get(i).getKey(), "Hadir");
-
-                }
+            public void onClick(View view) {
+              ListAbsensiAct.getInstance().deleteAbsen(labsensiConsts.get(i).getKey());
             }
         });
+
 
     }
 
@@ -64,15 +61,15 @@ public class ListAbsensiAdapter extends RecyclerView.Adapter<ListAbsensiAdapter.
     class MyViewHolder extends RecyclerView.ViewHolder{
 
         TextView xtgl;
-        CheckBox xboxhadir;
+        Button delete;
+
 
 
         public MyViewHolder(@NonNull View itemView){
             super(itemView);
 
             xtgl = itemView.findViewById(R.id.xtgl);
-            xboxhadir = itemView.findViewById(R.id.xboxhadir);
-
+            delete = itemView.findViewById(R.id.delete);
         }
     }
 

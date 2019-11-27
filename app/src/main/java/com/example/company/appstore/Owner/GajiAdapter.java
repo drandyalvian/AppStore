@@ -16,7 +16,11 @@ import com.example.company.appstore.FileUtils;
 import com.example.company.appstore.R;
 import com.example.company.appstore.permission.PermissionsActivity;
 import com.example.company.appstore.permission.PermissionsChecker;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -39,9 +43,15 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
     Context context, mContext;
     ArrayList<GajiConst> gajiConst;
 
+    private int totalMasuk;
+
     public GajiAdapter(ArrayList<GajiConst> p, Context c) {
         context = c;
         gajiConst = p;
+    }
+
+    public GajiAdapter(int x){
+        totalMasuk = x;
     }
 
     @NonNull
@@ -55,9 +65,13 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, final int i) {
 
+        GajiAct act = new GajiAct();
+        act.countMasuk(gajiConst.get(i).getKey(), gajiConst.get(i).getCabang());
+
         myViewHolder.tNama.setText(gajiConst.get(i).getNama());
-        myViewHolder.tGaji.setText(gajiConst.get(i).getGaji_pokok());
+        myViewHolder.tGaji.setText(Integer.toString(totalMasuk));
         myViewHolder.tgl1.setText(gajiConst.get(i).getTgl_gaji());
+
 
         final String getkey = gajiConst.get(i).getKey();
         final String cabangkey = gajiConst.get(i).getCabang();
@@ -67,9 +81,10 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
         final String gajiPokok = gajiConst.get(i).getGaji_pokok();
         final String uangMakan = gajiConst.get(i).getUang_makan();
         final String pinjaman = gajiConst.get(i).getPinjaman();
-        final Double gajiTotal = Double.parseDouble(gajiPokok) + Double.parseDouble(uangMakan) + Double.parseDouble(komisi);
+        final Double rumusGaji = Double.parseDouble(gajiPokok) * totalMasuk;
+        final Double gajiTotal = rumusGaji + Double.parseDouble(uangMakan) + Double.parseDouble(komisi);
         final Double gajiDiterima = gajiTotal - Double.parseDouble(pinjaman);
-        final String namaCabang = gajiConst.get(i).getNama_cabang();
+        final String namaCabang = Integer.toString(totalMasuk);
 
         Locale localeID = new Locale("in", "ID");
         NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
@@ -101,9 +116,9 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
                 if (checker.lacksPermissions(REQUIRED_PERMISSION)) {
                     PermissionsActivity.startActivityForResult((Activity) context, PERMISSION_REQUEST_CODE, REQUIRED_PERMISSION);
                     Toast.makeText(context, "File Disimpan : "+FileUtils.getAppPath(mContext) + " " + nama+".pdf", Toast.LENGTH_LONG).show();
-                    exportAct.createPdf(FileUtils.getAppPath(mContext) + nama + ".pdf", nama, formatRupiah.format(Double.parseDouble(komisi)), formatRupiah.format(Double.parseDouble(gajiPokok)), formatRupiah.format(Double.parseDouble(pinjaman)), formatRupiah.format(Double.parseDouble(uangMakan)), formatRupiah.format(gajiTotal), formatRupiah.format((double) gajiDiterima), namaCabang);
+                    exportAct.createPdf(FileUtils.getAppPath(mContext) + nama + ".pdf", nama, formatRupiah.format(Double.parseDouble(komisi)), formatRupiah.format(Double.parseDouble(gajiPokok)), formatRupiah.format(Double.parseDouble(pinjaman)), formatRupiah.format(Double.parseDouble(uangMakan)), formatRupiah.format(gajiTotal), formatRupiah.format((double) gajiDiterima), ""+namaCabang);
                 } else {
-                    exportAct.createPdf(FileUtils.getAppPath(mContext) + nama + ".pdf", nama, formatRupiah.format(Double.parseDouble(komisi)), formatRupiah.format(Double.parseDouble(gajiPokok)), formatRupiah.format(Double.parseDouble(pinjaman)), formatRupiah.format(Double.parseDouble(uangMakan)), formatRupiah.format(gajiTotal), formatRupiah.format((double) gajiDiterima), namaCabang);
+                    exportAct.createPdf(FileUtils.getAppPath(mContext) + nama + ".pdf", nama, formatRupiah.format(Double.parseDouble(komisi)), formatRupiah.format(Double.parseDouble(gajiPokok)), formatRupiah.format(Double.parseDouble(pinjaman)), formatRupiah.format(Double.parseDouble(uangMakan)), formatRupiah.format(gajiTotal), formatRupiah.format((double) gajiDiterima), namaCabang+"");
                     Toast.makeText(context, "File Disimpan : "+FileUtils.getAppPath(mContext) + " " + nama +".pdf", Toast.LENGTH_LONG).show();
 
 

@@ -62,7 +62,7 @@ public class DeviceAct extends AppCompatActivity {
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
-                    newDeviceAdapter.add(device.getName() + "\n" + device.getAddress()+"\n"+device.getUuids());
+                    newDeviceAdapter.add(device.getName() + "\n" + device.getAddress());
                 }
             }else{
                 progressBar.hide();
@@ -123,18 +123,18 @@ public class DeviceAct extends AppCompatActivity {
             String info = ((TextView) view).getText().toString();
             String address = info.substring(info.length() - 17);
 
-            registerReceiver(incomingPairRequestReceiver, new IntentFilter(BluetoothDevice.ACTION_PAIRING_REQUEST));
+//            registerReceiver(incomingPairRequestReceiver, new IntentFilter(BluetoothDevice.ACTION_PAIRING_REQUEST));
 
-//            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-//            intent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
-//            intent.putExtra(EXTRA_DEVICE_ADDRESS, address);
+            Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+            intent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 300);
+            intent.putExtra(EXTRA_DEVICE_ADDRESS, address);
 
 
 
-            Toast.makeText(DeviceAct.this, address, Toast.LENGTH_SHORT).show();
+           // Toast.makeText(DeviceAct.this, address, Toast.LENGTH_SHORT).show();
 
-//            setResult(RESULT_OK, intent);
-            //finish();
+            setResult(RESULT_OK, intent);
+            finish();
         }
     };
 

@@ -18,12 +18,15 @@
         android:textColor="@color/color5"
         android:textSize="14sp" />
 
-    <CheckBox
-        android:id="@+id/xboxhadir"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <Button
+        android:id="@+id/delete"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginRight="10dp"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="25dp"
-        android:fontFamily="@font/mregular" />
+        android:background="@drawable/icon_x"/>
+
+
 
 </RelativeLayout>
