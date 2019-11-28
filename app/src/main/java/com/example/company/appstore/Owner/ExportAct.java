@@ -69,7 +69,7 @@ public class ExportAct extends AppCompatActivity {
                 if (checker.lacksPermissions(REQUIRED_PERMISSION)) {
                     PermissionsActivity.startActivityForResult(ExportAct.this, PERMISSION_REQUEST_CODE, REQUIRED_PERMISSION);
                 } else {
-                    createPdf(FileUtils.getAppPath(mContext),"","","","","","","","");
+                    createPdf(FileUtils.getAppPath(mContext),"","","","","","","","","", "", "");
                 }
 
 
@@ -92,7 +92,7 @@ public class ExportAct extends AppCompatActivity {
 
     }
 
-    public void createPdf(String dest, String nama, String komisi, String gajiPokok, String pinjaman, String uangMakan, String gajiTotal, String gajiDiterima, String namaCabang) {
+    public void createPdf(String dest, String nama, String komisi, String gajiPokok, String pinjaman, String uangMakan, String gajiTotal, String gajiDiterima, String namaCabang, String totalMasuk, String totalUangMakan, String jumlahGajiPokok) {
 
         if (new File(dest).exists()) {
             new File(dest).delete();
@@ -168,10 +168,10 @@ public class ExportAct extends AppCompatActivity {
             document.add(mOrderIdValueParagraph);
 
             Chunk glue = new Chunk(new VerticalPositionMark());
-            Chunk mOrderIdValueChunk2 = new Chunk("25x20.000", mOrderIdValueFont);
+            Chunk mOrderIdValueChunk2 = new Chunk(totalMasuk + " x " + gajiPokok, mOrderIdValueFont);
             Paragraph mOrderIdValueParagraph2 = new Paragraph(mOrderIdValueChunk2);
             mOrderIdValueParagraph2.add(new Chunk(glue));
-            Chunk mOrderIdValueChunk1 = new Chunk(gajiPokok+"", mOrderIdValueFont);
+            Chunk mOrderIdValueChunk1 = new Chunk(jumlahGajiPokok, mOrderIdValueFont);
             mOrderIdValueParagraph2.add(mOrderIdValueChunk1);
             document.add(mOrderIdValueParagraph2);
 
@@ -205,10 +205,10 @@ public class ExportAct extends AppCompatActivity {
             document.add(mOrderAcNameParagraph);
 
 
-            Chunk mUangMakan = new Chunk("25x5.000", mOrderIdValueFont);
+            Chunk mUangMakan = new Chunk(totalMasuk+" x "+uangMakan, mOrderIdValueFont);
             Paragraph mUangMakanParagrap = new Paragraph(mUangMakan);
             mUangMakanParagrap.add(new Chunk(glue));
-            Chunk mUangMakanTotal = new Chunk(uangMakan+"", mOrderIdValueFont);
+            Chunk mUangMakanTotal = new Chunk(totalUangMakan+"", mOrderIdValueFont);
             mUangMakanParagrap.add(mUangMakanTotal);
             document.add(mUangMakanParagrap);
 
