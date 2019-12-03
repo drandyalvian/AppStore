@@ -101,9 +101,9 @@ public class AbsensiAct extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if(!s.toString().isEmpty()){
-                    search(s.toString());
+                   // search(s.toString());
                 }else {
-                    search("");
+                    //search("");
                 }
 
 
@@ -131,32 +131,32 @@ public class AbsensiAct extends AppCompatActivity {
     }
 
 //search fungsi
-    private void search(String s) {
-
-        Query query = reference.orderByChild("nama")
-                .startAt(s)
-                .endAt(s+"\uf8ff");
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.hasChildren()){
-                    absensiConsts.clear();
-                    for (DataSnapshot dss: dataSnapshot.getChildren()){
-                        final AbsensiConst absensi = dss.getValue(AbsensiConst.class);
-                        absensiConsts.add(absensi);
-                    }
-
-                    AbsensiAdapter adapter = new AbsensiAdapter(absensiConsts,AbsensiAct.this);
-                    rvView.setAdapter(adapter);
-                    adapter.notifyDataSetChanged();
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
+//    private void search(String s) {
+//
+//        Query query = reference.orderByChild("nama")
+//                .startAt(s)
+//                .endAt(s+"\uf8ff");
+//        query.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                if(dataSnapshot.hasChildren()){
+//                    absensiConsts.clear();
+//                    for (DataSnapshot dss: dataSnapshot.getChildren()){
+//                        final AbsensiConst absensi = dss.getValue(AbsensiConst.class);
+//                        absensiConsts.add(absensi);
+//                    }
+//
+//                    AbsensiAdapter adapter = new AbsensiAdapter(absensiConsts,AbsensiAct.this);
+//                    rvView.setAdapter(adapter);
+//                    adapter.notifyDataSetChanged();
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 }

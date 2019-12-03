@@ -49,21 +49,6 @@ public class PrintAct extends AppCompatActivity implements EasyPermissions.Permi
         ButterKnife.bind(this);
         setupBluetooth();
 
-        String coba4 = "Toko Andhika\n" +
-                "Cabang 1\n" +
-                "\nGaji Pokok:\n" +
-                "30 x 20.000 :       600.000"+
-                "\nKomisi:\n" +
-                "                    100.000" +
-                "\nUang Makan:\n" +
-                "30 x 20.000 :       600.000\n" +
-                "--------------------------------\n" +
-                "Total Gaji :        1.200.000\n" +
-                "Pijaman :           0\n" +
-                "--------------------------------\n" +
-                "Gaji Diterima :     1.200.0000";
-
-        viewPrint.setText(coba4);
     }
 
     @AfterPermissionGranted(RC_BLUETOOTH)

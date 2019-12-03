@@ -195,33 +195,74 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
         }
     }
 
-    public void printGaji(View view) {
+    public void printGaji(View view, String nama, String komisi, String gajiPokok, String pinjaman, String uangMakan, String gajiTotal, String gajiDiterima, String namaCabang, String totalMasuk, String totalUangMakan, String jumlahGajiPokok) {
         if (!mService.isAvailable()) {
             Log.i(TAG, "printText: perangkat tidak support bluetooth");
             return;
         }
         if (isPrinterReady) {
             String coba = "Toko Andhika\n" +
-                    "Cabang 1\n" +
-                    "-------------------------------";
+                    namaCabang + "\n" +
+                    "================================";
             mService.write(PrinterCommands.ESC_ALIGN_CENTER);
             mService.sendMessage(coba, "");
 
 
-            String coba4 = "\nGaji Pokok:\n" +
-                    "30 x 20.000 :       600.000" +
-                    "\nKomisi:\n" +
-                    "                    100.000" +
-                    "\nUang Makan:\n" +
-                    "30 x 20.000 :       600.000\n" +
-                    "--------------------------------\n" +
-                    "Total Gaji :        1.200.000\n" +
-                    "Pijaman :           0\n" +
-                    "--------------------------------\n" +
-                    "Gaji Diterima :     1.200.0000";
-
+            String lineGajiPokok = "\nGaji Pokok : \n" + totalMasuk + " x " + gajiPokok;
             mService.write(PrinterCommands.ESC_ALIGN_LEFT);
-            mService.sendMessage(coba4, "");
+            mService.sendMessage(lineGajiPokok, "");
+
+            String lineHasilGajiPokok = jumlahGajiPokok ;
+            mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
+            mService.sendMessage(lineHasilGajiPokok, "");
+
+            String lineKomisi = "Komisi :";
+            mService.write(PrinterCommands.ESC_ALIGN_LEFT);
+            mService.sendMessage(lineKomisi, "");
+
+            String lineHasilKomisi = komisi ;
+            mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
+            mService.sendMessage(lineHasilKomisi, "");
+
+            String lineUangMakan = "Uang Makan : \n" + totalMasuk + " x " + uangMakan;
+            mService.write(PrinterCommands.ESC_ALIGN_LEFT);
+            mService.sendMessage(lineUangMakan, "");
+
+            String lineHasilUangMakan = totalUangMakan;
+            mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
+            mService.sendMessage(lineHasilUangMakan, "");
+
+            String garis = "================================";
+
+            mService.write(PrinterCommands.ESC_ALIGN_CENTER);
+            mService.sendMessage(garis, "");
+
+            String lineTotalGaji = "Total Gaji :";
+            mService.write(PrinterCommands.ESC_ALIGN_LEFT);
+            mService.sendMessage(lineTotalGaji, "");
+
+            String lineHasilTotalGaji = gajiTotal;
+            mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
+            mService.sendMessage(lineHasilTotalGaji, "");
+
+            String linePinjaman = "Pinjaman :";
+            mService.write(PrinterCommands.ESC_ALIGN_LEFT);
+            mService.sendMessage(linePinjaman, "");
+
+            String lineHasilPinjaman = pinjaman;
+            mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
+            mService.sendMessage(lineHasilPinjaman, "");
+
+            mService.sendMessage(garis, "");
+
+            String lineGajiDiterima = "Gaji Diterima : ";
+            mService.write(PrinterCommands.ESC_ALIGN_LEFT);
+            mService.sendMessage(lineGajiDiterima, "");
+
+            String lineHasilGajiDiterima = gajiDiterima + "\n";
+            mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
+            mService.sendMessage(lineHasilGajiDiterima, "");
+
             mService.write(PrinterCommands.ESC_ENTER);
         } else {
             if (mService.isBTopen())

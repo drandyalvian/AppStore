@@ -28,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import butterknife.BindView;
@@ -39,6 +40,7 @@ public class ListAbsensiAct extends AppCompatActivity {
     DatabaseReference reference;
     @BindView(R.id.btnAdd)
     Button btnAdd;
+    private Button btnSave;
     private TextView tanggalAbsen;
     private RecyclerView rvView;
     private RecyclerView.Adapter adapter;
@@ -122,18 +124,18 @@ public class ListAbsensiAct extends AppCompatActivity {
         db.removeValue();
     }
 
-    private void addAbsen() {
+    private void addAbsen(String tanggal) {
         // tambahkan semua ke dialog
         DateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
         Date date = new Date();
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC+7"));
 
         DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("Cabang").child(username_key_new).child("Karyawan").child(nKaryawan).child("Absensi").child(dateFormat.format(date));
-        DatabaseReference countGaji = FirebaseDatabase.getInstance().getReference().child("Cabang").child(username_key_new).child("Karyawan").child(nKaryawan).child("Count_gaji").child(dateFormat.format(date));
+        DatabaseReference countGaji = FirebaseDatabase.getInstance().getReference().child("Cabang").child(username_key_new).child("Karyawan").child(nKaryawan).child("Count_gaji").child(tanggal);
         ListAbsensiConst absensiConst = new ListAbsensiConst(
                 "Hadir",
-                dateFormat.format(date),
-                dateFormat.format(date)
+                tanggal,
+                tanggal
 
         );
 
@@ -163,20 +165,37 @@ public class ListAbsensiAct extends AppCompatActivity {
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
 
+        DateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
+        Date date = new Date();
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC+7"));
+
         tanggalAbsen = (TextView) dialogView.findViewById(R.id.tanggalAbsen);
+        tanggalAbsen.setText(dateFormat.format(date));
+
         tanggalAbsen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showDateDialog();
+                showDateDialog(dialogView);
+            }
+        });
+
+        btnSave = (Button) dialogView.findViewById(R.id.btnSave);
+        btnSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addAbsen(tanggalAbsen.getText().toString());
+                alertDialog.hide();
             }
         });
     }
 
 
 
-    private void showDateDialog() {
+    private void showDateDialog(View viewDialog) {
 
         Calendar newCalendar = Calendar.getInstance();
+
+        dateFormatter = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
 
         datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
 
@@ -186,7 +205,7 @@ public class ListAbsensiAct extends AppCompatActivity {
                 Calendar newDate = Calendar.getInstance();
                 newDate.set(year, monthOfYear, dayOfMonth);
 
-                long date = System.currentTimeMillis();
+                tanggalAbsen = (TextView) viewDialog.findViewById(R.id.tanggalAbsen);
                 tanggalAbsen.setText(dateFormatter.format(newDate.getTime()));
             }
 
@@ -195,15 +214,4 @@ public class ListAbsensiAct extends AppCompatActivity {
         datePickerDialog.show();
     }
 
-    static
-    class ViewHolder {
-        @BindView(R.id.tanggalAbsen)
-        TextView tanggalAbsen;
-        @BindView(R.id.btnSave)
-        Button btnSave;
-
-        ViewHolder(View view) {
-            ButterKnife.bind(this, view);
-        }
-    }
 }

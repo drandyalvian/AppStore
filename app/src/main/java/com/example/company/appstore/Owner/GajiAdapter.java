@@ -124,7 +124,7 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
         myViewHolder.print.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((GajiAct)context).printGaji(view);
+                ((GajiAct)context).printGaji(view, nama, formatRupiah.format(komisi), formatRupiah.format(gajiPokok), formatRupiah.format(pinjaman), formatRupiah.format(uangMakan), formatRupiah.format(gajiTotal), formatRupiah.format(gajiDiterima), ""+namaCabang, Integer.toString(totalMasuk), formatRupiah.format(totalUangMakan), formatRupiah.format(jumlahGajiPokok));
             }
         });
 
