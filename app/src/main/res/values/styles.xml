@@ -18,4 +18,9 @@
 
     </style>
 
+    <style name="loginButton">
+        <item name="android:color">#ffae33</item>
+        <item name="android:fontFamily">@font/mregular</item>
+    </style>
+
 </resources>

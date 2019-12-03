@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.company.appstore.Owner.Login2Act;
@@ -21,7 +22,8 @@ import com.google.firebase.database.ValueEventListener;
 public class LoginAct extends AppCompatActivity {
 
     EditText xusername, xpass;
-    Button btn_login, btn_owner;
+    Button btn_owner;
+    Button btn_login;
     boolean doubleBackToExitPressedOnce = false;
 
     DatabaseReference reference;
