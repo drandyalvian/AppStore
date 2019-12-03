@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import butterknife.BindView;
-import butterknife.OnClick;
 
 import static com.example.company.appstore.permission.PermissionsActivity.PERMISSION_REQUEST_CODE;
 import static com.example.company.appstore.permission.PermissionsChecker.REQUIRED_PERMISSION;

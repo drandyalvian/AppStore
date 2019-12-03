@@ -1,5 +1,6 @@
 package com.example.company.appstore.Owner;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -29,6 +30,7 @@ public class InputGajiAct extends AppCompatActivity {
 
     private DatePickerDialog datePickerDialog;
     private SimpleDateFormat dateFormatter;
+
 
     TextView xnama, xposisi, xtgl;
     EditText xgajipokok,xgajilembur, xkompensasi, xuangmakan, xpinjaman;

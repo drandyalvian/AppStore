@@ -1,12 +1,20 @@
 package com.example.company.appstore.KepalaCabang;
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.company.appstore.R;
 import com.google.firebase.database.DataSnapshot;
@@ -18,8 +26,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 import java.util.TimeZone;
 
 import butterknife.BindView;
@@ -31,10 +39,16 @@ public class ListAbsensiAct extends AppCompatActivity {
     DatabaseReference reference;
     @BindView(R.id.btnAdd)
     Button btnAdd;
+    private TextView tanggalAbsen;
     private RecyclerView rvView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<ListAbsensiConst> labsensiConsts;
+    private DatePickerDialog datePickerDialog;
+    public SimpleDateFormat dateFormatter;
+    private AlertDialog.Builder dialog;
+    LayoutInflater inflater;
+    View dialogView;
 
 
     String USERNAME_KEY = "usernamekey";
@@ -55,6 +69,7 @@ public class ListAbsensiAct extends AppCompatActivity {
         rvView.setLayoutManager(layoutManager);
 
         getUsernameLocal();
+
 
 //mengambil data dari intent
         Bundle bundle = getIntent().getExtras();
@@ -140,6 +155,55 @@ public class ListAbsensiAct extends AppCompatActivity {
 
     @OnClick(R.id.btnAdd)
     public void onViewClicked() {
-        addAbsen();
+        //addAbsen();
+        ViewGroup viewGroup = findViewById(android.R.id.content);
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialogview_add_absensi, viewGroup, false);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(dialogView);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        tanggalAbsen = (TextView) dialogView.findViewById(R.id.tanggalAbsen);
+        tanggalAbsen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDateDialog();
+            }
+        });
+    }
+
+
+
+    private void showDateDialog() {
+
+        Calendar newCalendar = Calendar.getInstance();
+
+        datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, monthOfYear, dayOfMonth);
+
+                long date = System.currentTimeMillis();
+                tanggalAbsen.setText(dateFormatter.format(newDate.getTime()));
+            }
+
+        }, newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));
+
+        datePickerDialog.show();
+    }
+
+    static
+    class ViewHolder {
+        @BindView(R.id.tanggalAbsen)
+        TextView tanggalAbsen;
+        @BindView(R.id.btnSave)
+        Button btnSave;
+
+        ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
     }
 }
