@@ -28,12 +28,12 @@ import java.util.Locale;
 
 public class OwnerDashbordAct extends AppCompatActivity {
 
-    TextView xnama, jml_C1, jml_C2, jml_C3, tgl_cabang1, tgl_cabang2, tgl_cabang3, nc1, nc2, nc3;
+    TextView xnama, jml_C1, jml_C2, jml_C3, tgl_cabang1, tgl_cabang2, tgl_cabang3, nc1, nc2, nc3, tCabang1, tCabang2, tCabang3;
     LinearLayout gajik1,gajik2, gajik3, laporank1, laporank2, laporank3,datak1, datak2, datak3;
     Button logout, edit_toko, edit_toko2, edit_toko3;
     ImageView edit_owner;
 
-    DatabaseReference reference, reference2, reference3, reference4, reference5;
+    DatabaseReference reference, reference2, reference3, reference4, reference5, c1, c2, c3;
     String USERNAME_KEY = "usernamekey";
     String username_key = "";
     String username_key_new ="";
@@ -68,6 +68,50 @@ public class OwnerDashbordAct extends AppCompatActivity {
         jml_C1 = findViewById(R.id.ket_jmlc1);
         jml_C2 = findViewById(R.id.ket_jmlc2);
         jml_C3 = findViewById(R.id.ket_jmlc3);
+        tCabang1 = findViewById(R.id.tokoCabang1);
+        tCabang2 = findViewById(R.id.tokoCabang2);
+        tCabang3 = findViewById(R.id.tokoCabang3);
+
+
+        c1 = FirebaseDatabase.getInstance().getReference().child("KepalaCabang").child("cabang1");
+        c2 = FirebaseDatabase.getInstance().getReference().child("KepalaCabang").child("cabang2");
+        c3 = FirebaseDatabase.getInstance().getReference().child("KepalaCabang").child("cabang3");
+
+        c1.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                tCabang1.setText(dataSnapshot.child("nama_cabang").getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        c2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                tCabang2.setText(dataSnapshot.child("nama_cabang").getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        c3.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                tCabang3.setText(dataSnapshot.child("nama_cabang").getValue().toString());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
 
         reference = FirebaseDatabase.getInstance().getReference().child("Cabang").child("cabang1").child("Karyawan");

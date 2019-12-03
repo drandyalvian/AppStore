@@ -25,9 +25,11 @@ import java.util.ArrayList;
 public class EditTokoAct extends AppCompatActivity {
 
     Button back,btnsave;
-    EditText xnama, xpass;
+    EditText xnama, xpass, namaCabang;
     TextView  xusername, texttoko;
     Spinner selectKepala;
+
+    String userOld;
 
     DatabaseReference reference, getSpinner;
 
@@ -47,6 +49,9 @@ public class EditTokoAct extends AppCompatActivity {
         texttoko = findViewById(R.id.texttoko);
         btnsave = findViewById(R.id.btnsave);
         selectKepala = findViewById(R.id.selectKepala);
+        namaCabang = findViewById(R.id.namaToko);
+
+        xusername.setEnabled(false);
 
         Bundle bundle = getIntent().getExtras();
         final String cabangx= bundle.getString("nama");
@@ -59,17 +64,6 @@ public class EditTokoAct extends AppCompatActivity {
         selectKepala.setAdapter(arrayAdapter);
         getDataSpinner();
 
-        selectKepala.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(EditTokoAct.this, selectKepala.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {
-
-            }
-        });
 //mengambil data dari intent
 
 
@@ -79,8 +73,11 @@ public class EditTokoAct extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 xpass.setText(dataSnapshot.child("password").getValue().toString());
                 xusername.setText(dataSnapshot.child("username").getValue().toString());
-                //xnama.setText(dataSnapshot.child("nama_lengkap").getValue().toString());
+                selectKepala.setSelection(arrayAdapter.getPosition(dataSnapshot.child("nama_lengkap").getValue().toString()));
                 texttoko.setText(dataSnapshot.child("nama_cabang").getValue().toString());
+                namaCabang.setText(dataSnapshot.child("nama_cabang").getValue().toString());
+
+                userOld = xusername.getText().toString();
             }
 
             @Override
@@ -94,12 +91,13 @@ public class EditTokoAct extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                reference.child(xusername.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
+                reference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         dataSnapshot.getRef().child("password").setValue(xpass.getText().toString());
-                        dataSnapshot.getRef().child("nama_lengkap").setValue(xnama.getText().toString());
+                        dataSnapshot.getRef().child("nama_lengkap").setValue(selectKepala.getSelectedItem().toString());
                         dataSnapshot.getRef().child("username").setValue(xusername.getText().toString());
+                        dataSnapshot.getRef().child("nama_cabang").setValue(namaCabang.getText().toString());
                     }
 
                     @Override
@@ -126,22 +124,12 @@ public class EditTokoAct extends AppCompatActivity {
     }
 
     private void getDataSpinner(){
-        listener = getSpinner.addValueEventListener(new ValueEventListener() {
+
+        getSpinner.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot item:dataSnapshot.getChildren()){
-
-                    getSpinner.child(item.getValue().toString()).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            arrayList.add(dataSnapshot.getRef().toString());
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
+                  arrayList.add(item.child("nama").getValue().toString());
                 }
                 arrayAdapter.notifyDataSetChanged();
             }
