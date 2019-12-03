@@ -1,8 +1,10 @@
 package com.example.company.appstore.Owner;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -75,15 +77,21 @@ public class DataKaryawanAdapter extends RecyclerView.Adapter<DataKaryawanAdapte
             public void onClick(View view) {
                 reference = FirebaseDatabase.getInstance().getReference()
                         .child("Cabang").child(cabang).child("Karyawan");
-                reference.child(dataKaryawanConsts.get(i).getKey()).removeValue();
-//                listener.onDeleteData(dataKaryawanConsts.get(i), i);
-
-                Toast.makeText(listener, "", Toast.LENGTH_SHORT).show();
+                new AlertDialog.Builder(context)
+                        .setTitle("Hapus")
+                        .setMessage("Apakah anda yakin?")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                reference.child(dataKaryawanConsts.get(i).getKey()).removeValue();
+                                Toast.makeText(context, "Berhasil dihapus!", Toast.LENGTH_SHORT).show();
+                            }})
+                        .setNegativeButton(android.R.string.no, null).show();
             }
         });
 
     }
-//
+
     @Override
     public int getItemCount() {
         return dataKaryawanConsts.size();

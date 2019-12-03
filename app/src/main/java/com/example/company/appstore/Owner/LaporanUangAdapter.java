@@ -1,6 +1,8 @@
 package com.example.company.appstore.Owner;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -51,7 +53,16 @@ public class LaporanUangAdapter extends RecyclerView.Adapter<LaporanUangAdapter.
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        listener.onDeleteData(laporanUangConsts.get(i), i);
+                        new AlertDialog.Builder(context)
+                                .setTitle("Hapus")
+                                .setMessage("Apakah anda yakin?")
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        listener.onDeleteData(laporanUangConsts.get(i), i);
+                                        Toast.makeText(context, "Berhasil dihapus!", Toast.LENGTH_SHORT).show();
+                                    }})
+                                .setNegativeButton(android.R.string.no, null).show();
                     }
                 }
         );

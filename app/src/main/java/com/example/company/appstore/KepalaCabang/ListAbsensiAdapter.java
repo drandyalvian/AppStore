@@ -1,6 +1,8 @@
 package com.example.company.appstore.KepalaCabang;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -46,11 +48,18 @@ public class ListAbsensiAdapter extends RecyclerView.Adapter<ListAbsensiAdapter.
         myViewHolder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              ListAbsensiAct.getInstance().deleteAbsen(labsensiConsts.get(i).getKey());
+                new AlertDialog.Builder(context)
+                        .setTitle("Hapus")
+                        .setMessage("Apakah anda yakin?")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                ListAbsensiAct.getInstance().deleteAbsen(labsensiConsts.get(i).getKey());
+                                Toast.makeText(context, "Berhasil dihapus!", Toast.LENGTH_SHORT).show();
+                            }})
+                        .setNegativeButton(android.R.string.no, null).show();
             }
         });
-
-
     }
 
     @Override
@@ -62,8 +71,6 @@ public class ListAbsensiAdapter extends RecyclerView.Adapter<ListAbsensiAdapter.
 
         TextView xtgl;
         Button delete;
-
-
 
         public MyViewHolder(@NonNull View itemView){
             super(itemView);

@@ -130,8 +130,7 @@ public class ListAbsensiAct extends AppCompatActivity {
         Date date = new Date();
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC+7"));
 
-        DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("Cabang").child(username_key_new).child("Karyawan").child(nKaryawan).child("Absensi").child(dateFormat.format(date));
-        DatabaseReference countGaji = FirebaseDatabase.getInstance().getReference().child("Cabang").child(username_key_new).child("Karyawan").child(nKaryawan).child("Count_gaji").child(tanggal);
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("Cabang").child(username_key_new).child("Karyawan").child(nKaryawan);
         ListAbsensiConst absensiConst = new ListAbsensiConst(
                 "Hadir",
                 tanggal,
@@ -143,9 +142,18 @@ public class ListAbsensiAct extends AppCompatActivity {
                 dateFormat.format(date)
         );
 
-        countGaji.setValue(entity);
+        db.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                db.child("Absensi").child(tanggal).setValue(absensiConst);
+                db.child("Count_gaji").child(tanggal).setValue(entity);
+            }
 
-        db.setValue(absensiConst);
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     //mengambil data local
