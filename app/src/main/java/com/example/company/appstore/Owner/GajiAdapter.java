@@ -71,10 +71,11 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, final int i) {
 
+        Locale localeID = new Locale("in", "ID");
+        NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
 
         myViewHolder.tNama.setText(gajiConst.get(i).getNama());
-        myViewHolder.tGaji.setText(Integer.toString(totalMasuk));
-        myViewHolder.tgl1.setText(gajiConst.get(i).getTgl_gaji());
+        myViewHolder.tGaji.setText(formatRupiah.format(Double.parseDouble(gajiConst.get(i).getGaji_pokok())));
 
         final String getkey = gajiConst.get(i).getKey();
         final String cabangkey = gajiConst.get(i).getCabang();
@@ -105,11 +106,6 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
 
             }
         });
-
-
-        Locale localeID = new Locale("in", "ID");
-        NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
-
 
         myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,7 +159,6 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
             super(itemView);
             tNama = itemView.findViewById(R.id.tNama);
             tGaji = itemView.findViewById(R.id.tGaji);
-            tgl1 = itemView.findViewById(R.id.tgl1);
             print = itemView.findViewById(R.id.print);
             pdf = itemView.findViewById(R.id.pdf);
 

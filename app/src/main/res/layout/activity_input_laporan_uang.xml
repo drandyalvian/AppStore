@@ -130,6 +130,7 @@
                 android:background="@drawable/bg_square"
                 android:fontFamily="@font/mlight"
                 android:inputType="number"
+                android:maxLines="1"
                 android:paddingLeft="8dp"
                 android:text=""
                 android:textColor="@color/color4"

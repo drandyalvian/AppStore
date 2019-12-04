@@ -249,8 +249,6 @@ public class ExportAct extends AppCompatActivity {
 //            }
 
 
-
-
         } catch (IOException | DocumentException ie) {
             LOGE("createPdf: Error " + ie.getLocalizedMessage());
         } catch (ActivityNotFoundException ae) {

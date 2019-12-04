@@ -51,7 +51,6 @@ public class InputGajiAct extends AppCompatActivity {
         xuangmakan = findViewById(R.id.xuangmakan);
         xpinjaman = findViewById(R.id.xpinjaman);
         btnsave = findViewById(R.id.btnsave);
-        addtgl = findViewById(R.id.addtgl);
         back = findViewById(R.id.back);
 
         dateFormatter = new SimpleDateFormat("dd MMM yyyy", Locale.US);
@@ -60,15 +59,6 @@ public class InputGajiAct extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         cabangx= bundle.getString("cabang");
         karyawanx= bundle.getString("key");
-
-
-//      add tgl
-        addtgl.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDateDialog();
-            }
-        });
 
 //        Get
         reference = FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabangx).child("Karyawan").child(karyawanx);
@@ -82,7 +72,6 @@ public class InputGajiAct extends AppCompatActivity {
                 xkompensasi.setText(dataSnapshot.child("kompensasi").getValue().toString());
                 xuangmakan.setText(dataSnapshot.child("uang_makan").getValue().toString());
                 xpinjaman.setText(dataSnapshot.child("pinjaman").getValue().toString());
-                xtgl.setText(dataSnapshot.child("tgl_gaji").getValue().toString());
 
             }
 
@@ -107,7 +96,6 @@ public class InputGajiAct extends AppCompatActivity {
                         dataSnapshot.getRef().child("kompensasi").setValue(xkompensasi.getText().toString());
                         dataSnapshot.getRef().child("uang_makan").setValue(xuangmakan.getText().toString());
                         dataSnapshot.getRef().child("pinjaman").setValue(xpinjaman.getText().toString());
-                        dataSnapshot.getRef().child("tgl_gaji").setValue(xtgl.getText().toString());
                     }
 
                     @Override
@@ -117,7 +105,7 @@ public class InputGajiAct extends AppCompatActivity {
                 });
 
                 Intent go = new Intent(InputGajiAct.this,GajiAct.class);
-                go.putExtra("cabang","cabang1");
+                go.putExtra("cabang",cabangx);
                 startActivity(go);
             }
 
