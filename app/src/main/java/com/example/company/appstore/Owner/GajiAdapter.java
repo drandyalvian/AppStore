@@ -1,6 +1,7 @@
 package com.example.company.appstore.Owner;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -33,8 +34,6 @@ import static com.example.company.appstore.permission.PermissionsChecker.REQUIRE
 
 public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> {
 
-    @BindView(R.id.print)
-    Button print;
     private DatabaseReference reference;
 
     PermissionsChecker checker;
@@ -48,6 +47,13 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
 
     private String nama, namaCabang;
 
+    private TextView viewTotalCicilan, viewCicilanPinjaman, viewTotalGaji, viewNamaPegawai;
+
+    private Button pdf, print;
+
+    ViewGroup viewGroup;
+    View dialogView ;
+    AlertDialog.Builder builder;
 
 
 
@@ -71,11 +77,17 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull final MyViewHolder myViewHolder, final int i) {
 
+
+
+
+
+
         Locale localeID = new Locale("in", "ID");
         NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
 
         myViewHolder.tNama.setText(gajiConst.get(i).getNama());
-        myViewHolder.tGaji.setText(formatRupiah.format(Double.parseDouble(gajiConst.get(i).getGaji_pokok())));
+
+
 
         final String getkey = gajiConst.get(i).getKey();
         final String cabangkey = gajiConst.get(i).getCabang();
@@ -99,6 +111,9 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
 
                 namaCabang = gajiConst.get(i).getNama_cabang();
 
+                myViewHolder.tGaji.setText(formatRupiah.format(gajiTotal));
+
+
             }
 
             @Override
@@ -117,29 +132,53 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
             }
         });
 
-        myViewHolder.print.setOnClickListener(new View.OnClickListener() {
+        myViewHolder.payroll.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ((GajiAct)context).printGaji(view, nama, formatRupiah.format(komisi), formatRupiah.format(gajiPokok), formatRupiah.format(pinjaman), formatRupiah.format(uangMakan), formatRupiah.format(gajiTotal), formatRupiah.format(gajiDiterima), ""+namaCabang, Integer.toString(totalMasuk), formatRupiah.format(totalUangMakan), formatRupiah.format(jumlahGajiPokok));
+                //((GajiAct)context).printGaji(view, nama, formatRupiah.format(komisi), formatRupiah.format(gajiPokok), formatRupiah.format(pinjaman), formatRupiah.format(uangMakan), formatRupiah.format(gajiTotal), formatRupiah.format(gajiDiterima), ""+namaCabang, Integer.toString(totalMasuk), formatRupiah.format(totalUangMakan), formatRupiah.format(jumlahGajiPokok));
+                viewGroup = myViewHolder.itemView.findViewById(android.R.id.content);
+                dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_gaji, viewGroup, false);
+                builder = new AlertDialog.Builder(context);
+                builder.setView(dialogView);
+
+                viewTotalCicilan = dialogView.findViewById(R.id.viewTotalCicilan);
+                viewCicilanPinjaman = dialogView.findViewById(R.id.viewCicilanPinjaman);
+                viewTotalGaji = dialogView.findViewById(R.id.viewTotalGaji);
+                viewNamaPegawai = dialogView.findViewById(R.id.namaPegawai);
+
+                print = dialogView.findViewById(R.id.btnPrint);
+                pdf = dialogView.findViewById(R.id.btnPdf);
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+
+                viewNamaPegawai.setText(gajiConst.get(i).getNama());
+
+                viewTotalGaji.setText(formatRupiah.format(gajiTotal));
+
+                viewTotalCicilan.setText(formatRupiah.format(Double.parseDouble(gajiConst.get(i).getPinjaman())));
+
+
             }
         });
 
-        myViewHolder.pdf.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                checker = new PermissionsChecker(context);
-                mContext = context.getApplicationContext();
-                ExportAct exportAct = new ExportAct();
-                if (checker.lacksPermissions(REQUIRED_PERMISSION)) {
-                    PermissionsActivity.startActivityForResult((Activity) context, PERMISSION_REQUEST_CODE, REQUIRED_PERMISSION);
-                    Toast.makeText(context, "File Disimpan : "+FileUtils.getAppPath(mContext) + " " + nama+".pdf", Toast.LENGTH_LONG).show();
-                    exportAct.createPdf(FileUtils.getAppPath(mContext) + nama + ".pdf", nama, formatRupiah.format(komisi), formatRupiah.format(gajiPokok), formatRupiah.format(pinjaman), formatRupiah.format(uangMakan), formatRupiah.format(gajiTotal), formatRupiah.format(gajiDiterima), ""+namaCabang, Integer.toString(totalMasuk), formatRupiah.format(totalUangMakan), formatRupiah.format(jumlahGajiPokok));
-                } else {
-                    exportAct.createPdf(FileUtils.getAppPath(mContext) + nama + ".pdf", nama, formatRupiah.format(komisi), formatRupiah.format(gajiPokok), formatRupiah.format(pinjaman), formatRupiah.format(uangMakan), formatRupiah.format(gajiTotal), formatRupiah.format(gajiDiterima), ""+namaCabang, Integer.toString(totalMasuk), formatRupiah.format(totalUangMakan), formatRupiah.format(jumlahGajiPokok));
-                    Toast.makeText(context, "File Disimpan : "+FileUtils.getAppPath(mContext) + " " + nama +".pdf", Toast.LENGTH_LONG).show();
-                }
-            }
-        });
+
+
+//        myViewHolder.pdf.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                checker = new PermissionsChecker(context);
+//                mContext = context.getApplicationContext();
+//                ExportAct exportAct = new ExportAct();
+//                if (checker.lacksPermissions(REQUIRED_PERMISSION)) {
+//                    PermissionsActivity.startActivityForResult((Activity) context, PERMISSION_REQUEST_CODE, REQUIRED_PERMISSION);
+//                    Toast.makeText(context, "File Disimpan : "+FileUtils.getAppPath(mContext) + " " + nama+".pdf", Toast.LENGTH_LONG).show();
+//                    exportAct.createPdf(FileUtils.getAppPath(mContext) + nama + ".pdf", nama, formatRupiah.format(komisi), formatRupiah.format(gajiPokok), formatRupiah.format(pinjaman), formatRupiah.format(uangMakan), formatRupiah.format(gajiTotal), formatRupiah.format(gajiDiterima), ""+namaCabang, Integer.toString(totalMasuk), formatRupiah.format(totalUangMakan), formatRupiah.format(jumlahGajiPokok));
+//                } else {
+//                    exportAct.createPdf(FileUtils.getAppPath(mContext) + nama + ".pdf", nama, formatRupiah.format(komisi), formatRupiah.format(gajiPokok), formatRupiah.format(pinjaman), formatRupiah.format(uangMakan), formatRupiah.format(gajiTotal), formatRupiah.format(gajiDiterima), ""+namaCabang, Integer.toString(totalMasuk), formatRupiah.format(totalUangMakan), formatRupiah.format(jumlahGajiPokok));
+//                    Toast.makeText(context, "File Disimpan : "+FileUtils.getAppPath(mContext) + " " + nama +".pdf", Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        });
 
     }
 
@@ -151,16 +190,19 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
-        TextView tNama, tGaji, tgl1;
-        Button print, pdf;
+        TextView tNama, tGaji;
+        Button payroll;
 
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
             tNama = itemView.findViewById(R.id.tNama);
             tGaji = itemView.findViewById(R.id.tGaji);
-            print = itemView.findViewById(R.id.print);
-            pdf = itemView.findViewById(R.id.pdf);
+            payroll = itemView.findViewById(R.id.btnPayroll);
+
+
+
+
 
         }
     }

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="350dp"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_btn3"
+    android:padding="30dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/namaPegawai"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="Nama Pegawai"
+        android:fontFamily="@font/mregular"
+        android:textColor="@color/color5"
+        android:layout_marginBottom="10dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color6"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/mlight"
+            android:textSize="16sp"
+            android:textColor="@color/color5"
+            android:layout_marginTop="20dp"
+            android:text="Total Gaji"/>
+
+        <TextView
+            android:id="@+id/viewCicilanPinjaman"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/mlight"
+            android:textSize="16sp"
+            android:gravity="right"
+            android:textColor="@color/color5"
+            android:layout_marginTop="20dp"
+            android:text="Cicilan ke : xx"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/viewTotalGaji"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        android:text="Rp.XXX"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/mlight"
+        android:textColor="@color/color5"
+        android:layout_marginBottom="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/mlight"
+        android:textSize="16sp"
+        android:textColor="@color/color5"
+        android:layout_marginTop="0dp"
+        android:text="Total Pinjaman"/>
+
+    <TextView
+        android:id="@+id/viewTotalCicilan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/mlight"
+        android:textSize="16sp"
+        android:textColor="@color/color5"
+        android:layout_marginTop="5dp"
+        android:text="Rp.XXX"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/mlight"
+        android:textSize="16sp"
+        android:textColor="@color/color5"
+        android:layout_marginTop="5dp"
+        android:text="Cicil Gaji"/>
+
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/mlight"
+            android:textSize="16sp"
+            android:paddingLeft="8dp"
+            android:text="0"
+            android:textColor="@color/color4"
+            android:background="@drawable/bg_square"/>
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnPdf"
+            android:layout_width="40dp"
+            android:layout_height="36dp"
+            android:layout_gravity="left"
+            android:background="@drawable/button_retangle"
+            android:drawableLeft="@drawable/ic_pdf"
+            android:paddingLeft="8dp"
+            android:paddingTop="0dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="0dp"
+            android:text="" />
+
+        <Button
+            android:id="@+id/btnPrint"
+            android:layout_width="39dp"
+            android:layout_height="36dp"
+            android:layout_gravity="right"
+            android:layout_marginLeft="10dp"
+            android:background="@drawable/button_retangle"
+            android:drawableLeft="@drawable/ic_printer"
+            android:paddingLeft="8dp"
+            android:paddingRight="0dp" />
+
+    </LinearLayout>
+
+
+
+
+
+</LinearLayout>

@@ -65,7 +65,6 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
 
         back = findViewById(R.id.back);
         inputgaji = findViewById(R.id.inputgaji);
-        print = findViewById(R.id.print);
 
         rvView = (RecyclerView) findViewById(R.id.gaji_place);
         rvView.setHasFixedSize(true);
@@ -280,4 +279,6 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
             }
         }
     }
+
+
 }

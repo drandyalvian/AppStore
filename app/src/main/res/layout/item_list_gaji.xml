@@ -40,26 +40,18 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="20dp"
-            android:layout_marginTop="30dp">
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="25dp">
 
             <Button
-                android:id="@+id/pdf"
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginRight="20dp"
-                android:layout_toLeftOf="@id/print"
-                android:background="@drawable/pdf"
-                android:textColor="@color/color4" />
-
-            <Button
-                android:id="@+id/print"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:id="@+id/btnPayroll"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:layout_alignParentRight="true"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="0dp"
                 android:layout_marginRight="0dp"
-                android:background="@drawable/printer"
+                android:drawableLeft="@drawable/ic_payroll"
+                android:background="#fff"
                 android:textColor="@color/color4" />
 
         </RelativeLayout>
