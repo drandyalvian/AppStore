@@ -2,10 +2,12 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="350dp"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/bg_btn3"
     android:padding="30dp"
+    android:layout_marginLeft="50dp"
+    android:layout_marginRight="50dp"
     android:orientation="vertical">
 
     <TextView
@@ -68,7 +70,7 @@
         android:textSize="16sp"
         android:textColor="@color/color5"
         android:layout_marginTop="0dp"
-        android:text="Total Pinjaman"/>
+        android:text="Sisa Pinjaman"/>
 
     <TextView
         android:id="@+id/viewTotalCicilan"
@@ -90,12 +92,18 @@
         android:layout_marginTop="5dp"
         android:text="Cicil Gaji"/>
 
-
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
         <EditText
-            android:layout_width="match_parent"
+            android:id="@+id/kurangPinjaman"
+            android:layout_width="fill_parent"
             android:layout_height="30dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="10dp"
+            android:paddingTop="3dp"
+            android:layout_weight="1"
+            android:paddingBottom="3dp"
+            android:layout_marginRight="5dp"
             android:fontFamily="@font/mlight"
             android:textSize="16sp"
             android:paddingLeft="8dp"
@@ -103,33 +111,42 @@
             android:textColor="@color/color4"
             android:background="@drawable/bg_square"/>
 
-
+        <Button
+            android:id="@+id/btnSavePinjaman"
+            android:layout_width="33dp"
+            android:layout_height="30dp"
+            android:paddingLeft="5dp"
+            android:background="@drawable/button_retangle"
+            android:drawableLeft="@drawable/ic_check"
+            ></Button>
+    </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
        android:layout_height="wrap_content"
         android:paddingTop="10dp"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/btnPdf"
-            android:layout_width="40dp"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
             android:layout_height="36dp"
-            android:layout_gravity="left"
+            android:textColor="#ffffff"
             android:background="@drawable/button_retangle"
             android:drawableLeft="@drawable/ic_pdf"
             android:paddingLeft="8dp"
-            android:paddingTop="0dp"
-            android:paddingRight="8dp"
-            android:paddingBottom="0dp"
-            android:text="" />
+            android:text="PDF" />
 
         <Button
             android:id="@+id/btnPrint"
-            android:layout_width="39dp"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
             android:layout_height="36dp"
             android:layout_gravity="right"
             android:layout_marginLeft="10dp"
+            android:text="Print"
+            android:textColor="#ffffff"
             android:background="@drawable/button_retangle"
             android:drawableLeft="@drawable/ic_printer"
             android:paddingLeft="8dp"

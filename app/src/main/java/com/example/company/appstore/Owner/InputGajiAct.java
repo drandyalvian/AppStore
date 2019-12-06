@@ -1,6 +1,5 @@
 package com.example.company.appstore.Owner;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -19,9 +18,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class InputGajiAct extends AppCompatActivity {
 
@@ -85,6 +87,9 @@ public class InputGajiAct extends AppCompatActivity {
         btnsave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                DateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
+                Date date = new Date();
+                dateFormat.setTimeZone(TimeZone.getTimeZone("UTC+7"));
 
                 reference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override

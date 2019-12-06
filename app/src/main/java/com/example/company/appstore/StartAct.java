@@ -29,8 +29,6 @@ public class StartAct extends AppCompatActivity {
                 sqlLiteHelper.updateSplash();
                 Intent gotosign = new Intent(StartAct.this,LoginAct.class);
                 startActivity(gotosign);
-
-
             }
         });
 
