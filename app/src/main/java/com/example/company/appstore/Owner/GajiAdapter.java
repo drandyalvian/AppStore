@@ -182,7 +182,14 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
                     totalUangMakan = Double.parseDouble(myCursor.getString(12));
 
                     jumlahGajiPokok = totalMasuk * gajiPokok;
+
+                    if (pinjaman.equals(0)){
+                        save.setEnabled(false);
+                    }else{
+                        save.setEnabled(true);
+                    }
                 }
+
 
 
                 viewTotalCicilan.setText(formatRupiah.format(pinjaman));

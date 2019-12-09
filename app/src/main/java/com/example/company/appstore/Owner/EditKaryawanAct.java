@@ -75,7 +75,6 @@ public class EditKaryawanAct extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 xnama.setText(dataSnapshot.child("nama").getValue().toString());
                 xcabangtoko.setSelection(cabangToko.getPosition(dataSnapshot.child("nama_cabang").getValue().toString()));
-                xusername.setText(dataSnapshot.child("key").getValue().toString());
                 xumur.setText(dataSnapshot.child("umur").getValue().toString());
                 xalamat.setText(dataSnapshot.child("alamat").getValue().toString());
                 xnohp.setText(dataSnapshot.child("telepon").getValue().toString());
