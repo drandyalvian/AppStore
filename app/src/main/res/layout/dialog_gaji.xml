@@ -109,6 +109,7 @@
             android:paddingLeft="8dp"
             android:text="0"
             android:textColor="@color/color4"
+            android:inputType="number"
             android:background="@drawable/bg_square"/>
 
         <Button

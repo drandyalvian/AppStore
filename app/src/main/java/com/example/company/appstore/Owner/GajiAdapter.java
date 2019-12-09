@@ -183,7 +183,7 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
 
                     jumlahGajiPokok = totalMasuk * gajiPokok;
 
-                    if (pinjaman.equals(0)){
+                    if (Double.parseDouble(myCursor.getString(4)) == 0){
                         save.setEnabled(false);
                     }else{
                         save.setEnabled(true);
@@ -226,11 +226,16 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
                         reference.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                sisaPinjaman = pinjaman - Integer.parseInt(kurangPinjaman.getText().toString());
-                                pinjaman = sisaPinjaman;
+                                if (pinjaman < Integer.parseInt(kurangPinjaman.getText().toString())){
+                                    Toast.makeText(context, "Nominal melebihi pinjaman!", Toast.LENGTH_SHORT).show();
+                                    kurangPinjaman.setError("Melebihi nominal pinjaman");
+                                    kurangPinjaman.requestFocus();
+                                }else{
+                                    sisaPinjaman = pinjaman - Integer.parseInt(kurangPinjaman.getText().toString());
+                                    pinjaman = sisaPinjaman;
+                                    dataSnapshot.getRef().child("pinjaman").setValue(df.format(sisaPinjaman).toString());
+                                }
                                 viewTotalCicilan.setText(formatRupiah.format(pinjaman));
-
-                                dataSnapshot.getRef().child("pinjaman").setValue(df.format(sisaPinjaman).toString());
                             }
 
                             @Override
@@ -238,6 +243,8 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
 
                             }
                         });
+
+                        Toast.makeText(context, "clicked!", Toast.LENGTH_SHORT).show();
                     }
                 });
 
