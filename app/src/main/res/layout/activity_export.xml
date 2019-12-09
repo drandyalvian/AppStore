@@ -11,6 +11,6 @@
         android:layout_height="wrap_content"
         android:text="PDF"
         android:id="@+id/bPdf"
-        />
+        tools:ignore="MissingConstraints" />
 
 </android.support.constraint.ConstraintLayout>
