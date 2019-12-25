@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="350dp"
+    android:background="@drawable/bg_btn3"
+    android:padding="30dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="Filter Data"
+        android:fontFamily="@font/mregular"
+        android:textColor="@color/color5"
+        android:layout_marginBottom="10dp"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color6"/>
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <Button
+                        android:id="@+id/btnAll"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:background="@drawable/bg_btn1"
+                        android:fontFamily="@font/mmedium"
+                        android:paddingRight="20dp"
+                        android:paddingLeft="20dp"
+                        android:textStyle="bold"
+                        android:textAllCaps="false"
+                        android:textColor="@color/color6"
+                        android:text="All Data"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"/>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/mlight"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/color5"
+                android:layout_marginTop="10dp"
+                android:text="Bulan"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_square"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/fbulan"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:fontFamily="@font/mlight"
+                    android:paddingLeft="2dp"
+                    android:drawSelectorOnTop="true"
+                    android:textColor="@color/color4"
+                    android:textSize="14sp"/>
+
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/mlight"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/color5"
+                android:layout_marginTop="20dp"
+                android:text="Tahun"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/ftahun"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/mlight"
+                    android:textSize="16sp"
+                    android:paddingLeft="8dp"
+                    android:textStyle="bold"
+                    android:text=""
+                    android:textColor="@color/color5"
+                    android:background="@drawable/bg_square"/>
+
+            </LinearLayout>
+            <Button
+                android:id="@+id/btnsaves"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:text="SAVE"
+                android:fontFamily="@font/mregular"
+                android:textSize="18sp"
+                android:textColor="#fff"
+                android:background="@drawable/bg_btn2"
+                android:layout_marginTop="30dp"/>
+
+
+        </LinearLayout>
+
+    </ScrollView>
+
+
+
+
+
+
+</LinearLayout>
