@@ -28,7 +28,7 @@ public class EditKaryawanAct extends AppCompatActivity {
     Button back, save;
     Spinner xspiner, xcabangtoko;
     TextView xusername;
-    EditText xnama, xumur, xalamat, xnohp, xgajipokok;
+    EditText xnama, xumur, xalamat, xnohp, xgajipokok, xposisi;
     String cabangx, karyawanx;
 
     DatabaseReference reference;
@@ -56,6 +56,7 @@ public class EditKaryawanAct extends AppCompatActivity {
         xnohp = findViewById(R.id.xnohp);
         xgajipokok = findViewById(R.id.xgajipokok);
         xspiner = findViewById(R.id.xspiner);
+        xposisi = findViewById(R.id.xposisi);
 
         EditText editor = new EditText(this);
         editor.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
@@ -78,6 +79,7 @@ public class EditKaryawanAct extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 xnama.setText(dataSnapshot.child("nama").getValue().toString());
+                xposisi.setText(dataSnapshot.child("posisi").getValue().toString());
                 xcabangtoko.setSelection(cabangToko.getPosition(dataSnapshot.child("nama_cabang").getValue().toString()));
                 xumur.setText(dataSnapshot.child("umur").getValue().toString());
                 xalamat.setText(dataSnapshot.child("alamat").getValue().toString());
@@ -103,6 +105,7 @@ public class EditKaryawanAct extends AppCompatActivity {
                         dataSnapshot.getRef().child("nama").setValue(xnama.getText().toString());
                         dataSnapshot.getRef().child("key").setValue(xnama.getText().toString());
                         dataSnapshot.getRef().child("key_name").setValue(xnama.getText().toString());
+                        dataSnapshot.getRef().child("posisi").setValue(xposisi.getText().toString());
                         dataSnapshot.getRef().child("nama_cabang").setValue(xcabangtoko.getSelectedItem().toString());
                         dataSnapshot.getRef().child("umur").setValue(xumur.getText().toString());
                         dataSnapshot.getRef().child("alamat").setValue(xalamat.getText().toString());

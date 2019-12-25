@@ -41,7 +41,7 @@ public class AbsensiAdapter extends RecyclerView.Adapter<AbsensiAdapter.MyViewHo
     public void onBindViewHolder(@NonNull AbsensiAdapter.MyViewHolder myViewHolder, int i) {
 
         myViewHolder.xnama.setText(absensiConsts.get(i).getNama());
-        myViewHolder.xposisi.setText(absensiConsts.get(i).getPosisi());
+        myViewHolder.xposisi.setText(absensiConsts.get(i).getAlamat());
 
         final String getkey = absensiConsts.get(i).getKey_name();
 

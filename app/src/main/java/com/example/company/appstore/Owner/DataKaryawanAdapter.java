@@ -56,7 +56,7 @@ public class DataKaryawanAdapter extends RecyclerView.Adapter<DataKaryawanAdapte
     public void onBindViewHolder(@NonNull final DataKaryawanAdapter.MyViewHolder myViewHolder, final int i) {
 
         myViewHolder.xnama.setText(dataKaryawanConsts.get(i).getNama());
-        myViewHolder.xalamat.setText(dataKaryawanConsts.get(i).getAlamat());
+        myViewHolder.xalamat.setText(dataKaryawanConsts.get(i).getPosisi());
 
         final String cabang = dataKaryawanConsts.get(i).getCabang();
         final String key = dataKaryawanConsts.get(i).getKey();
