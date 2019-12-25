@@ -1,7 +1,12 @@
 package com.example.company.appstore.Owner;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -38,6 +43,9 @@ public class Login2Act extends AppCompatActivity {
         xusername = findViewById(R.id.xusername);
         xpass = findViewById(R.id.xpass);
 
+        xusername.setText("admin");
+        xpass.setText("1111");
+
         // Login
 
         btn_login.setOnClickListener(new View.OnClickListener() {
@@ -62,50 +70,88 @@ public class Login2Act extends AppCompatActivity {
                     reference= FirebaseDatabase.getInstance().getReference().
                             child("Admin").child(username);
 
-                    reference.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            if(dataSnapshot.exists()){
+                    ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+                    android.net.NetworkInfo wifi = cm
+                            .getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+                    android.net.NetworkInfo datac = cm
+                            .getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+                    if((wifi != null & datac != null) && (wifi.isConnected()| datac.isConnected())){
+                        Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
 
-                                // ambil data password dari firbase
-                                String passwordFromFirebase = dataSnapshot.child("password").getValue().toString();
+//                                Toast.makeText(LoginAct.this, "Koneksi lambat", Toast.LENGTH_SHORT).show();
 
-                                //Validasi password dengan firebase
-                                if(password.equals(passwordFromFirebase)){
+                                new AlertDialog.Builder(Login2Act.this)
+                                        .setTitle("Koneksi Lambat ")
+                                        .setIcon(android.R.drawable.ic_dialog_alert)
+                                        .setMessage("Tunggu...?")
+                                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                            public void onClick(DialogInterface dialog, int whichButton) {
+                                                btn_login.setText("LOGIN");
+                                                btn_login.setEnabled(true);
+                                            }})
+                                        .setPositiveButton(android.R.string.ok, null).show();
+
+                            }
+                        }, 1*15*1000);
 
 
-                                    //Simpan username key pada local
-                                    SharedPreferences sharedPreferences = getSharedPreferences(USERNAME_KEY, MODE_PRIVATE);
-                                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                                    editor.putString(username_key, xusername.getText().toString());
-                                    editor.apply();
+                        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                if(dataSnapshot.exists()){
 
-                                    //pindah activity
-                                    Intent gotoprofil = new Intent(Login2Act.this,OwnerDashbordAct.class);
-                                    startActivity(gotoprofil);
+                                    // ambil data password dari firbase
+                                    String passwordFromFirebase = dataSnapshot.child("password").getValue().toString();
 
+                                    //Validasi password dengan firebase
+                                    if(password.equals(passwordFromFirebase)){
+
+
+                                        //Simpan username key pada local
+                                        SharedPreferences sharedPreferences = getSharedPreferences(USERNAME_KEY, MODE_PRIVATE);
+                                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                                        editor.putString(username_key, xusername.getText().toString());
+                                        editor.apply();
+
+                                        //pindah activity
+                                        Intent gotoprofil = new Intent(Login2Act.this,OwnerDashbordAct.class);
+                                        startActivity(gotoprofil);
+
+
+                                    }
+                                    else {
+                                        Toast.makeText(getApplicationContext(),"Password salah!", Toast.LENGTH_SHORT).show();
+                                        btn_login.setEnabled(true);
+                                        btn_login.setText("Login");
+                                    }
 
                                 }
-                                else {
-                                    Toast.makeText(getApplicationContext(),"Password salah!", Toast.LENGTH_SHORT).show();
+                                else{
+                                    Toast.makeText(getApplicationContext(),"Username tidak ada!", Toast.LENGTH_SHORT).show();
                                     btn_login.setEnabled(true);
                                     btn_login.setText("Login");
                                 }
 
                             }
-                            else{
-                                Toast.makeText(getApplicationContext(),"Username tidak ada!", Toast.LENGTH_SHORT).show();
-                                btn_login.setEnabled(true);
-                                btn_login.setText("Login");
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
                             }
+                        });
 
-                        }
+                    }else {
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
+                        Toast.makeText(Login2Act.this, "Koneksi tidak tersedia", Toast.LENGTH_SHORT).show();
+                        btn_login.setText("LOGIN");
+                        btn_login.setEnabled(true);
 
-                        }
-                    });
+                    }
+
+
                 }
 
                 //loading

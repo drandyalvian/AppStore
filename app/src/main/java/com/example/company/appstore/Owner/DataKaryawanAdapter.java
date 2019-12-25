@@ -2,6 +2,7 @@ package com.example.company.appstore.Owner;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -63,10 +64,38 @@ public class DataKaryawanAdapter extends RecyclerView.Adapter<DataKaryawanAdapte
         myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent go = new Intent(context, EditKaryawanAct.class);
-                go.putExtra("keyCabang",cabang); //Lempar key
-                go.putExtra("key",key); //Lempar key
-                context.startActivity(go);
+//                Intent go = new Intent(context, ListAbsensiAdmin.class);
+//                go.putExtra("keyCabang",cabang); //Lempar key
+//                go.putExtra("key",key); //Lempar key
+//                context.startActivity(go);
+
+                final Dialog dialog = new Dialog(context);
+                dialog.setContentView(R.layout.dialogview_opsi);
+                dialog.show();
+
+                Button btnProfil = (Button) dialog.findViewById(R.id.btnProfil);
+                Button btnAbsen = (Button) dialog.findViewById(R.id.btnAbsen);
+
+                btnProfil.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent go = new Intent(context, EditKaryawanAct.class);
+                        go.putExtra("keyCabang",cabang); //Lempar key
+                        go.putExtra("key",key); //Lempar key
+                        context.startActivity(go);
+                    }
+                });
+
+                btnAbsen.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent go = new Intent(context, ListAbsensiAdmin.class);
+                        go.putExtra("keyCabang",cabang); //Lempar key
+                        go.putExtra("key",key); //Lempar key
+                        context.startActivity(go);
+
+                    }
+                });
 
             }
         });

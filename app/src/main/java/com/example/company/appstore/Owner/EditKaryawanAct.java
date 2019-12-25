@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -56,6 +57,9 @@ public class EditKaryawanAct extends AppCompatActivity {
         xgajipokok = findViewById(R.id.xgajipokok);
         xspiner = findViewById(R.id.xspiner);
 
+        EditText editor = new EditText(this);
+        editor.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+
 //        spinner
         final ArrayAdapter pilihGender=ArrayAdapter.createFromResource(this, R.array.pilih_gender, android.R.layout.simple_spinner_dropdown_item);
         xspiner.setAdapter(pilihGender);
@@ -97,6 +101,8 @@ public class EditKaryawanAct extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                         dataSnapshot.getRef().child("nama").setValue(xnama.getText().toString());
+                        dataSnapshot.getRef().child("key").setValue(xnama.getText().toString());
+                        dataSnapshot.getRef().child("key_name").setValue(xnama.getText().toString());
                         dataSnapshot.getRef().child("nama_cabang").setValue(xcabangtoko.getSelectedItem().toString());
                         dataSnapshot.getRef().child("umur").setValue(xumur.getText().toString());
                         dataSnapshot.getRef().child("alamat").setValue(xalamat.getText().toString());

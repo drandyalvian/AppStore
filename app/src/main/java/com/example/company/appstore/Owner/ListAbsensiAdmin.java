@@ -1,17 +1,14 @@
-package com.example.company.appstore.KepalaCabang;
+package com.example.company.appstore.Owner;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +20,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.company.appstore.KepalaCabang.AbsensiAct;
+import com.example.company.appstore.KepalaCabang.CountGajiEntity;
+import com.example.company.appstore.KepalaCabang.ListAbsensiAdapter;
+import com.example.company.appstore.KepalaCabang.ListAbsensiConst;
 import com.example.company.appstore.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -43,8 +44,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class ListAbsensiAct extends AppCompatActivity {
-    private static ListAbsensiAct instance;
+public class ListAbsensiAdmin extends AppCompatActivity {
+
+    private static ListAbsensiAdmin instance;
     DatabaseReference reference, reference2;
     @BindView(R.id.btnAdd)
     Button btnAdd;
@@ -70,11 +72,12 @@ public class ListAbsensiAct extends AppCompatActivity {
     String username_key = "";
     String username_key_new = "";
     String nKaryawan = "";
+    String nCabang = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_absensi);
+        setContentView(R.layout.activity_list_absensi_admin);
         ButterKnife.bind(this);
         instance = this;
 
@@ -89,16 +92,18 @@ public class ListAbsensiAct extends AppCompatActivity {
 //mengambil data dari intent
         Bundle bundle = getIntent().getExtras();
         final String nama_karyawan = bundle.getString("key");
+        final String xcabang = bundle.getString("keyCabang");
         nKaryawan = nama_karyawan;
+        nCabang = xcabang;
 
 
 //database
 
-        reference2 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(username_key_new).child("Karyawan")
+        reference2 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(xcabang).child("Karyawan")
                 .child(nama_karyawan).child("Absensi");
 
         reference = FirebaseDatabase.getInstance().getReference();
-        reference.child("Cabang").child(username_key_new).child("Karyawan")
+        reference.child("Cabang").child(xcabang).child("Karyawan")
                 .child(nama_karyawan).child("Absensi")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
@@ -112,7 +117,7 @@ public class ListAbsensiAct extends AppCompatActivity {
                             labsensiConsts.add(laConst);
 
                         }
-                        adapter = new ListAbsensiAdapter(labsensiConsts, ListAbsensiAct.this, username_key_new);
+                        adapter = new ListAbsensiAdapter(labsensiConsts, ListAbsensiAdmin.this, username_key_new);
                         rvView.setAdapter(adapter);
                     }
 
@@ -122,7 +127,7 @@ public class ListAbsensiAct extends AppCompatActivity {
                     }
                 });
 
-        reference.child("Cabang").child(username_key_new).child("Karyawan")
+        reference.child("Cabang").child(xcabang).child("Karyawan")
                 .child(nama_karyawan).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -138,19 +143,23 @@ public class ListAbsensiAct extends AppCompatActivity {
         });
 
 
+// pindah act
+
         Button back = (Button) findViewById(R.id.back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                Intent go = new Intent(ListAbsensiAct.this, AbsensiAct.class);
+                Intent go = new Intent(ListAbsensiAdmin.this, DataKaryawanAct.class);
+                go.putExtra("cabang",xcabang); //Lempar key
+                go.putExtra("key",nama_karyawan); //Lempar key
                 startActivity(go);
             }
         });
 
     }
 
-    public static ListAbsensiAct getInstance() {
+    public static ListAbsensiAdmin getInstance() {
         return instance;
     }
 
@@ -206,6 +215,8 @@ public class ListAbsensiAct extends AppCompatActivity {
         username_key_new = sharedPreferences.getString(username_key, "");
 
     }
+
+
 
 
     @OnClick(R.id.btnAdd)
@@ -272,7 +283,7 @@ public class ListAbsensiAct extends AppCompatActivity {
 
     public void aFilter(String fbulan, String ftahun){
 
-        Toast.makeText(ListAbsensiAct.this, fbulan+" "+ftahun, Toast.LENGTH_SHORT).show();
+        Toast.makeText(ListAbsensiAdmin.this, fbulan+" "+ftahun, Toast.LENGTH_SHORT).show();
 
         Query query = reference2.orderByChild("filter").equalTo(fbulan+" "+ftahun);
 
@@ -287,7 +298,7 @@ public class ListAbsensiAct extends AppCompatActivity {
 
                     }
 
-                    ListAbsensiAdapter adapter = new ListAbsensiAdapter (labsensiConsts,ListAbsensiAct.this, username_key);
+                    ListAbsensiAdapter adapter = new ListAbsensiAdapter (labsensiConsts,ListAbsensiAdmin.this, username_key);
                     rvView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                 }
@@ -303,7 +314,7 @@ public class ListAbsensiAct extends AppCompatActivity {
 
     public void allData(){
         reference = FirebaseDatabase.getInstance().getReference();
-        reference.child("Cabang").child(username_key_new).child("Karyawan")
+        reference.child("Cabang").child(nCabang).child("Karyawan")
                 .child(nKaryawan).child("Absensi")
                 .addValueEventListener(new ValueEventListener() {
                     @Override
@@ -317,7 +328,7 @@ public class ListAbsensiAct extends AppCompatActivity {
                             labsensiConsts.add(laConst);
 
                         }
-                        adapter = new ListAbsensiAdapter(labsensiConsts, ListAbsensiAct.this, username_key_new);
+                        adapter = new ListAbsensiAdapter(labsensiConsts, ListAbsensiAdmin.this, username_key_new);
                         rvView.setAdapter(adapter);
                     }
 
@@ -355,7 +366,7 @@ public class ListAbsensiAct extends AppCompatActivity {
 
                 if (ftahun.getText().toString().equals("")) {
 
-                    Toast.makeText(ListAbsensiAct.this, "Tidak boleh kosong !", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ListAbsensiAdmin.this, "Tidak boleh kosong !", Toast.LENGTH_SHORT).show();
                 } else {
                     aFilter(fbulan.getSelectedItem().toString(), ftahun.getText().toString());
                     alertDialog.hide();

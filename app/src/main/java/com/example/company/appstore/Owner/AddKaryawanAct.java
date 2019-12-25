@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -34,7 +35,7 @@ public class AddKaryawanAct extends AppCompatActivity {
     Button back, save;
     Spinner xspiner, xcabangtoko;
     EditText  xnama, xumur, xalamat, xnohp, xgajipokok, xusername, xposisi;
-    String cabangx, karyawanx, cabangToko;
+    String cabangx, karyawanx, cabangToko, key;
 
     DatabaseReference reference;
 
@@ -55,6 +56,9 @@ public class AddKaryawanAct extends AppCompatActivity {
         xgajipokok = findViewById(R.id.xgajipokok);
         xspiner = findViewById(R.id.xspiner);
         xposisi = findViewById(R.id.xposisi);
+
+        EditText editor = new EditText(this);
+        editor.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
 
 //        spinner
         final ArrayAdapter pilihGender = ArrayAdapter.createFromResource(this, R.array.pilih_gender, android.R.layout.simple_spinner_dropdown_item);
@@ -85,6 +89,7 @@ public class AddKaryawanAct extends AppCompatActivity {
 
                 GajiConst gajiConst = new GajiConst(
                         xnama.getText().toString(),
+                        xnama.getText().toString(),
                         xposisi.getText().toString(),
                         xalamat.getText().toString(),
                         xspiner.getSelectedItem().toString(),
@@ -100,6 +105,7 @@ public class AddKaryawanAct extends AppCompatActivity {
                         "0",
                         "0");
 
+
                 DateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
                 Date date = new Date();
                 dateFormat.setTimeZone(TimeZone.getTimeZone("UTC+7"));
@@ -107,7 +113,8 @@ public class AddKaryawanAct extends AppCompatActivity {
                 ListAbsensiConst absensiConst = new ListAbsensiConst(
                         "Alpha",
                         dateFormat.format(date),
-                        dateFormat.format(date)
+                        dateFormat.format(date),
+                        dateFormat.format(date).substring(3)
 
                 );
 
@@ -134,6 +141,8 @@ public class AddKaryawanAct extends AppCompatActivity {
                     reference.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+
                             if (dataSnapshot.hasChild(arrOfStr[0])) {
                                 DateFormat dateFormat2 = new SimpleDateFormat("yyyymmddmmss");
                                 Date date2 = new Date();
@@ -148,10 +157,7 @@ public class AddKaryawanAct extends AppCompatActivity {
                                 reference.child(arrOfStr[0]).child("Absensi").child(dateFormat.format(date)).setValue(absensiConst);
                                 Toast.makeText(AddKaryawanAct.this, "belum ada", Toast.LENGTH_SHORT).show();
                             }
-                            Intent go = new Intent(AddKaryawanAct.this, DataKaryawanAct.class);
-                            go.putExtra("cabang", cabangx);
-                            startActivity(go);
-                            finish();
+
 
                         }
 
@@ -159,7 +165,12 @@ public class AddKaryawanAct extends AppCompatActivity {
                         public void onCancelled(@NonNull DatabaseError databaseError) {
 
                         }
+
                     });
+
+                    Intent go = new Intent(AddKaryawanAct.this,DataKaryawanAct.class);
+                    go.putExtra("cabang", cabangx);
+                    startActivity(go);
 
 
                 }
@@ -167,5 +178,20 @@ public class AddKaryawanAct extends AppCompatActivity {
             }
 
         });
+
+//        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//
+//                dataSnapshot.getRef().child("key").setValue(xnama.getText().toString());
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+
+
     }
 }

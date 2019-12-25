@@ -5,14 +5,16 @@ import java.io.Serializable;
 public class GajiConst implements Serializable {
 
     String nama,posisi,alamat,gender,nama_cabang, cabang, umur, telepon, key, gaji_lembur,
-            gaji_pokok, kompensasi, pinjaman, uang_makan, tgl_gaji;
+            gaji_pokok, kompensasi, pinjaman, uang_makan, tgl_gaji, key_name;
 
     public GajiConst() {
 
     }
 
-    public GajiConst(String nama, String posisi, String alamat, String gender, String nama_cabang, String cabang, String umur, String telepon, String key, String gaji_lembur, String gaji_pokok, String kompensasi, String pinjaman, String uang_makan, String tgl_gaji) {
+
+    public GajiConst(String nama,String key_name, String posisi, String alamat, String gender, String nama_cabang, String cabang, String umur, String telepon, String key, String gaji_lembur, String gaji_pokok, String kompensasi, String pinjaman, String uang_makan, String tgl_gaji) {
         this.nama = nama;
+        this.key_name = key_name;
         this.posisi = posisi;
         this.alamat = alamat;
         this.gender = gender;
@@ -27,6 +29,15 @@ public class GajiConst implements Serializable {
         this.pinjaman = pinjaman;
         this.uang_makan = uang_makan;
         this.tgl_gaji = tgl_gaji;
+
+    }
+
+    public String getKey_name() {
+        return key_name;
+    }
+
+    public void setKey_name(String key_name) {
+        this.key_name = key_name;
     }
 
     public String getNama() {

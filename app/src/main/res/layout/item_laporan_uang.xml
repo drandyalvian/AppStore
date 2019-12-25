@@ -15,9 +15,9 @@
             android:id="@+id/xtgl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/mlight"
+            android:fontFamily="@font/mregular"
             android:text=""
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:textColor="@color/color5"/>
         <TextView
             android:id="@+id/xnominal"

@@ -1,5 +1,6 @@
 package com.example.company.appstore.KepalaCabang;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -18,17 +19,22 @@ public class AbsensiAdapter extends RecyclerView.Adapter<AbsensiAdapter.MyViewHo
 
     Context context;
     ArrayList<AbsensiConst> absensiConsts;
-    public AbsensiAdapter(ArrayList<AbsensiConst> p, Context c){
+    public AbsensiAdapter(Context c, ArrayList<AbsensiConst> p){
         context = c;
         absensiConsts = p;
     }
 
     @NonNull
     @Override
-    public AbsensiAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new MyViewHolder(LayoutInflater.
-                from(context).inflate(R.layout.item_absensi,
-                viewGroup,false));
+    public AbsensiAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
+
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_absensi, parent, false);
+        MyViewHolder vh = new MyViewHolder(v);
+        return vh;
+
+//        return new MyViewHolder(LayoutInflater.
+//                from(context).inflate(R.layout.item_absensi,
+//                parent,false));
     }
 
     @Override
@@ -37,14 +43,15 @@ public class AbsensiAdapter extends RecyclerView.Adapter<AbsensiAdapter.MyViewHo
         myViewHolder.xnama.setText(absensiConsts.get(i).getNama());
         myViewHolder.xposisi.setText(absensiConsts.get(i).getPosisi());
 
-        final String getkey = absensiConsts.get(i).getKey();
+        final String getkey = absensiConsts.get(i).getKey_name();
 
         myViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 Intent go = new Intent(context, ListAbsensiAct.class);
                 go.putExtra("key",getkey); //Lempar key
-                go.putExtra("cabang", absensiConsts.get(i).getCabang());
+//                go.putExtra("cabang", absensiConsts.get(i).getCabang());
                 context.startActivity(go);
             }
         });

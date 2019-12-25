@@ -1,5 +1,7 @@
 package com.example.company.appstore.KepalaCabang;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
@@ -11,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.company.appstore.Owner.Login2Act;
+import com.example.company.appstore.Owner.OwnerDashbordAct;
 import com.example.company.appstore.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -139,8 +143,26 @@ public class DashbordAct extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent go = new Intent(DashbordAct.this,LoginAct.class);
-                startActivity(go);
+
+                logout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        new AlertDialog.Builder(DashbordAct.this)
+                                .setTitle("Logout Account")
+                                .setMessage("Apakah anda yakin?")
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+                                        Intent go = new Intent(DashbordAct.this,LoginAct.class);
+                                        startActivity(go);
+                                    }})
+                                .setNegativeButton(android.R.string.no, null).show();
+
+
+                    }
+                });
+
 
             }
         });

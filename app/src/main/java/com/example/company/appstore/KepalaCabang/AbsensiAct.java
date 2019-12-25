@@ -1,5 +1,6 @@
 package com.example.company.appstore.KepalaCabang;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
@@ -10,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,7 +35,7 @@ public class AbsensiAct extends AppCompatActivity {
     private RecyclerView rvView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
-    private ArrayList<AbsensiConst> absensiConsts;
+    private ArrayList<AbsensiConst> listku;
 
     String USERNAME_KEY = "usernamekey";
     String username_key ="";
@@ -60,16 +62,16 @@ public class AbsensiAct extends AppCompatActivity {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                absensiConsts = new ArrayList<>();
+                listku = new ArrayList<>();
                 for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
 
                     AbsensiConst aConst = dataSnapshot1.getValue(AbsensiConst.class);
-                    aConst.setKey(dataSnapshot1.getKey());
+                    aConst.setKey_name(dataSnapshot1.getKey());
 
-                    absensiConsts.add(aConst);
+                    listku.add(aConst);
 
                 }
-                adapter = new AbsensiAdapter(absensiConsts,AbsensiAct.this);
+                adapter = new AbsensiAdapter(AbsensiAct.this, listku);
                 rvView.setAdapter(adapter);
             }
 
@@ -78,6 +80,8 @@ public class AbsensiAct extends AppCompatActivity {
 
             }
         });
+
+
 
 
 
@@ -101,14 +105,17 @@ public class AbsensiAct extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if(!s.toString().isEmpty()){
-                   // search(s.toString());
+                    search(s.toString());
                 }else {
-                    //search("");
+
+                    search("");
+
                 }
 
 
             }
         });
+
 
 
 //Pindah activity
@@ -123,6 +130,10 @@ public class AbsensiAct extends AppCompatActivity {
 
     }
 
+    public static Intent getActIntent(Activity activity){
+        return new Intent(activity, AbsensiAct.class);
+    }
+
 //mengambil data local
     public void getUsernameLocal(){
         SharedPreferences sharedPreferences = getSharedPreferences(USERNAME_KEY, MODE_PRIVATE);
@@ -131,32 +142,36 @@ public class AbsensiAct extends AppCompatActivity {
     }
 
 //search fungsi
-//    private void search(String s) {
-//
-//        Query query = reference.orderByChild("nama")
-//                .startAt(s)
-//                .endAt(s+"\uf8ff");
-//        query.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                if(dataSnapshot.hasChildren()){
-//                    absensiConsts.clear();
-//                    for (DataSnapshot dss: dataSnapshot.getChildren()){
-//                        final AbsensiConst absensi = dss.getValue(AbsensiConst.class);
-//                        absensiConsts.add(absensi);
-//                    }
-//
-//                    AbsensiAdapter adapter = new AbsensiAdapter(absensiConsts,AbsensiAct.this);
-//                    rvView.setAdapter(adapter);
-//                    adapter.notifyDataSetChanged();
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-//    }
+    private void search(String s ) {
+
+
+        Query query = reference.orderByChild("nama")
+                .startAt(s)
+                .endAt(s+"\uf8ff"); //
+
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChildren()){
+                    listku.clear();
+                    for (DataSnapshot dss: dataSnapshot.getChildren()){
+                        final AbsensiConst absensi = dss.getValue(AbsensiConst.class);
+                        listku.add(absensi);
+
+
+                    }
+
+                    AbsensiAdapter adapter = new AbsensiAdapter(AbsensiAct.this, listku);
+                    rvView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 }

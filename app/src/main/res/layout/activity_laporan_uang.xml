@@ -41,38 +41,63 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/txtsearch"
+    <RelativeLayout
+        android:id="@+id/view"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="70dp"
         android:layout_marginStart="30dp"
         android:layout_marginTop="112dp"
         android:layout_marginEnd="30dp"
-        android:background="@drawable/bg_search"
-        android:fontFamily="@font/mlight"
-        android:hint="Search"
-        android:paddingLeft="50dp"
-        android:textSize="16sp"
-        android:textColor="@color/color5"
+        android:background="@drawable/bg_btn3"
+        android:padding="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" >
 
-    <ImageView
-        android:layout_width="24dp"
-        android:layout_height="6dp"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="132dp"
-        android:background="@drawable/icon_search"
-        app:layout_constraintStart_toStartOf="@+id/imageView4"
-        app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@+id/imgabsen"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/mregular"
+                android:textSize="16sp"
+                android:textColor="@color/color5"
+                android:lineHeight="15dp"
+                android:text="Today" />
+
+            <TextView
+                android:id="@+id/xToday"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/mlight"
+                android:textColor="@color/color5"
+                android:textSize="14sp"
+                android:text="" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_filter"
+            android:layout_width="26dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="7dp"
+            android:background="@drawable/settingsblue"
+            android:layout_alignParentRight="true"/>
+
+
+    </RelativeLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginStart="18dp"
-        android:layout_marginTop="184dp"
+        android:layout_marginTop="200dp"
         android:layout_marginEnd="18dp"
         android:scrollbars="none"
         app:layout_constraintEnd_toEndOf="parent"

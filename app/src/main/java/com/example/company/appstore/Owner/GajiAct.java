@@ -9,9 +9,13 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,6 +27,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.zj.btsdk.BluetoothService;
 
@@ -38,6 +43,7 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
 
     Button back, print;
     RelativeLayout inputgaji;
+    EditText txtsearch;
 
     DatabaseReference reference;
     
@@ -65,6 +71,7 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
 
         back = findViewById(R.id.back);
         inputgaji = findViewById(R.id.inputgaji);
+        txtsearch = findViewById(R.id.txtsearch);
 
         rvView = (RecyclerView) findViewById(R.id.gaji_place);
         rvView.setHasFixedSize(true);
@@ -126,7 +133,70 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
 //
 //            }
 //        });
+
+
+//        EditText editor = new EditText(this);
+//        editor.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+
+//        txtsearch.addTextChangedListener(new TextWatcher() {
+//            @Override
+//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//                if(!s.toString().isEmpty()){
+//                    search(s.toString());
+//                }else {
+//
+//                    search("");
+//
+//                }
+//
+//
+//            }
+//        });
     }
+
+    //search fungsi
+//    private void search(String s ) {
+//
+//
+//        Query query = reference.orderByChild("nama")
+//                .startAt(s)
+//                .endAt(s+"\uf8ff"); //
+//
+//        query.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                if(dataSnapshot.hasChildren()){
+//                    gajiConsts.clear();
+//                    for (DataSnapshot dss: dataSnapshot.getChildren()){
+//                        final GajiConst gajiK = dss.getValue(GajiConst.class);
+//                        gajiConsts.add(gajiK);
+//
+//
+//                    }
+//
+//                    GajiAdapter adapter = new GajiAdapter(gajiConsts,GajiAct.this);
+//                    rvView.setAdapter(adapter);
+//                    adapter.notifyDataSetChanged();
+//                }
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//            }
+//        });
+//    }
 
     @AfterPermissionGranted(RC_BLUETOOTH)
     private void setupBluetooth() {

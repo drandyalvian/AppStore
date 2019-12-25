@@ -30,7 +30,7 @@ public class InputLaporanUangAct extends AppCompatActivity  {
     private DatePickerDialog datePickerDialog;
     private SimpleDateFormat dateFormatter;
     private TextView xtgl;
-    private Button addtgl,btnsave;
+    private Button addtgl,btnsave, back;
     EditText xnominal;
 
     DatabaseReference reference;
@@ -45,12 +45,13 @@ public class InputLaporanUangAct extends AppCompatActivity  {
 
         getUsernameLocal();
 
-        dateFormatter = new SimpleDateFormat("dd MMM yyyy", Locale.US);
+//        dateFormatter = new SimpleDateFormat("dd MMMM yyyy");
 
         xtgl = findViewById(R.id.xtgl);
         addtgl = findViewById(R.id.addtgl);
         xnominal = findViewById(R.id.xnominal);
         btnsave = findViewById(R.id.btnsave);
+        back = findViewById(R.id.back);
 
         xtgl.addTextChangedListener(loginTextWatcher);
         xnominal.addTextChangedListener(loginTextWatcher);
@@ -74,6 +75,7 @@ public class InputLaporanUangAct extends AppCompatActivity  {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         dataSnapshot.getRef().child("tanggal").setValue(xtgl.getText().toString());
+                        dataSnapshot.getRef().child("filter").setValue(xtgl.getText().toString().substring(3));
                         dataSnapshot.getRef().child("key").setValue(xtgl.getText().toString());
                         dataSnapshot.getRef().child("nominal").setValue(xnominal.getText().toString());
                     }
@@ -91,6 +93,13 @@ public class InputLaporanUangAct extends AppCompatActivity  {
             }
         });
 
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent go = new Intent(InputLaporanUangAct.this, LaporanUangAct.class);
+                startActivity(go);
+            }
+        });
 
 
     }
@@ -99,6 +108,8 @@ public class InputLaporanUangAct extends AppCompatActivity  {
 
 
         Calendar newCalendar = Calendar.getInstance();
+
+        dateFormatter = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
 
         datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
 

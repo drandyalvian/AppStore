@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".KepalaCabang.ListAbsensiAct">
+    tools:context=".Owner.ListAbsensiAdmin">
 
     <ImageView
         android:id="@+id/imageView4"
@@ -119,9 +119,9 @@
             android:paddingBottom="100dp">
 
             <android.support.v7.widget.RecyclerView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/labsensi_place">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/labsensi_place">
 
 
             </android.support.v7.widget.RecyclerView>
@@ -142,4 +142,5 @@
         android:background="@drawable/icon_plus"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
 </android.support.constraint.ConstraintLayout>

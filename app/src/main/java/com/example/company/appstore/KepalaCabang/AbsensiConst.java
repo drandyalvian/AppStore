@@ -11,14 +11,14 @@ public class AbsensiConst implements Serializable {
     String nama_cabang;
     String umur;
     String telepon;
-    String key;
+    String key_name;
     String cabang;
 
     public AbsensiConst() {
     }
 
     public AbsensiConst(String nama, String posisi, String alamat,
-                        String gender, String nama_cabang, String umur, String telepon, String key, String cabang) {
+                        String gender, String nama_cabang, String umur, String telepon, String key_name, String cabang) {
         this.nama = nama;
         this.posisi = posisi;
         this.alamat = alamat;
@@ -26,7 +26,7 @@ public class AbsensiConst implements Serializable {
         this.nama_cabang = nama_cabang;
         this.umur = umur;
         this.telepon = telepon;
-        this.key = key;
+        this.key_name = key_name;
         this.cabang = cabang;
     }
 
@@ -87,12 +87,12 @@ public class AbsensiConst implements Serializable {
     }
 
 
-    public String getKey() {
-        return key;
+    public String getKey_name() {
+        return key_name;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setKey_name(String key_name) {
+        this.key_name = key_name;
     }
 
     public String getCabang() {
@@ -102,4 +102,5 @@ public class AbsensiConst implements Serializable {
     public void setCabang(String cabang) {
         this.cabang = cabang;
     }
+
 }

@@ -1,5 +1,7 @@
 package com.example.company.appstore.Owner;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
@@ -11,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.company.appstore.R;
 import com.google.firebase.database.DataSnapshot;
@@ -267,8 +270,18 @@ public class OwnerDashbordAct extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent go = new Intent(OwnerDashbordAct.this,Login2Act.class);
-                startActivity(go);
+
+                new AlertDialog.Builder(OwnerDashbordAct.this)
+                        .setTitle("Logout Account")
+                        .setMessage("Apakah anda yakin?")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+                                Intent go = new Intent(OwnerDashbordAct.this,Login2Act.class);
+                                startActivity(go);
+                            }})
+                        .setNegativeButton(android.R.string.no, null).show();
+
 
             }
         });
