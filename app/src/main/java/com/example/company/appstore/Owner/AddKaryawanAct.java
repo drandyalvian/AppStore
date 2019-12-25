@@ -179,6 +179,16 @@ public class AddKaryawanAct extends AppCompatActivity {
 
         });
 
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent go = new Intent(AddKaryawanAct.this, DataKaryawanAct.class);
+                go.putExtra("cabang", cabangx);
+                startActivity(go);
+            }
+        });
+
 //        reference.addListenerForSingleValueEvent(new ValueEventListener() {
 //            @Override
 //            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

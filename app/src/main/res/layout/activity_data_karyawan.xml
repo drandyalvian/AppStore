@@ -33,10 +33,10 @@
 
     <Button
         android:id="@+id/back"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginStart="30dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/left_arrow"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -118,6 +118,16 @@
 
 
     </ScrollView>
+
+    <Button
+        android:id="@+id/btnRecap"
+        android:layout_width="63dp"
+        android:layout_height="74dp"
+        android:layout_marginEnd="31dp"
+        android:layout_marginBottom="110dp"
+        android:background="@drawable/ic_recap"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <Button
         android:id="@+id/btnplus2"

@@ -92,17 +92,22 @@ public class LoginAct extends AppCompatActivity {
                             public void run() {
 
 //                                Toast.makeText(LoginAct.this, "Koneksi lambat", Toast.LENGTH_SHORT).show();
+                                btn_login.setText("LOGIN");
+                                btn_login.setEnabled(true);
 
-                                new AlertDialog.Builder(LoginAct.this)
-                                        .setTitle("Koneksi Lambat ")
-                                        .setIcon(android.R.drawable.ic_dialog_alert)
-                                        .setMessage("Tunggu...?")
-                                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int whichButton) {
-                                                btn_login.setText("LOGIN");
-                                                btn_login.setEnabled(true);
-                                            }})
-                                        .setPositiveButton(android.R.string.ok, null).show();
+//                                new AlertDialog.Builder(LoginAct.this)
+//                                        .setTitle("Koneksi Lambat ")
+//                                        .setIcon(android.R.drawable.ic_dialog_alert)
+//                                        .setMessage("Tunggu...?").show();
+//                                finish();
+//                                        .setPositiveButton(android.R.string.ok, null)
+//                                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+//                                            public void onClick(DialogInterface dialog, int whichButton) {
+//                                                btn_login.setText("LOGIN");
+//                                                btn_login.setEnabled(true);
+//                                            }}).show();
+
+
 
                             }
                         }, 1*15*1000);

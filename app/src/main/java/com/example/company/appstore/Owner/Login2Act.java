@@ -83,16 +83,19 @@ public class Login2Act extends AppCompatActivity {
 
 //                                Toast.makeText(LoginAct.this, "Koneksi lambat", Toast.LENGTH_SHORT).show();
 
-                                new AlertDialog.Builder(Login2Act.this)
-                                        .setTitle("Koneksi Lambat ")
-                                        .setIcon(android.R.drawable.ic_dialog_alert)
-                                        .setMessage("Tunggu...?")
-                                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int whichButton) {
-                                                btn_login.setText("LOGIN");
-                                                btn_login.setEnabled(true);
-                                            }})
-                                        .setPositiveButton(android.R.string.ok, null).show();
+                                btn_login.setText("LOGIN");
+                                btn_login.setEnabled(true);
+
+//                                new AlertDialog.Builder(Login2Act.this)
+//                                        .setTitle("Koneksi Lambat ")
+//                                        .setIcon(android.R.drawable.ic_dialog_alert)
+//                                        .setMessage("Tunggu...?")
+//                                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+//                                            public void onClick(DialogInterface dialog, int whichButton) {
+//                                                btn_login.setText("LOGIN");
+//                                                btn_login.setEnabled(true);
+//                                            }})
+//                                        .setPositiveButton(android.R.string.ok, null).show();
 
                             }
                         }, 1*15*1000);

@@ -1,26 +1,27 @@
 package com.example.company.appstore.Owner;
 
+import android.app.AlertDialog;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.company.appstore.KepalaCabang.AbsensiAct;
-import com.example.company.appstore.KepalaCabang.AbsensiAdapter;
-import com.example.company.appstore.KepalaCabang.AbsensiConst;
-import com.example.company.appstore.KepalaCabang.LaporanUangConst;
 import com.example.company.appstore.R;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,6 +31,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class DataKaryawanAct extends AppCompatActivity implements DataKaryawanAdapter.FirebaseDataListener {
 
 
@@ -37,7 +41,7 @@ public class DataKaryawanAct extends AppCompatActivity implements DataKaryawanAd
     LinearLayout profilk;
     EditText txtsearch;
 
-    DatabaseReference reference;
+    DatabaseReference reference, reference2;
     private RecyclerView rvView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -47,6 +51,7 @@ public class DataKaryawanAct extends AppCompatActivity implements DataKaryawanAd
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_data_karyawan);
+        ButterKnife.bind(this);
 
         back = findViewById(R.id.back);
         txtsearch = findViewById(R.id.txtsearch);
@@ -60,6 +65,9 @@ public class DataKaryawanAct extends AppCompatActivity implements DataKaryawanAd
 
         final String cabang = getIntent().getStringExtra("cabang");
 
+        reference2 = FirebaseDatabase.getInstance().getReference()
+                .child("KepalaCabang").child(cabang);
+
         reference = FirebaseDatabase.getInstance().getReference()
                 .child("Cabang").child(cabang).child("Karyawan");
         reference.addValueEventListener(new ValueEventListener() {
@@ -67,7 +75,7 @@ public class DataKaryawanAct extends AppCompatActivity implements DataKaryawanAd
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 dataKaryawanConsts = new ArrayList<>();
 
-                for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
 
                     DataKaryawanConst kConst = dataSnapshot1.getValue(DataKaryawanConst.class);
 
@@ -109,9 +117,9 @@ public class DataKaryawanAct extends AppCompatActivity implements DataKaryawanAd
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(!s.toString().isEmpty()){
+                if (!s.toString().isEmpty()) {
                     search(s.toString());
-                }else {
+                } else {
 
                     search("");
 
@@ -124,7 +132,7 @@ public class DataKaryawanAct extends AppCompatActivity implements DataKaryawanAd
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent go = new Intent(DataKaryawanAct.this,OwnerDashbordAct.class);
+                Intent go = new Intent(DataKaryawanAct.this, OwnerDashbordAct.class);
                 startActivity(go);
 
             }
@@ -133,8 +141,8 @@ public class DataKaryawanAct extends AppCompatActivity implements DataKaryawanAd
         btnplus2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent go = new Intent(DataKaryawanAct.this,AddKaryawanAct.class);
-                go.putExtra("cabang",cabang);
+                Intent go = new Intent(DataKaryawanAct.this, AddKaryawanAct.class);
+                go.putExtra("cabang", cabang);
                 startActivity(go);
 
             }
@@ -145,7 +153,7 @@ public class DataKaryawanAct extends AppCompatActivity implements DataKaryawanAd
     @Override
     public void onDeleteData(DataKaryawanConst dataKaryawanConst, int i) {
 
-        if (reference!=null){
+        if (reference != null) {
 
 //            reference.child(DataKaryawanConst.getKey()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
 //                @Override
@@ -158,28 +166,27 @@ public class DataKaryawanAct extends AppCompatActivity implements DataKaryawanAd
     }
 
 
-
     //search fungsi
-    private void search(String s ) {
+    private void search(String s) {
 
 
         Query query = reference.orderByChild("nama")
                 .startAt(s)
-                .endAt(s+"\uf8ff"); //
+                .endAt(s + "\uf8ff"); //
 
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.hasChildren()){
+                if (dataSnapshot.hasChildren()) {
                     dataKaryawanConsts.clear();
-                    for (DataSnapshot dss: dataSnapshot.getChildren()){
+                    for (DataSnapshot dss : dataSnapshot.getChildren()) {
                         final DataKaryawanConst dataK = dss.getValue(DataKaryawanConst.class);
                         dataKaryawanConsts.add(dataK);
 
 
                     }
 
-                    DataKaryawanAdapter adapter = new DataKaryawanAdapter(dataKaryawanConsts,DataKaryawanAct.this,DataKaryawanAct.this);
+                    DataKaryawanAdapter adapter = new DataKaryawanAdapter(dataKaryawanConsts, DataKaryawanAct.this, DataKaryawanAct.this);
                     rvView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                 }
@@ -188,6 +195,50 @@ public class DataKaryawanAct extends AppCompatActivity implements DataKaryawanAd
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    @OnClick(R.id.btnRecap)
+    public void onViewClicked() {
+
+        ViewGroup viewGroup = findViewById(android.R.id.content);
+        View dialogView2 = LayoutInflater.from(this).inflate(R.layout.dialogview_recap, viewGroup, false);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(dialogView2);
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+
+        EditText ftahun = (EditText) dialogView2.findViewById(R.id.ftahun);
+        TextView dcabang = (TextView) dialogView2.findViewById(R.id.dcabang);
+
+        reference2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                dcabang.setText(dataSnapshot.child("nama_cabang").getValue().toString());
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        Spinner fbulan = (Spinner) dialogView2.findViewById(R.id.fbulan);
+
+        final ArrayAdapter pilihFilter = ArrayAdapter.createFromResource(this, R.array.pilih_filter, android.R.layout.simple_spinner_dropdown_item);
+        fbulan.setAdapter(pilihFilter);
+
+
+        Button btnSave2 =(Button) dialogView2.findViewById(R.id.btnsaves);
+        btnSave2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                alertDialog.hide();
 
             }
         });
