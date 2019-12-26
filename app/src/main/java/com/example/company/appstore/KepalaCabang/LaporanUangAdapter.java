@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,10 +19,12 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class LaporanUangAdapter extends RecyclerView.Adapter<LaporanUangAdapter.MyViewHolder> {
+public class LaporanUangAdapter extends RecyclerView.Adapter<LaporanUangAdapter.MyViewHolder>{
 
     //listener untuk delete
     FirebaseDataListener listener;
+
+
 
     Context context;
     ArrayList<LaporanUangConst> laporanUangConsts;
@@ -50,6 +53,7 @@ public class LaporanUangAdapter extends RecyclerView.Adapter<LaporanUangAdapter.
         myViewHolder.xtgl.setText(laporanUangConsts.get(i).getTanggal());
         myViewHolder.xnominal.setText(formatRupiah.format ((double)nominal));
 
+
         myViewHolder.delete.setOnClickListener(
                 new View.OnClickListener() {
                     @Override
@@ -74,6 +78,7 @@ public class LaporanUangAdapter extends RecyclerView.Adapter<LaporanUangAdapter.
     public int getItemCount() {
         return laporanUangConsts.size();
     }
+
 
     class MyViewHolder extends RecyclerView.ViewHolder{
 

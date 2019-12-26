@@ -108,30 +108,9 @@ public class LaporanUangAct extends AppCompatActivity implements LaporanUangAdap
             }
         });
 
-////pencarian data
-//        txtsearch.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//                if(!s.toString().isEmpty()){
-//                    search(s.toString());
-//                }else {
-//                    search("");
-//                }
-//
-//
-//            }
-//        });
 
+
+//pindah activity
         btnplus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -144,7 +123,6 @@ public class LaporanUangAct extends AppCompatActivity implements LaporanUangAdap
             }
         });
 
-//pindah activity
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -177,7 +155,6 @@ public class LaporanUangAct extends AppCompatActivity implements LaporanUangAdap
 
     public void aFilter(String fbulan, String ftahun){
 
-        Toast.makeText(LaporanUangAct.this, fbulan+" "+ftahun, Toast.LENGTH_SHORT).show();
 
         Query query = reference.orderByChild("filter").equalTo(fbulan+" "+ftahun);
 
@@ -195,6 +172,8 @@ public class LaporanUangAct extends AppCompatActivity implements LaporanUangAdap
                             LaporanUangAct.this );
                     rvView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
+
+                    Toast.makeText(LaporanUangAct.this, fbulan+" "+ftahun, Toast.LENGTH_SHORT).show();
                 }
 
             }

@@ -22,7 +22,6 @@ import android.widget.Toast;
 
 import com.example.company.appstore.KepalaCabang.AbsensiAct;
 import com.example.company.appstore.KepalaCabang.CountGajiEntity;
-import com.example.company.appstore.KepalaCabang.ListAbsensiAdapter;
 import com.example.company.appstore.KepalaCabang.ListAbsensiConst;
 import com.example.company.appstore.R;
 import com.google.firebase.database.DataSnapshot;
@@ -117,7 +116,7 @@ public class ListAbsensiAdmin extends AppCompatActivity {
                             labsensiConsts.add(laConst);
 
                         }
-                        adapter = new ListAbsensiAdapter(labsensiConsts, ListAbsensiAdmin.this, username_key_new);
+                        adapter = new ListAbsensiAdminAdapter(labsensiConsts, ListAbsensiAdmin.this, username_key_new);
                         rvView.setAdapter(adapter);
                     }
 
@@ -165,13 +164,13 @@ public class ListAbsensiAdmin extends AppCompatActivity {
 
     //update absen
     public void updateAbsen(String key, String keterangan, String filter) {
-        DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("Cabang").child(username_key_new).child("Karyawan").child(nKaryawan).child("Absensi").child(key);
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("Cabang").child(nCabang).child("Karyawan").child(nKaryawan).child("Absensi").child(key);
         ListAbsensiConst listAbsensiConst = new ListAbsensiConst(keterangan, key, key, filter);
         db.setValue(listAbsensiConst);
     }
 
     public void deleteAbsen(String key) {
-        DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("Cabang").child(username_key_new).child("Karyawan").child(nKaryawan).child("Absensi").child(key);
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("Cabang").child(nCabang).child("Karyawan").child(nKaryawan).child("Absensi").child(key);
         db.removeValue();
     }
 
@@ -181,7 +180,7 @@ public class ListAbsensiAdmin extends AppCompatActivity {
         Date date = new Date();
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC+7"));
 
-        DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("Cabang").child(username_key_new).child("Karyawan").child(nKaryawan);
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("Cabang").child(nCabang).child("Karyawan").child(nKaryawan);
         ListAbsensiConst absensiConst = new ListAbsensiConst(
                 "Hadir",
                 tanggal,
@@ -298,7 +297,7 @@ public class ListAbsensiAdmin extends AppCompatActivity {
 
                     }
 
-                    ListAbsensiAdapter adapter = new ListAbsensiAdapter (labsensiConsts,ListAbsensiAdmin.this, username_key);
+                    ListAbsensiAdminAdapter adapter = new ListAbsensiAdminAdapter (labsensiConsts,ListAbsensiAdmin.this, username_key);
                     rvView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                 }
@@ -328,7 +327,7 @@ public class ListAbsensiAdmin extends AppCompatActivity {
                             labsensiConsts.add(laConst);
 
                         }
-                        adapter = new ListAbsensiAdapter(labsensiConsts, ListAbsensiAdmin.this, username_key_new);
+                        adapter = new ListAbsensiAdminAdapter(labsensiConsts, ListAbsensiAdmin.this, username_key_new);
                         rvView.setAdapter(adapter);
                     }
 

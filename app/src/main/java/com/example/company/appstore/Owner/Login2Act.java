@@ -30,6 +30,8 @@ public class Login2Act extends AppCompatActivity {
 
     DatabaseReference reference;
 
+    boolean doubleBackToExitPressedOnce = false;
+
     String USERNAME_KEY = "usernamekey";
     String username_key = "";
 
@@ -180,5 +182,23 @@ public class Login2Act extends AppCompatActivity {
 
     public void validation(){
 
+    }
+
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            finishAffinity();
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Klik lagi keluar aplikasi", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce=false;
+            }
+        }, 2000);
     }
 }

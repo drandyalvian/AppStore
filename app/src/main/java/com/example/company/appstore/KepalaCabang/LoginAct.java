@@ -137,7 +137,7 @@ public class LoginAct extends AppCompatActivity {
                                         //pindah activity
                                         Intent gotoprofil = new Intent(LoginAct.this, DashbordAct.class);
                                         startActivity(gotoprofil);
-                                        finish();
+//                                        finish();
 
 
 
