@@ -172,6 +172,9 @@ public class ListAbsensiAdmin extends AppCompatActivity {
     public void deleteAbsen(String key) {
         DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("Cabang").child(nCabang).child("Karyawan").child(nKaryawan).child("Absensi").child(key);
         db.removeValue();
+        DatabaseReference db2 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(nCabang)
+                .child("Karyawan").child(nKaryawan).child("Count_gaji").child(key);
+        db2.removeValue();
     }
 
     private void addAbsen(String tanggal) {
@@ -191,7 +194,7 @@ public class ListAbsensiAdmin extends AppCompatActivity {
         );
 
         CountGajiEntity entity = new CountGajiEntity(
-                dateFormat.format(date)
+                dateFormat.format(date),dateFormat.format(date)
         );
 
         db.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -228,9 +231,9 @@ public class ListAbsensiAdmin extends AppCompatActivity {
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
 
-        DateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
+        DateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH);
         Date date = new Date();
-        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC+7"));
+//        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC+7"));
 
         tanggalAbsen = (TextView) dialogView.findViewById(R.id.tanggalAbsen);
         tanggalAbsen.setText(dateFormat.format(date));
@@ -261,7 +264,8 @@ public class ListAbsensiAdmin extends AppCompatActivity {
 
         Calendar newCalendar = Calendar.getInstance();
 
-        dateFormatter = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
+//        dateFormatter = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
+        dateFormatter = new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH);
 
         datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
 
@@ -282,8 +286,6 @@ public class ListAbsensiAdmin extends AppCompatActivity {
 
     public void aFilter(String fbulan, String ftahun){
 
-        Toast.makeText(ListAbsensiAdmin.this, fbulan+" "+ftahun, Toast.LENGTH_SHORT).show();
-
         Query query = reference2.orderByChild("filter").equalTo(fbulan+" "+ftahun);
 
         query.addValueEventListener(new ValueEventListener() {
@@ -300,6 +302,8 @@ public class ListAbsensiAdmin extends AppCompatActivity {
                     ListAbsensiAdminAdapter adapter = new ListAbsensiAdminAdapter (labsensiConsts,ListAbsensiAdmin.this, username_key);
                     rvView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
+
+                    Toast.makeText(ListAbsensiAdmin.this, fbulan+" "+ftahun, Toast.LENGTH_SHORT).show();
                 }
 
             }

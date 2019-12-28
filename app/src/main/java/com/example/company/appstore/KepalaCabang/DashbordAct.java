@@ -26,13 +26,12 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 
-public class DashbordAct extends AppCompatActivity {
+public class DashbordAct extends AppCompatActivity{
 
     TextView keuangan, absensi,namakepala,namatoko,tglKeuangan, jmlkaryawan;
     Button logout;
     LinearLayout linearlayout, linearlayout2;
     ImageView absen_belum,absen_sudah,laporan_belum,laporan_sudah;
-
 
     DatabaseReference reference;
     String USERNAME_KEY = "usernamekey";
@@ -61,18 +60,23 @@ public class DashbordAct extends AppCompatActivity {
         laporan_sudah = findViewById(R.id.laporan_sudah);
         logout = findViewById(R.id.logout);
 
+        //set tgl
+        long date = System.currentTimeMillis();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy");
+        String dateString = sdf.format(date);
+        tglKeuangan.setText(dateString);
+
 // notif
+
+
         absen_sudah.animate().alpha(0).setDuration(300).start();
         laporan_sudah.animate().alpha(0).setDuration(300).start();
 
         absen_belum.animate().alpha(1).setDuration(300).start();
         laporan_belum.animate().alpha(1).setDuration(300).start();
 
-//set tgl
-        long date = System.currentTimeMillis();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy");
-        String dateString = sdf.format(date);
-        tglKeuangan.setText(dateString);
+
+
 
 //Get Jumlah Data Karyawan
         reference = FirebaseDatabase.getInstance().getReference().
@@ -199,4 +203,6 @@ public class DashbordAct extends AppCompatActivity {
             }
         }, 2000);
     }
+
+
 }

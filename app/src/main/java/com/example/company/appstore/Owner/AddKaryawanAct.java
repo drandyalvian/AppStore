@@ -149,13 +149,13 @@ public class AddKaryawanAct extends AppCompatActivity {
                                 dateFormat2.setTimeZone(TimeZone.getTimeZone("UTC+7"));
                                 keyKaryawan[0] = (dateFormat2.format(date2)).toString();
                                 reference.child(keyKaryawan[0]).setValue(gajiConst);
-                                reference.child(arrOfStr[0]).child("Absensi").child(dateFormat.format(date)).setValue(absensiConst);
+//                                reference.child(arrOfStr[0]).child("Absensi").child(dateFormat.format(date)).setValue(absensiConst);
                                 Toast.makeText(AddKaryawanAct.this, "sudah ada", Toast.LENGTH_SHORT).show();
 
                             }else {
                                 reference.child(arrOfStr[0]).setValue(gajiConst);
-                                reference.child(arrOfStr[0]).child("Absensi").child(dateFormat.format(date)).setValue(absensiConst);
-                                Toast.makeText(AddKaryawanAct.this, "belum ada", Toast.LENGTH_SHORT).show();
+//                                reference.child(arrOfStr[0]).child("Absensi").child(dateFormat.format(date)).setValue(absensiConst);
+//                                Toast.makeText(AddKaryawanAct.this, "belum ada", Toast.LENGTH_SHORT).show();
                             }
 
 

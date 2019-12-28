@@ -58,6 +58,11 @@ public class InputLaporanOwner extends AppCompatActivity {
         xtgl.addTextChangedListener(loginTextWatcher);
         xnominal.addTextChangedListener(loginTextWatcher);
 
+        long date = System.currentTimeMillis();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH);
+        String dateString = sdf.format(date);
+        xtgl.setText(dateString);
+
         reference = FirebaseDatabase.getInstance().getReference().child("Cabang")
                 .child(cabang).child("LaporanUang");
 
@@ -113,7 +118,8 @@ public class InputLaporanOwner extends AppCompatActivity {
 
         Calendar newCalendar = Calendar.getInstance();
 
-        dateFormatter = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
+//        dateFormatter = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
+        dateFormatter = new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH);
 
         datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
 

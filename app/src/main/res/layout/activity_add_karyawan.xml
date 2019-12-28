@@ -261,7 +261,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:fontFamily="@font/mregular"
-                    android:text="Gaji Pokok"
+                    android:text="Gaji Pokok / Hari"
                     android:textColor="@color/color4"
                     android:textSize="16sp"
                     android:textStyle="bold" />

@@ -3,6 +3,7 @@ package com.example.company.appstore.Owner;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,10 +30,20 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import jxl.Workbook;
+import jxl.WorkbookSettings;
+import jxl.write.Label;
+import jxl.write.WritableSheet;
+import jxl.write.WritableWorkbook;
+import jxl.write.WriteException;
+import jxl.write.biff.RowsExceededException;
 
 public class DataKaryawanAct extends AppCompatActivity implements DataKaryawanAdapter.FirebaseDataListener {
 
@@ -40,6 +51,8 @@ public class DataKaryawanAct extends AppCompatActivity implements DataKaryawanAd
     Button back, btnplus2;
     LinearLayout profilk;
     EditText txtsearch;
+
+    String cabangku;
 
     DatabaseReference reference, reference2;
     private RecyclerView rvView;
@@ -64,6 +77,9 @@ public class DataKaryawanAct extends AppCompatActivity implements DataKaryawanAd
         rvView.setLayoutManager(layoutManager);
 
         final String cabang = getIntent().getStringExtra("cabang");
+        cabangku = cabang;
+
+
 
         reference2 = FirebaseDatabase.getInstance().getReference()
                 .child("KepalaCabang").child(cabang);
@@ -237,10 +253,110 @@ public class DataKaryawanAct extends AppCompatActivity implements DataKaryawanAd
         btnSave2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                createExcelSheet(fbulan.getSelectedItem().toString(), ftahun.getText().toString(), cabangku);
                 alertDialog.hide();
 
             }
         });
+    }
+
+    private void createExcelSheet(String fbulan, String ftahun, String cabang)
+    {
+//        String Fnamexls="dataKaryawan"+System.currentTimeMillis()+ ".xls";
+        String Fnamexls="Rekap_"+cabangku+"_"+fbulan+ftahun+".xls";
+        File sdCard = Environment.getExternalStorageDirectory();
+        File directory = new File (sdCard.getAbsolutePath() + "/recap");
+        directory.mkdirs();
+        File file = new File(directory, Fnamexls);
+
+        WorkbookSettings wbSettings = new WorkbookSettings();
+
+        wbSettings.setLocale(new Locale("en", "EN"));
+        Toast.makeText(this, "storage/recap/"+Fnamexls, Toast.LENGTH_LONG).show();
+
+        WritableWorkbook workbook;
+        try {
+            int a = 1;
+            workbook = Workbook.createWorkbook(file, wbSettings);
+            //workbook.createSheet("Report", 0);
+            WritableSheet sheet = workbook.createSheet(cabangku+" "+fbulan+ftahun, 0);
+            Label labela0 = new Label(0, 2, "Nama"); //COLOM A, ROW 2
+            Label labela1 = new Label(0, 3, " "); //COLOM A, ROW 2
+            Label labela2 = new Label(0, 4, "Nama Satu");
+            Label labela3 = new Label(0, 5, "Nama Dua");
+            Label labela4 = new Label(0, 6, "Nama Tiga");
+
+            Label labelb1 = new Label(1, 2, fbulan+" "+ftahun);
+            Label labelb2 = new Label(1, 3, "1");
+            Label labelb3 = new Label(2, 3, "2");
+            Label labelb4 = new Label(3, 3, "3");
+            Label labelb5 = new Label(4, 3, "4");
+            Label labelb6 = new Label(5, 3, "5");
+            Label labelb7 = new Label(6, 3, "6");
+            Label labelb8 = new Label(7, 3, "7");
+            Label labelb9 = new Label(8, 3, "8");
+            Label labelb10 = new Label(9, 3, "9");
+            Label labelb11 = new Label(10, 3, "..30");
+
+            Label labelc1 = new Label(11, 2, "Gaji");
+            Label labelc2 = new Label(11, 3, " ");
+            Label labelc3 = new Label(11, 4, "Rp, 1.500.0000");
+            Label labelc4 = new Label(11, 5, "Rp, 1.500.0000");
+            Label labelc5 = new Label(11, 6, "Rp, 1.500.0000");
+//            Label labelb1 = new Label(0,1,"first");
+//            Label labelc1 = new Label(0,0,"HEADING");
+//            Label labeld1 = new Label(1,0,"Heading2");
+//            Label labele1 = new Label(1,1,String.valueOf(a));
+            try {
+                sheet.addCell(labela0);
+                sheet.addCell(labela1);
+                sheet.addCell(labela2);
+                sheet.addCell(labela3);
+                sheet.addCell(labela4);
+
+                sheet.addCell(labelb1);
+                sheet.addCell(labelb2);
+                sheet.addCell(labelb3);
+                sheet.addCell(labelb4);
+                sheet.addCell(labelb5);
+                sheet.addCell(labelb6);
+                sheet.addCell(labelb7);
+                sheet.addCell(labelb8);
+                sheet.addCell(labelb9);
+                sheet.addCell(labelb10);
+                sheet.addCell(labelb11);
+
+                sheet.addCell(labelc1);
+                sheet.addCell(labelc2);
+                sheet.addCell(labelc3);
+                sheet.addCell(labelc4);
+                sheet.addCell(labelc5);
+
+
+//                sheet.addCell(label1);
+//                sheet.addCell(label0);
+//                sheet.addCell(label4);
+//                sheet.addCell(label3);
+            } catch (RowsExceededException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (WriteException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+
+
+            workbook.write();
+            try {
+                workbook.close();
+            } catch (WriteException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            //createExcel(excelSheet);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 }

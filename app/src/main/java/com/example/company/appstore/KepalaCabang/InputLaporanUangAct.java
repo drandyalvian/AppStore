@@ -1,6 +1,7 @@
 package com.example.company.appstore.KepalaCabang;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
@@ -8,11 +9,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.company.appstore.R;
 import com.google.firebase.database.DataSnapshot;
@@ -27,6 +30,7 @@ import java.util.Locale;
 
 public class InputLaporanUangAct extends AppCompatActivity  {
 
+
     private DatePickerDialog datePickerDialog;
     private SimpleDateFormat dateFormatter;
     private TextView xtgl;
@@ -37,6 +41,7 @@ public class InputLaporanUangAct extends AppCompatActivity  {
     String USERNAME_KEY = "usernamekey";
     String username_key ="";
     String username_key_new ="";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +60,12 @@ public class InputLaporanUangAct extends AppCompatActivity  {
 
         xtgl.addTextChangedListener(loginTextWatcher);
         xnominal.addTextChangedListener(loginTextWatcher);
+
+        long date = System.currentTimeMillis();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH);
+        String dateString = sdf.format(date);
+        xtgl.setText(dateString);
+
 
         reference = FirebaseDatabase.getInstance().getReference().child("Cabang")
                 .child(username_key_new).child("LaporanUang");
@@ -78,6 +89,8 @@ public class InputLaporanUangAct extends AppCompatActivity  {
                         dataSnapshot.getRef().child("filter").setValue(xtgl.getText().toString().substring(3));
                         dataSnapshot.getRef().child("key").setValue(xtgl.getText().toString());
                         dataSnapshot.getRef().child("nominal").setValue(xnominal.getText().toString());
+
+
                     }
 
                     @Override
@@ -89,6 +102,8 @@ public class InputLaporanUangAct extends AppCompatActivity  {
                 Intent go = new Intent(InputLaporanUangAct.this,LaporanUangAct.class);
                 startActivity(go);
                 finish();
+
+
 
             }
         });
@@ -109,7 +124,8 @@ public class InputLaporanUangAct extends AppCompatActivity  {
 
         Calendar newCalendar = Calendar.getInstance();
 
-        dateFormatter = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
+//        dateFormatter = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
+        dateFormatter = new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH);
 
         datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
 

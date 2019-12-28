@@ -136,7 +136,6 @@ public class LaporanOwnerAct extends AppCompatActivity implements LaporanUangAda
 
     public void aFilter(String fbulan, String ftahun){
 
-        Toast.makeText(LaporanOwnerAct.this, fbulan+" "+ftahun, Toast.LENGTH_SHORT).show();
 
         Query query = reference.orderByChild("filter").equalTo(fbulan+" "+ftahun);
 
@@ -150,10 +149,12 @@ public class LaporanOwnerAct extends AppCompatActivity implements LaporanUangAda
                         laporanUangConsts.add(laporan);
                     }
 
-                    adapter = new LaporanUangAdapter(laporanUangConsts,LaporanOwnerAct.this,
+                    LaporanUangAdapter adapter = new LaporanUangAdapter(laporanUangConsts,LaporanOwnerAct.this,
                             LaporanOwnerAct.this );
                     rvView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
+
+                    Toast.makeText(LaporanOwnerAct.this, fbulan+" "+ftahun, Toast.LENGTH_SHORT).show();
                 }
 
             }

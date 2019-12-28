@@ -262,7 +262,7 @@
                     android:fontFamily="@font/mregular"
                     android:textColor="@color/color4"
                     android:textStyle="bold"
-                    android:text="Gaji Pokok"
+                    android:text="Gaji Pokok / Hari"
                     android:textSize="16sp" />
 
                 <EditText
