@@ -151,27 +151,6 @@
                             android:background="@drawable/bg_square"/>
 
                     </LinearLayout>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/mlight"
-                        android:textSize="16sp"
-                        android:textColor="@color/color5"
-                        android:layout_marginTop="20dp"
-                        android:text="Kompensasi"/>
-                    <EditText
-                        android:id="@+id/xkompensasi"
-                        android:layout_width="match_parent"
-                        android:layout_height="30dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginTop="10dp"
-                        android:inputType="number"
-                        android:fontFamily="@font/mlight"
-                        android:textSize="16sp"
-                        android:paddingLeft="8dp"
-                        android:text=""
-                        android:textColor="@color/color4"
-                        android:background="@drawable/bg_square"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -214,6 +193,29 @@
                         android:paddingLeft="8dp"
                         android:inputType="number"
                         android:text=""
+                        android:textColor="@color/color4"
+                        android:background="@drawable/bg_square"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/mlight"
+                        android:textSize="16sp"
+                        android:textColor="@color/color5"
+                        android:layout_marginTop="20dp"
+                        android:text="Angsuran Pasti"/>
+
+                    <EditText
+                        android:id="@+id/x_angsuran_pasti"
+                        android:layout_width="match_parent"
+                        android:layout_height="30dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="10dp"
+                        android:fontFamily="@font/mlight"
+                        android:textSize="16sp"
+                        android:paddingLeft="8dp"
+                        android:inputType="number"
+                        android:text="0"
                         android:textColor="@color/color4"
                         android:background="@drawable/bg_square"/>
 

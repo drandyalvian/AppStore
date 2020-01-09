@@ -35,7 +35,7 @@ public class InputGajiAct extends AppCompatActivity {
 
 
     TextView xnama, xposisi, xtgl;
-    EditText xgajipokok,xgajilembur, xkompensasi, xuangmakan, xpinjaman;
+    EditText xgajipokok,xgajilembur, xAngsuranPasti, xuangmakan, xpinjaman;
     Button btnsave, back, addtgl;
 
 
@@ -49,7 +49,7 @@ public class InputGajiAct extends AppCompatActivity {
         xposisi = findViewById(R.id.xposisi);
         xgajipokok = findViewById(R.id.xgajipokok);
         xgajilembur = findViewById(R.id.xgajilembur);
-        xkompensasi = findViewById(R.id.xkompensasi);
+        xAngsuranPasti = findViewById(R.id.x_angsuran_pasti);
         xuangmakan = findViewById(R.id.xuangmakan);
         xpinjaman = findViewById(R.id.xpinjaman);
         btnsave = findViewById(R.id.btnsave);
@@ -71,7 +71,7 @@ public class InputGajiAct extends AppCompatActivity {
                 xposisi.setText(dataSnapshot.child("posisi").getValue().toString());
                 xgajipokok.setText(dataSnapshot.child("gaji_pokok").getValue().toString());
                 xgajilembur.setText(dataSnapshot.child("gaji_lembur").getValue().toString());
-                xkompensasi.setText(dataSnapshot.child("kompensasi").getValue().toString());
+                xAngsuranPasti.setText(dataSnapshot.child("angsuran_pasti").getValue().toString());
                 xuangmakan.setText(dataSnapshot.child("uang_makan").getValue().toString());
                 xpinjaman.setText(dataSnapshot.child("pinjaman").getValue().toString());
 
@@ -98,7 +98,7 @@ public class InputGajiAct extends AppCompatActivity {
                         dataSnapshot.getRef().child("posisi").setValue(xposisi.getText().toString());
                         dataSnapshot.getRef().child("gaji_pokok").setValue(xgajipokok.getText().toString());
                         dataSnapshot.getRef().child("gaji_lembur").setValue(xgajilembur.getText().toString());
-                        dataSnapshot.getRef().child("kompensasi").setValue(xkompensasi.getText().toString());
+                        dataSnapshot.getRef().child("angsuran_pasti").setValue(xAngsuranPasti.getText().toString());
                         dataSnapshot.getRef().child("uang_makan").setValue(xuangmakan.getText().toString());
                         dataSnapshot.getRef().child("pinjaman").setValue(xpinjaman.getText().toString());
                     }

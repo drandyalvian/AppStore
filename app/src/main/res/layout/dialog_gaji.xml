@@ -82,45 +82,16 @@
         android:layout_marginTop="5dp"
         android:text="Rp.XXX"/>
 
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <CheckBox
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/check_setor_pinjaman"
+        android:text="Bayar Angsuran"
         android:fontFamily="@font/mlight"
-        android:textSize="16sp"
         android:textColor="@color/color5"
-        android:layout_marginTop="5dp"
-        android:text="Cicil Gaji"/>
+        android:layout_marginTop="7dp"
+        />
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
-        <EditText
-            android:id="@+id/kurangPinjaman"
-            android:layout_width="fill_parent"
-            android:layout_height="30dp"
-            android:paddingTop="3dp"
-            android:layout_weight="1"
-            android:paddingBottom="3dp"
-            android:layout_marginRight="5dp"
-            android:fontFamily="@font/mlight"
-            android:textSize="16sp"
-            android:paddingLeft="8dp"
-            android:text="0"
-            android:textColor="@color/color4"
-            android:inputType="number"
-            android:background="@drawable/bg_square"/>
-
-        <Button
-            android:id="@+id/btnSavePinjaman"
-            android:layout_width="33dp"
-            android:layout_height="30dp"
-            android:paddingLeft="5dp"
-            android:background="@drawable/button_retangle"
-            android:drawableLeft="@drawable/ic_check"
-            ></Button>
-    </LinearLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
