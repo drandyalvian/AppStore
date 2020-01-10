@@ -87,7 +87,7 @@ public class DashbordAct extends AppCompatActivity{
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 long count = dataSnapshot.getChildrenCount();
-                jmlhadir.setText(String.valueOf(count)+ " Hadir");
+                jmlhadir.setText(String.valueOf(count)+ " Hadir dari ");
                 if (count > 3 ){
                     absen_sudah.animate().alpha(1).setDuration(300).start();
                     absen_belum.animate().alpha(0).setDuration(300).start();
