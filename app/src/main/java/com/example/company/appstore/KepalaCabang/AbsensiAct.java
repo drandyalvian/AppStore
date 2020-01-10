@@ -64,6 +64,7 @@ public class AbsensiAct extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 listku = new ArrayList<>();
                 for (DataSnapshot dataSnapshot1: dataSnapshot.getChildren()){
+                    Log.e(dataSnapshot.getKey(),dataSnapshot.getChildrenCount() + "");
 
                     AbsensiConst aConst = dataSnapshot1.getValue(AbsensiConst.class);
                     aConst.setKey_name(dataSnapshot1.getKey());

@@ -24,6 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -37,7 +38,7 @@ public class InputLaporanUangAct extends AppCompatActivity  {
     private Button addtgl,btnsave, back;
     EditText xnominal;
 
-    DatabaseReference reference;
+    DatabaseReference reference, reference2, reference3;
     String USERNAME_KEY = "usernamekey";
     String username_key ="";
     String username_key_new ="";
@@ -69,6 +70,10 @@ public class InputLaporanUangAct extends AppCompatActivity  {
 
         reference = FirebaseDatabase.getInstance().getReference().child("Cabang")
                 .child(username_key_new).child("LaporanUang");
+        reference2 = FirebaseDatabase.getInstance().getReference().child("Cabang")
+                .child(username_key_new).child("CountAbsen").child(dateString);
+        reference3 = FirebaseDatabase.getInstance().getReference().child("Cabang")
+                .child(username_key_new).child("CekLaporan").child(dateString);
 
 
         addtgl.setOnClickListener(new View.OnClickListener() {
@@ -78,35 +83,169 @@ public class InputLaporanUangAct extends AppCompatActivity  {
             }
         });
 
-        btnsave.setOnClickListener(new View.OnClickListener() {
+
+        reference2.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onClick(View view) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                long count = dataSnapshot.getChildrenCount();
+//                if (count == 0 ){
+////                    Toast.makeText(InputLaporanUangAct.this, "Jumlah karyawan 0, Anda belum melakukan absen hari ini", Toast.LENGTH_LONG).show();
+//                }else if (count == 1 || count == 2 || count == 3){
+////                    Toast.makeText(InputLaporanUangAct.this, "Jumlah karyawan hari ini "+count+" jumlah karyawan minimal 4 orang", Toast.LENGTH_LONG).show();
+//                }
 
-                reference.child(xtgl.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
+                btnsave.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        dataSnapshot.getRef().child("tanggal").setValue(xtgl.getText().toString());
-                        dataSnapshot.getRef().child("filter").setValue(xtgl.getText().toString().substring(3));
-                        dataSnapshot.getRef().child("key").setValue(xtgl.getText().toString());
-                        dataSnapshot.getRef().child("nominal").setValue(xnominal.getText().toString());
+                    public void onClick(View view) {
+////                        Log.d("count", s);
+
+                        if (count > 3){
+                            int jml = Integer.parseInt(xnominal.getText().toString());
 
 
-                    }
+                            reference.child(xtgl.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    dataSnapshot.getRef().child("tanggal").setValue(xtgl.getText().toString());
+                                    dataSnapshot.getRef().child("filter").setValue(xtgl.getText().toString().substring(3));
+                                    dataSnapshot.getRef().child("key").setValue(xtgl.getText().toString());
+//                            dataSnapshot.getRef().child("nominal").setValue(xnominal.getText().toString());
+                                    if (count == 4){
+                                        double jumlah = jml*30 * 0.3;
+                                        DecimalFormat df = new DecimalFormat("###.#");
+                                        dataSnapshot.getRef().child("nominal").setValue(String.valueOf(df.format(jumlah)));
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                        reference3.child(xtgl.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                dataSnapshot.getRef().child("key").setValue(xtgl.getText().toString());
+                                                dataSnapshot.getRef().child("nominal").setValue(String.valueOf(df.format(jumlah)));
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+
+                                    }else if (count == 5){
+                                        double jumlah = jml*29 * 0.24;
+                                        DecimalFormat df = new DecimalFormat("###.#");
+                                        dataSnapshot.getRef().child("nominal").setValue(String.valueOf(df.format(jumlah)));
+                                        reference3.child(xtgl.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                dataSnapshot.getRef().child("key").setValue(xtgl.getText().toString());
+                                                dataSnapshot.getRef().child("nominal").setValue(String.valueOf(df.format(jumlah)));
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+
+                                    }else if (count == 6){
+                                        double jumlah = jml*28 * 0.22;
+                                        DecimalFormat df = new DecimalFormat("###.#");
+                                        dataSnapshot.getRef().child("nominal").setValue(String.valueOf(df.format(jumlah)));
+                                        reference3.child(xtgl.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                dataSnapshot.getRef().child("key").setValue(xtgl.getText().toString());
+                                                dataSnapshot.getRef().child("nominal").setValue(String.valueOf(df.format(jumlah)));
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+
+                                    }else if (count == 7){
+                                        double jumlah = jml*27 * 0.2;
+                                        DecimalFormat df = new DecimalFormat("###.#");
+                                        dataSnapshot.getRef().child("nominal").setValue(String.valueOf(df.format(jumlah)));
+                                        reference3.child(xtgl.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                dataSnapshot.getRef().child("key").setValue(xtgl.getText().toString());
+                                                dataSnapshot.getRef().child("nominal").setValue(String.valueOf(df.format(jumlah)));
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+
+                                    }else if (count == 8){
+                                        double jumlah = jml*26 * 0.18;
+                                        DecimalFormat df = new DecimalFormat("###.#");
+                                        dataSnapshot.getRef().child("nominal").setValue(String.valueOf(df.format(jumlah)));
+                                        reference3.child(xtgl.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                dataSnapshot.getRef().child("key").setValue(xtgl.getText().toString());
+                                                dataSnapshot.getRef().child("nominal").setValue(String.valueOf(df.format(jumlah)));
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+
+                                    }else if (count == 9){
+                                        double jumlah = jml*25 * 0.17;
+                                        DecimalFormat df = new DecimalFormat("###.#");
+                                        dataSnapshot.getRef().child("nominal").setValue(String.valueOf(df.format(jumlah)));
+                                        reference3.child(xtgl.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                dataSnapshot.getRef().child("key").setValue(xtgl.getText().toString());
+                                                dataSnapshot.getRef().child("nominal").setValue(String.valueOf(df.format(jumlah)));
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+                                    }
+
+
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                }
+
+                            });
+
+                            Intent go = new Intent(InputLaporanUangAct.this,LaporanUangAct.class);
+                            startActivity(go);
+                            finish();
+
+                        }else{
+                            Toast.makeText(InputLaporanUangAct.this,
+                                    "Jumlah karyawan hari ini "+count+", minimal 4 orang", Toast.LENGTH_LONG).show();
+                        }
 
                     }
                 });
 
-                Intent go = new Intent(InputLaporanUangAct.this,LaporanUangAct.class);
-                startActivity(go);
-                finish();
+            }
 
-
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
+
+
+
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override

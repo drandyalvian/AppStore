@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -24,16 +26,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 public class DashbordAct extends AppCompatActivity{
 
-    TextView keuangan, absensi,namakepala,namatoko,tglKeuangan, jmlkaryawan;
+    TextView keuangan, absensi,namakepala,namatoko,tglKeuangan, jmlkaryawan, jmlhadir,tgl;
     Button logout;
     LinearLayout linearlayout, linearlayout2;
     ImageView absen_belum,absen_sudah,laporan_belum,laporan_sudah;
 
-    DatabaseReference reference;
+    DatabaseReference reference, reference2, reference3;
     String USERNAME_KEY = "usernamekey";
     String username_key = "";
     String username_key_new ="";
@@ -49,7 +53,9 @@ public class DashbordAct extends AppCompatActivity{
         namakepala = findViewById(R.id.namakepala);
         namatoko = findViewById(R.id.namatoko);
         tglKeuangan = findViewById(R.id.tglKeuangan);
+        tgl = findViewById(R.id.tgl);
         jmlkaryawan = findViewById(R.id.jmlkaryawan);
+        jmlhadir = findViewById(R.id.jmlhadir);
         keuangan = findViewById(R.id.keuangan);
         absensi = findViewById(R.id.absensi);
         linearlayout = findViewById(R.id.linearLayout);
@@ -62,18 +68,82 @@ public class DashbordAct extends AppCompatActivity{
 
         //set tgl
         long date = System.currentTimeMillis();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy");
         String dateString = sdf.format(date);
-        tglKeuangan.setText(dateString);
+
+        SimpleDateFormat sdflocal = new SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault());
+        String dateLocal = sdflocal.format(date);
+//        tglKeuangan.setText(dateString);
+        tgl.setText(dateLocal);
 
 // notif
 
+        reference2 = FirebaseDatabase.getInstance().getReference().child("Cabang")
+                .child(username_key_new).child("CountAbsen").child(dateString);
+        reference3 = FirebaseDatabase.getInstance().getReference().child("Cabang")
+                .child(username_key_new).child("CekLaporan").child(dateString);
 
-        absen_sudah.animate().alpha(0).setDuration(300).start();
-        laporan_sudah.animate().alpha(0).setDuration(300).start();
+        reference2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                long count = dataSnapshot.getChildrenCount();
+                jmlhadir.setText(String.valueOf(count)+ " Hadir");
+                if (count > 3 ){
+                    absen_sudah.animate().alpha(1).setDuration(300).start();
+                    absen_belum.animate().alpha(0).setDuration(300).start();
+//                    absen_sudah.setBackgroundDrawable(ContextCompat.getDrawable(DashbordAct.this, R.drawable.icon_sudah));
 
-        absen_belum.animate().alpha(1).setDuration(300).start();
-        laporan_belum.animate().alpha(1).setDuration(300).start();
+                }else {
+                    absen_belum.animate().alpha(1).setDuration(300).start();
+                    absen_sudah.animate().alpha(0).setDuration(300).start();
+//                    absen_belum.setBackgroundDrawable(ContextCompat.getDrawable(DashbordAct.this, R.drawable.icon_belum));
+
+                }
+
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        reference3.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                long count = dataSnapshot.getChildrenCount();
+                if (count != 0){
+                    laporan_sudah.animate().alpha(1).setDuration(300).start();
+                    laporan_belum.animate().alpha(0).setDuration(300).start();
+                    reference3.child(dateString).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            tglKeuangan.setText("Rp. "+NumberFormat.getNumberInstance(Locale.getDefault()).
+                                    format(Double.parseDouble(dataSnapshot.child("nominal").getValue().toString())));
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                        }
+                    });
+                }else {
+                    laporan_sudah.animate().alpha(0).setDuration(300).start();
+                    laporan_belum.animate().alpha(1).setDuration(300).start();
+                    tglKeuangan.setText("Rp. "+"0");
+                }
+
+//
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
 
 
@@ -85,7 +155,7 @@ public class DashbordAct extends AppCompatActivity{
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Integer jml = (int) dataSnapshot.getChildrenCount();
-                jmlkaryawan.setText("Jumlah Karyawan :"+jml );
+                jmlkaryawan.setText(jml+" Karyawan" );
             }
 
             @Override

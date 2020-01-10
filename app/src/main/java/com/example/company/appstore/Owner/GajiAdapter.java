@@ -152,11 +152,11 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
                 viewCicilanPinjaman = dialogView.findViewById(R.id.viewCicilanPinjaman);
                 viewTotalGaji = dialogView.findViewById(R.id.viewTotalGaji);
                 viewNamaPegawai = dialogView.findViewById(R.id.namaPegawai);
-                kurangPinjaman = dialogView.findViewById(R.id.kurangPinjaman);
+//                kurangPinjaman = dialogView.findViewById(R.id.kurangPinjaman);
 
                 print = dialogView.findViewById(R.id.btnPrint);
                 pdf = dialogView.findViewById(R.id.btnPdf);
-                save = dialogView.findViewById(R.id.btnSavePinjaman);
+//                save = dialogView.findViewById(R.id.btnSavePinjaman);
                 AlertDialog alertDialog = builder.create();
                 alertDialog.show();
 

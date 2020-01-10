@@ -45,7 +45,7 @@ import butterknife.OnClick;
 
 public class ListAbsensiAct extends AppCompatActivity {
     private static ListAbsensiAct instance;
-    DatabaseReference reference, reference2;
+    DatabaseReference reference, reference2, reference3;
     @BindView(R.id.btnAdd)
     Button btnAdd;
     @BindView(R.id.xnama)
@@ -163,11 +163,20 @@ public class ListAbsensiAct extends AppCompatActivity {
     }
 
     public void deleteAbsen(String key) {
+
+        long date = System.currentTimeMillis();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy");
+        String dateString = sdf.format(date);
+
         DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("Cabang").child(username_key_new).child("Karyawan").child(nKaryawan).child("Absensi").child(key);
         db.removeValue();
         DatabaseReference db2 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(username_key_new)
                 .child("Karyawan").child(nKaryawan).child("Count_gaji").child(key);
         db2.removeValue();
+
+        DatabaseReference db3 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(username_key_new)
+                .child("CountAbsen").child(key).child(nKaryawan);
+        db3.removeValue();
     }
 
     private void addAbsen(String tanggal) {
@@ -186,6 +195,11 @@ public class ListAbsensiAct extends AppCompatActivity {
 
         );
 
+        DatabaseReference db3 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(username_key_new);
+        CountAbsen countAbsen = new CountAbsen(
+                nKaryawan,nKaryawan
+        );
+
         CountGajiEntity entity = new CountGajiEntity(
                 dateFormat.format(date), dateFormat.format(date)
         );
@@ -195,6 +209,8 @@ public class ListAbsensiAct extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 db.child("Absensi").child(tanggal).setValue(absensiConst);
                 db.child("Count_gaji").child(tanggal).setValue(entity);
+                db3.child("CountAbsen").child(tanggal).child(nKaryawan).setValue(countAbsen);
+
             }
 
             @Override

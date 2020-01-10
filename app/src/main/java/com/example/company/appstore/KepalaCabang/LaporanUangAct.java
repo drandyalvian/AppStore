@@ -43,7 +43,7 @@ public class LaporanUangAct extends AppCompatActivity implements LaporanUangAdap
     EditText txtsearch;
     TextView xToday;
 
-    DatabaseReference reference;
+    DatabaseReference reference, reference2;
     private RecyclerView rvView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -75,6 +75,11 @@ public class LaporanUangAct extends AppCompatActivity implements LaporanUangAdap
         Date today = Calendar.getInstance().getTime();//getting date
         SimpleDateFormat formatter = new SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault());//formating according to my need
         String date = formatter.format(today);
+
+        long dateku = System.currentTimeMillis();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH);
+        String dateString = sdf.format(dateku);
+
         xToday.setText(date);
 
 
@@ -84,6 +89,8 @@ public class LaporanUangAct extends AppCompatActivity implements LaporanUangAdap
 
         reference = FirebaseDatabase.getInstance().getReference().child("Cabang")
                 .child(username_key_new).child("LaporanUang");
+        reference2 = FirebaseDatabase.getInstance().getReference().child("Cabang")
+                .child(username_key_new).child("CekLaporan").child(dateString);
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -147,6 +154,12 @@ public class LaporanUangAct extends AppCompatActivity implements LaporanUangAdap
                 @Override
                 public void onSuccess(Void aVoid) {
                     Toast.makeText(LaporanUangAct.this, "success delete", Toast.LENGTH_SHORT).show();
+                }
+            });
+            reference2.child(laporanUangConst.getKey()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+
                 }
             });
 

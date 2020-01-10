@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.company.appstore.KepalaCabang.AbsensiAct;
+import com.example.company.appstore.KepalaCabang.CountAbsen;
 import com.example.company.appstore.KepalaCabang.CountGajiEntity;
 import com.example.company.appstore.KepalaCabang.ListAbsensiConst;
 import com.example.company.appstore.R;
@@ -175,6 +176,9 @@ public class ListAbsensiAdmin extends AppCompatActivity {
         DatabaseReference db2 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(nCabang)
                 .child("Karyawan").child(nKaryawan).child("Count_gaji").child(key);
         db2.removeValue();
+        DatabaseReference db3 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(nCabang)
+                .child("CountAbsen").child(key).child(nKaryawan);
+        db3.removeValue();
     }
 
     private void addAbsen(String tanggal) {
@@ -193,6 +197,11 @@ public class ListAbsensiAdmin extends AppCompatActivity {
 
         );
 
+        DatabaseReference db3 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(nCabang);
+        CountAbsen countAbsen = new CountAbsen(
+                nKaryawan,nKaryawan
+        );
+
         CountGajiEntity entity = new CountGajiEntity(
                 dateFormat.format(date),dateFormat.format(date)
         );
@@ -202,6 +211,7 @@ public class ListAbsensiAdmin extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 db.child("Absensi").child(tanggal).setValue(absensiConst);
                 db.child("Count_gaji").child(tanggal).setValue(entity);
+                db3.child("CountAbsen").child(tanggal).child(nKaryawan).setValue(countAbsen);
             }
 
             @Override
