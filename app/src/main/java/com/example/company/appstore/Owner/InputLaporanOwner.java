@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -22,6 +23,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.DecimalFormat;
@@ -83,15 +85,12 @@ public class InputLaporanOwner extends AppCompatActivity {
             }
         });
 
-        reference2.addValueEventListener(new ValueEventListener() {
+
+        Query query = reference2.orderByChild("keterangan").equalTo("Hadir");
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 long count = dataSnapshot.getChildrenCount();
-                if (count == 0 ){
-//                    Toast.makeText(InputLaporanUangAct.this, "Jumlah karyawan 0, Anda belum melakukan absen hari ini", Toast.LENGTH_LONG).show();
-                }else if (count == 1 || count == 2 || count == 3){
-//                    Toast.makeText(InputLaporanUangAct.this, "Jumlah karyawan hari ini "+count+" jumlah karyawan minimal 4 orang", Toast.LENGTH_LONG).show();
-                }
 
                 btnsave.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -229,11 +228,12 @@ public class InputLaporanOwner extends AppCompatActivity {
 
                         }else{
                             Toast.makeText(InputLaporanOwner.this,
-                                    "Jumlah karyawan hari ini "+count+", minimal 4 orang", Toast.LENGTH_LONG).show();
+                                    "Jumlah karyawan yang hadir "+count+", minimal 4 orang", Toast.LENGTH_LONG).show();
                         }
 
                     }
                 });
+
 
             }
 
@@ -243,32 +243,6 @@ public class InputLaporanOwner extends AppCompatActivity {
             }
         });
 
-//        btnsave.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//
-//                reference.child(xtgl.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
-//                    @Override
-//                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                        dataSnapshot.getRef().child("tanggal").setValue(xtgl.getText().toString());
-//                        dataSnapshot.getRef().child("filter").setValue(xtgl.getText().toString().substring(3));
-//                        dataSnapshot.getRef().child("key").setValue(xtgl.getText().toString());
-//                        dataSnapshot.getRef().child("nominal").setValue(xnominal.getText().toString());
-//                    }
-//
-//                    @Override
-//                    public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                    }
-//                });
-//
-//                Intent go = new Intent(InputLaporanOwner.this, LaporanOwnerAct.class);
-//                go.putExtra("cabang",cabang);
-//                startActivity(go);
-////                finish();
-//
-//            }
-//        });
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override

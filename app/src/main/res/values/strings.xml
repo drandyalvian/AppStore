@@ -11,7 +11,7 @@
 
     <string-array name="pilih_filter">
         <item>January</item>
-        <item>Febuary</item>
+        <item>February</item>
         <item>March</item>
         <item>April</item>
         <item>May</item>
@@ -28,6 +28,11 @@
         <item>Toko Cabang 1</item>
         <item>Toko Cabang 2</item>
         <item>Toko Cabang 3</item>
+    </string-array>
+
+    <string-array name="absensi">
+        <item>Hadir</item>
+        <item>Alpha</item>
     </string-array>
 
     <string name="action_settings">Settings</string>

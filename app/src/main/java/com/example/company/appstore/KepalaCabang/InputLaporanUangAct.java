@@ -22,6 +22,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.DecimalFormat;
@@ -83,16 +84,11 @@ public class InputLaporanUangAct extends AppCompatActivity  {
             }
         });
 
-
-        reference2.addValueEventListener(new ValueEventListener() {
+        Query query = reference2.orderByChild("keterangan").equalTo("Hadir");
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 long count = dataSnapshot.getChildrenCount();
-//                if (count == 0 ){
-////                    Toast.makeText(InputLaporanUangAct.this, "Jumlah karyawan 0, Anda belum melakukan absen hari ini", Toast.LENGTH_LONG).show();
-//                }else if (count == 1 || count == 2 || count == 3){
-////                    Toast.makeText(InputLaporanUangAct.this, "Jumlah karyawan hari ini "+count+" jumlah karyawan minimal 4 orang", Toast.LENGTH_LONG).show();
-//                }
 
                 btnsave.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -230,7 +226,7 @@ public class InputLaporanUangAct extends AppCompatActivity  {
 
                         }else{
                             Toast.makeText(InputLaporanUangAct.this,
-                                    "Jumlah karyawan hari ini "+count+", minimal 4 orang", Toast.LENGTH_LONG).show();
+                                    "Jumlah karyawan yang hadir "+count+", minimal 4 orang", Toast.LENGTH_LONG).show();
                         }
 
                     }
@@ -243,6 +239,7 @@ public class InputLaporanUangAct extends AppCompatActivity  {
 
             }
         });
+
 
 
 

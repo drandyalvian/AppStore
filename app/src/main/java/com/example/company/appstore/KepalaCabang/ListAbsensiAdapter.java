@@ -3,6 +3,7 @@ package com.example.company.appstore.KepalaCabang;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -43,7 +44,18 @@ public class ListAbsensiAdapter extends RecyclerView.Adapter<ListAbsensiAdapter.
     @Override
     public void onBindViewHolder(@NonNull ListAbsensiAdapter.MyViewHolder myViewHolder, final int i) {
 
-        myViewHolder.xtgl.setText(labsensiConsts.get(i).getTanggal());
+//        myViewHolder.xket.setText(labsensiConsts.get(i).getKeterangan());
+//        myViewHolder.xtgl.setText(labsensiConsts.get(i).getTanggal().toString());
+        if (labsensiConsts.get(i).getKeterangan().equals("Alpha")){
+            myViewHolder.xtgl.setText(labsensiConsts.get(i).getTanggal().toString());
+            myViewHolder.xket.setText(labsensiConsts.get(i).getKeterangan());
+            myViewHolder.xket.setTextColor(Color.RED);
+
+        }else {
+            myViewHolder.xtgl.setText(labsensiConsts.get(i).getTanggal().toString());
+            myViewHolder.xket.setText(labsensiConsts.get(i).getKeterangan());
+            myViewHolder.xket.setTextColor(Color.BLUE);
+        }
 
         myViewHolder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,14 +81,16 @@ public class ListAbsensiAdapter extends RecyclerView.Adapter<ListAbsensiAdapter.
 
     class MyViewHolder extends RecyclerView.ViewHolder{
 
-        TextView xtgl;
+        TextView xtgl, xket;
         Button delete;
 
         public MyViewHolder(@NonNull View itemView){
             super(itemView);
 
             xtgl = itemView.findViewById(R.id.xtgl);
+            xket = itemView.findViewById(R.id.xket);
             delete = itemView.findViewById(R.id.delete);
+
         }
     }
 

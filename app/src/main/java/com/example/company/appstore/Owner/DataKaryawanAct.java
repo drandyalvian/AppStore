@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.company.appstore.KepalaCabang.AbsensiConst;
+import com.example.company.appstore.KepalaCabang.ListAbsensiConst;
 import com.example.company.appstore.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,7 +36,10 @@ import com.google.firebase.database.ValueEventListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
+import android.os.Handler;;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -54,7 +60,7 @@ public class DataKaryawanAct extends AppCompatActivity implements DataKaryawanAd
 
     String cabangku;
 
-    DatabaseReference reference, reference2;
+    DatabaseReference reference, reference2, reference3, reference4, reference5, reference6;
     private RecyclerView rvView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -79,16 +85,22 @@ public class DataKaryawanAct extends AppCompatActivity implements DataKaryawanAd
         final String cabang = getIntent().getStringExtra("cabang");
         cabangku = cabang;
 
-
+        reference = FirebaseDatabase.getInstance().getReference()
+                .child("Cabang").child(cabang).child("Karyawan");
 
         reference2 = FirebaseDatabase.getInstance().getReference()
                 .child("KepalaCabang").child(cabang);
 
-        reference = FirebaseDatabase.getInstance().getReference()
+
+        reference5 = FirebaseDatabase.getInstance().getReference()
                 .child("Cabang").child(cabang).child("Karyawan");
+
+
+
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                 dataKaryawanConsts = new ArrayList<>();
 
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
@@ -98,6 +110,8 @@ public class DataKaryawanAct extends AppCompatActivity implements DataKaryawanAd
                     kConst.setKey(dataSnapshot1.getKey());
 
                     dataKaryawanConsts.add(kConst);
+//                    Log.d("dataku", String.valueOf(kConst));
+
                 }
 
                 adapter = new DataKaryawanAdapter(dataKaryawanConsts, DataKaryawanAct.this, DataKaryawanAct.this);
@@ -249,114 +263,322 @@ public class DataKaryawanAct extends AppCompatActivity implements DataKaryawanAd
         fbulan.setAdapter(pilihFilter);
 
 
-        Button btnSave2 =(Button) dialogView2.findViewById(R.id.btnsaves);
+        Button btnSave2 = (Button) dialogView2.findViewById(R.id.btnsaves);
         btnSave2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                btnSave2.setText("TUNGGU..");
                 createExcelSheet(fbulan.getSelectedItem().toString(), ftahun.getText().toString(), cabangku);
-                alertDialog.hide();
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        alertDialog.hide();
+                    }
+                }, 5000);
+
 
             }
         });
     }
 
-    private void createExcelSheet(String fbulan, String ftahun, String cabang)
-    {
+    private void createExcelSheet(String fbulan, String ftahun, String cabang) {
 //        String Fnamexls="dataKaryawan"+System.currentTimeMillis()+ ".xls";
-        String Fnamexls="Rekap_"+cabangku+"_"+fbulan+ftahun+".xls";
+        String Fnamexls = cabangku + "_" + fbulan + ftahun + ".xls";
         File sdCard = Environment.getExternalStorageDirectory();
-        File directory = new File (sdCard.getAbsolutePath() + "/recap");
+        File directory = new File(sdCard.getAbsolutePath() + "/AppStore/recap");
         directory.mkdirs();
         File file = new File(directory, Fnamexls);
 
         WorkbookSettings wbSettings = new WorkbookSettings();
 
         wbSettings.setLocale(new Locale("en", "EN"));
-        Toast.makeText(this, "storage/recap/"+Fnamexls, Toast.LENGTH_LONG).show();
 
-        WritableWorkbook workbook;
-        try {
-            int a = 1;
-            workbook = Workbook.createWorkbook(file, wbSettings);
-            //workbook.createSheet("Report", 0);
-            WritableSheet sheet = workbook.createSheet(cabangku+" "+fbulan+ftahun, 0);
-            Label labela0 = new Label(0, 2, "Nama"); //COLOM A, ROW 2
-            Label labela1 = new Label(0, 3, " "); //COLOM A, ROW 2
-            Label labela2 = new Label(0, 4, "Nama Satu");
-            Label labela3 = new Label(0, 5, "Nama Dua");
-            Label labela4 = new Label(0, 6, "Nama Tiga");
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
 
-            Label labelb1 = new Label(1, 2, fbulan+" "+ftahun);
-            Label labelb2 = new Label(1, 3, "1");
-            Label labelb3 = new Label(2, 3, "2");
-            Label labelb4 = new Label(3, 3, "3");
-            Label labelb5 = new Label(4, 3, "4");
-            Label labelb6 = new Label(5, 3, "5");
-            Label labelb7 = new Label(6, 3, "6");
-            Label labelb8 = new Label(7, 3, "7");
-            Label labelb9 = new Label(8, 3, "8");
-            Label labelb10 = new Label(9, 3, "9");
-            Label labelb11 = new Label(10, 3, "..30");
+                Toast.makeText(DataKaryawanAct.this, "storage/AppSore/recap/" + Fnamexls, Toast.LENGTH_LONG).show();
+            }
+        }, 5000);
 
-            Label labelc1 = new Label(11, 2, "Gaji");
-            Label labelc2 = new Label(11, 3, " ");
-            Label labelc3 = new Label(11, 4, "Rp, 1.500.0000");
-            Label labelc4 = new Label(11, 5, "Rp, 1.500.0000");
-            Label labelc5 = new Label(11, 6, "Rp, 1.500.0000");
-//            Label labelb1 = new Label(0,1,"first");
-//            Label labelc1 = new Label(0,0,"HEADING");
-//            Label labeld1 = new Label(1,0,"Heading2");
-//            Label labele1 = new Label(1,1,String.valueOf(a));
-            try {
-                sheet.addCell(labela0);
-                sheet.addCell(labela1);
-                sheet.addCell(labela2);
-                sheet.addCell(labela3);
-                sheet.addCell(labela4);
+//        Toast.makeText(this, "storage/AppSore/recap/" + Fnamexls, Toast.LENGTH_LONG).show();
 
-                sheet.addCell(labelb1);
-                sheet.addCell(labelb2);
-                sheet.addCell(labelb3);
-                sheet.addCell(labelb4);
-                sheet.addCell(labelb5);
-                sheet.addCell(labelb6);
-                sheet.addCell(labelb7);
-                sheet.addCell(labelb8);
-                sheet.addCell(labelb9);
-                sheet.addCell(labelb10);
-                sheet.addCell(labelb11);
+        reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                sheet.addCell(labelc1);
-                sheet.addCell(labelc2);
-                sheet.addCell(labelc3);
-                sheet.addCell(labelc4);
-                sheet.addCell(labelc5);
+                WritableWorkbook workbook;
+                try {
+                    workbook = Workbook.createWorkbook(file, wbSettings);
+                    //workbook.createSheet("Report", 0);
+                    WritableSheet sheet = workbook.createSheet(cabangku + " " + fbulan + ftahun, 0);
+                    Label labela0 = new Label(0, 2, "Nama"); //COLOM A, ROW 2
+                    Label labela1 = new Label(0, 3, " ");
+
+                    int i = 0;
+                    int a = 4;
+                    int b = 1;
+                    Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+                    int length = (int) dataSnapshot.getChildrenCount();
+                    String[] sampleString = new String[length];
+
+                    do{
+
+                        final int c = b;
+                        final int d = a;
+                        final int x = i;
+
+                        sampleString[i] = iterator.next().getKey().toString();
+                        Label labeln = new Label(0, a, sampleString[i]);
+                        Log.d(Integer.toString(i), sampleString[i]);
 
 
-//                sheet.addCell(label1);
-//                sheet.addCell(label0);
-//                sheet.addCell(label4);
-//                sheet.addCell(label3);
-            } catch (RowsExceededException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            } catch (WriteException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+
+//                        reference3 = FirebaseDatabase.getInstance().getReference()
+//                                .child("Cabang").child(cabang).child("Karyawan").child(sampleString[i]).child("Absensi");
+                        reference3 = FirebaseDatabase.getInstance().getReference()
+                                .child("Cabang").child(cabang).child("Recap").child(sampleString[i]).child(fbulan+" "+ftahun);
+
+//                        Query query1 = reference3.orderByChild("keterangan").equalTo("Hadir");
+
+                        Query query2 = reference.orderByChild("key").equalTo(sampleString[i]);
+
+//                        Query query3 = FirebaseDatabase.getInstance().getReference()
+//                                .child("Cabang").child(cabang).child("Karyawan").child(sampleString[0]).child("Absensi")
+//                                .orderByChild("filter").equalTo(fbulan+" "+ftahun);
+
+                        reference6 = FirebaseDatabase.getInstance().getReference()
+                                .child("Cabang").child(cabang).child("Recap").child(sampleString[0]).child(fbulan+" "+ftahun);
+
+
+                        reference3.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+                                List<ListAbsensiConst> users2 = new ArrayList<>();
+                                while (iterator.hasNext()) {
+                                    DataSnapshot dataSnapshotChild = iterator.next();
+                                    ListAbsensiConst user2 = dataSnapshotChild.getValue(ListAbsensiConst.class);
+                                    users2.add(user2);
+                                }
+
+                                int lengthku = (int) dataSnapshot.getChildrenCount();
+                                String[] sampleString = new String[lengthku];
+
+                                for (int i = 0, i2 = 1; i < length; i++, i2++) {
+                                    try {
+
+                                        for (int j = 0, j2 = 1; j < lengthku; j++, j2++) {
+                                            sampleString[j] = users2.get(i).getKeterangan();
+                                            Label labela1 = new Label(i2, d, sampleString[j]);
+                                            Log.d("kolom"+i2+"baris"+d,sampleString[j] );
+
+                                            try {
+                                                sheet.addCell(labela1);
+                                            } catch (WriteException e) {
+                                                e.printStackTrace();
+                                            }
+
+                                        }
+
+                                    }catch (Exception e){
+                                        Log.d("erorku", e.getMessage());
+                                    }
+
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+                        reference6.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+
+                                List<ListAbsensiConst> users1 = new ArrayList<>();
+                                while (iterator.hasNext()) {
+                                    DataSnapshot dataSnapshotChild = iterator.next();
+                                    ListAbsensiConst user1 = dataSnapshotChild.getValue(ListAbsensiConst.class);
+                                    users1.add(user1);
+                                }
+
+                                int lengthku = (int) dataSnapshot.getChildrenCount();
+                                String[] sampleString = new String[lengthku];
+                                int clength = lengthku+1;
+                                Log.d("Gaji " ,"kolom"+clength+"baris"+2 );
+                                Label labelgaji = new Label(clength, 2, "Gaji");
+
+
+                                for (int j = 0, j2 = 1; j < lengthku; j++, j2++) {
+//                                    sampleString[j] = iterator.next().getKey().substring(0,2);
+                                    sampleString[j] = users1.get(j).getKeterangan();
+                                    Label labela2 = new Label(j2, 4, sampleString[j]);
+                                    Label labeltgl = new Label(j2, 3, String.valueOf(j2));
+                                    Log.d("kolom"+j2+"baris"+4,sampleString[j] );
+
+                                    try {
+                                        sheet.addCell(labela2);
+                                        sheet.addCell(labeltgl);
+                                        sheet.addCell(labelgaji);
+                                    } catch (WriteException e) {
+                                        e.printStackTrace();
+                                    }
+//                            System.out.print("kolom"+j2+"baris"+i2+" "+sampleString[j]);
+                                }
+
+//                               total gaji
+                                reference5.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                        Iterator<DataSnapshot> dataSnapshots = dataSnapshot.getChildren().iterator();
+                                        List<GajiConst> users = new ArrayList<>();
+                                        while (dataSnapshots.hasNext()) {
+                                            DataSnapshot dataSnapshotChild = dataSnapshots.next();
+                                            GajiConst user = dataSnapshotChild.getValue(GajiConst.class);
+                                            users.add(user);
+                                        }
+
+                                        try {
+
+                                            for (int i = 0, i2 = 4 ; i < users.size(); i++, i2++) {
+
+
+                                                final int x = i;
+                                                final int x2 = i2;
+                                                int angkaku = Integer.parseInt(users.get(i).getGaji_pokok());
+                                                reference4 = FirebaseDatabase.getInstance().getReference()
+                                                        .child("Cabang").child(cabang).child("Recap").child(String.valueOf(users.get(i).getKey_name())).child(fbulan+" "+ftahun);
+                                                Query query4 = reference4.orderByChild("keterangan").equalTo("Hadir");
+
+//                                                Log.d("karyawan"+i, String.valueOf(users.get(i).getKey())+" "+angkaku);
+                                                query4.addValueEventListener(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                        int jumlah = (int) (angkaku*dataSnapshot.getChildrenCount());
+
+                                                        Label labelgaji2 = new Label(clength, x2, String.valueOf(jumlah));
+                                                        Log.d("aKolom " +clength +" baris "+x2 ,String.valueOf(jumlah));
+//                                                        Log.d("aKolom " +clength +" baris "+x2 ,String.valueOf(dataSnapshot.getChildrenCount()));
+
+                                                        try {
+                                                            sheet.addCell(labelgaji2);
+                                                        } catch (WriteException e) {
+                                                            e.printStackTrace();
+                                                        }
+
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                                                });
+
+
+                                            }
+                                        }catch (Exception e){
+
+                                        }
+
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+
+
+
+                            }
+
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+                        try {
+                            sheet.addCell(labeln);
+                        } catch (WriteException e) {
+                            e.printStackTrace();
+                        }
+
+                        i++;
+                        a++;
+                        b++;
+
+                    }while (i < length);
+
+
+
+                    Label labelb1 = new Label(1, 2, fbulan+" "+ftahun);
+
+                    try {
+                        sheet.addCell(labela0);
+                        sheet.addCell(labela1);
+
+                        sheet.addCell(labelb1);
+                    } catch (RowsExceededException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    } catch (WriteException e) {
+                        // TODO Auto-generated catch block
+                        e.printStackTrace();
+                    }
+
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                workbook.write();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                workbook.close();
+                            } catch (WriteException e) {
+                                // TODO Auto-generated catch block
+                                e.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }, 5000);
+
+
+
+                    //createExcel(excelSheet);
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+
             }
 
 
-            workbook.write();
-            try {
-                workbook.close();
-            } catch (WriteException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
-            //createExcel(excelSheet);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+        });
+
+
+
     }
+
 }

@@ -179,9 +179,12 @@ public class ListAbsensiAdmin extends AppCompatActivity {
         DatabaseReference db3 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(nCabang)
                 .child("CountAbsen").child(key).child(nKaryawan);
         db3.removeValue();
+        DatabaseReference db4 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(nCabang)
+                .child("Recap").child(nKaryawan).child(key.substring(3)).child(key);
+        db4.removeValue();
     }
 
-    private void addAbsen(String tanggal) {
+    private void addAbsen2(String tanggal, String sket) {
         // tambahkan semua ke dialog
         DateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
         Date date = new Date();
@@ -189,7 +192,7 @@ public class ListAbsensiAdmin extends AppCompatActivity {
 
         DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("Cabang").child(nCabang).child("Karyawan").child(nKaryawan);
         ListAbsensiConst absensiConst = new ListAbsensiConst(
-                "Hadir",
+                sket,
                 tanggal,
                 tanggal,
                 tanggal.substring(3)
@@ -199,11 +202,58 @@ public class ListAbsensiAdmin extends AppCompatActivity {
 
         DatabaseReference db3 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(nCabang);
         CountAbsen countAbsen = new CountAbsen(
-                nKaryawan,nKaryawan
+                nKaryawan,nKaryawan, sket
+        );
+
+
+        DatabaseReference db4 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(nCabang).child("Recap").child(nKaryawan);
+        RecapAbsen recapAbsen = new RecapAbsen(
+                sket,tanggal
+        );
+
+        db.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                db.child("Absensi").child(tanggal).setValue(absensiConst);
+                db3.child("CountAbsen").child(tanggal).child(nKaryawan).setValue(countAbsen);
+                db4.child(tanggal.substring(3)).child(tanggal).setValue(recapAbsen);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void addAbsen(String tanggal, String sket) {
+        // tambahkan semua ke dialog
+        DateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
+        Date date = new Date();
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC+7"));
+
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("Cabang").child(nCabang).child("Karyawan").child(nKaryawan);
+        ListAbsensiConst absensiConst = new ListAbsensiConst(
+                sket,
+                tanggal,
+                tanggal,
+                tanggal.substring(3)
+
+
+        );
+
+        DatabaseReference db3 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(nCabang);
+        CountAbsen countAbsen = new CountAbsen(
+                nKaryawan,nKaryawan, sket
         );
 
         CountGajiEntity entity = new CountGajiEntity(
                 dateFormat.format(date),dateFormat.format(date)
+        );
+
+        DatabaseReference db4 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(nCabang).child("Recap").child(nKaryawan);
+        RecapAbsen recapAbsen = new RecapAbsen(
+                sket,tanggal
         );
 
         db.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -212,6 +262,7 @@ public class ListAbsensiAdmin extends AppCompatActivity {
                 db.child("Absensi").child(tanggal).setValue(absensiConst);
                 db.child("Count_gaji").child(tanggal).setValue(entity);
                 db3.child("CountAbsen").child(tanggal).child(nKaryawan).setValue(countAbsen);
+                db4.child(tanggal.substring(3)).child(tanggal).setValue(recapAbsen);
             }
 
             @Override
@@ -248,6 +299,10 @@ public class ListAbsensiAdmin extends AppCompatActivity {
         tanggalAbsen = (TextView) dialogView.findViewById(R.id.tanggalAbsen);
         tanggalAbsen.setText(dateFormat.format(date));
 
+        Spinner sket = (Spinner) dialogView.findViewById(R.id.sket);
+        final ArrayAdapter absensi = ArrayAdapter.createFromResource(this, R.array.absensi, android.R.layout.simple_spinner_dropdown_item);
+        sket.setAdapter(absensi);
+
         Button addtgl = (Button) dialogView.findViewById(R.id.addtgl);
 
         addtgl.setOnClickListener(new View.OnClickListener() {
@@ -261,8 +316,21 @@ public class ListAbsensiAdmin extends AppCompatActivity {
         btnSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addAbsen(tanggalAbsen.getText().toString());
-                alertDialog.hide();
+
+                if (sket.getSelectedItem().toString().equals("Alpha")){
+
+                    //data karyawan, recap,
+                    addAbsen2(tanggalAbsen.getText().toString(), sket.getSelectedItem().toString());
+                    alertDialog.hide();
+
+                }else if(sket.getSelectedItem().toString().equals("Hadir")){
+                    //data karyawan, recap, count absen, count gaji
+                    addAbsen(tanggalAbsen.getText().toString(), sket.getSelectedItem().toString());
+                    alertDialog.hide();
+                }
+
+//                addAbsen(tanggalAbsen.getText().toString(), sket.getSelectedItem().toString());
+//                alertDialog.hide();
             }
         });
 

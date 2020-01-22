@@ -37,7 +37,7 @@ public class AddKaryawanAct extends AppCompatActivity {
     EditText  xnama, xumur, xalamat, xnohp, xgajipokok, xusername, xposisi;
     String cabangx, karyawanx, cabangToko, key;
 
-    DatabaseReference reference;
+    DatabaseReference reference, reference2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,11 +69,13 @@ public class AddKaryawanAct extends AppCompatActivity {
         cabangx = bundle.getString("cabang");
 
         reference = FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabangx).child("Karyawan");
+        reference2 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabangx).child("Recap");
 
         //add karyawan
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String str = xnama.getText().toString();
                 String[] arrOfStr = str.split(" ");
                 final String[] keyKaryawan = new String[1];
@@ -168,10 +170,24 @@ public class AddKaryawanAct extends AppCompatActivity {
 
                     });
 
+
+                    reference2.child(xnama.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                            dataSnapshot.getRef().child("key").setValue(xnama.getText().toString());
+                            dataSnapshot.getRef().child("gaji_pokok").setValue(xgajipokok.getText().toString());
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
                     Intent go = new Intent(AddKaryawanAct.this,DataKaryawanAct.class);
                     go.putExtra("cabang", cabangx);
                     startActivity(go);
-
 
                 }
 

@@ -35,7 +35,7 @@ public class DataKaryawanAdapter extends RecyclerView.Adapter<DataKaryawanAdapte
     Context context;
     ArrayList<DataKaryawanConst> dataKaryawanConsts;
 
-    DatabaseReference reference;
+    DatabaseReference reference, reference2;
 
     public DataKaryawanAdapter(ArrayList<DataKaryawanConst> p, Context c, Context b){
         context = c;
@@ -106,6 +106,8 @@ public class DataKaryawanAdapter extends RecyclerView.Adapter<DataKaryawanAdapte
             public void onClick(View view) {
                 reference = FirebaseDatabase.getInstance().getReference()
                         .child("Cabang").child(cabang).child("Karyawan");
+                reference2 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabang).child("Recap");
+
                 new AlertDialog.Builder(context)
                         .setTitle("Hapus")
                         .setMessage("Apakah anda yakin?")
@@ -113,6 +115,7 @@ public class DataKaryawanAdapter extends RecyclerView.Adapter<DataKaryawanAdapte
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int whichButton) {
                                 reference.child(dataKaryawanConsts.get(i).getKey()).removeValue();
+                                reference2.child(dataKaryawanConsts.get(i).getKey()).removeValue();
                                 Toast.makeText(context, "Berhasil dihapus!", Toast.LENGTH_SHORT).show();
                             }})
                         .setNegativeButton(android.R.string.no, null).show();

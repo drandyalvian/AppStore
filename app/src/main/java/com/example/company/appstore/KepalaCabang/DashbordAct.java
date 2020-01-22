@@ -24,6 +24,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.NumberFormat;
@@ -37,7 +38,7 @@ public class DashbordAct extends AppCompatActivity{
     LinearLayout linearlayout, linearlayout2;
     ImageView absen_belum,absen_sudah,laporan_belum,laporan_sudah;
 
-    DatabaseReference reference, reference2, reference3;
+    DatabaseReference reference, reference2, reference3, reference4;
     String USERNAME_KEY = "usernamekey";
     String username_key = "";
     String username_key_new ="";
@@ -83,25 +84,14 @@ public class DashbordAct extends AppCompatActivity{
         reference3 = FirebaseDatabase.getInstance().getReference().child("Cabang")
                 .child(username_key_new).child("CekLaporan").child(dateString);
 
-        reference2.addValueEventListener(new ValueEventListener() {
+        Query query = reference2.orderByChild("keterangan").equalTo("Hadir");
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 long count = dataSnapshot.getChildrenCount();
                 jmlhadir.setText(String.valueOf(count)+ " Hadir dari ");
-                if (count > 3 ){
-                    absen_sudah.animate().alpha(1).setDuration(300).start();
-                    absen_belum.animate().alpha(0).setDuration(300).start();
-//                    absen_sudah.setBackgroundDrawable(ContextCompat.getDrawable(DashbordAct.this, R.drawable.icon_sudah));
 
-                }else {
-                    absen_belum.animate().alpha(1).setDuration(300).start();
-                    absen_sudah.animate().alpha(0).setDuration(300).start();
-//                    absen_belum.setBackgroundDrawable(ContextCompat.getDrawable(DashbordAct.this, R.drawable.icon_belum));
-
-                }
-
-
-
+                Log.d("cek", String.valueOf(dataSnapshot.getChildrenCount()));
             }
 
             @Override
@@ -109,6 +99,50 @@ public class DashbordAct extends AppCompatActivity{
 
             }
         });
+
+        //Get Jumlah Data Karyawan
+        reference4 = FirebaseDatabase.getInstance().getReference().
+                child("Cabang").child(username_key_new).child("Karyawan");
+        reference4.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                Integer jml = (int) dataSnapshot.getChildrenCount();
+                jmlkaryawan.setText(jml+" Karyawan" );
+
+                //notif
+                reference2.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        long count = dataSnapshot.getChildrenCount();
+//                jmlhadir.setText(String.valueOf(count)+ " Hadir dari ");
+                        if (count == jml ){
+                            absen_sudah.animate().alpha(1).setDuration(300).start();
+                            absen_belum.animate().alpha(0).setDuration(300).start();
+//                    absen_sudah.setBackgroundDrawable(ContextCompat.getDrawable(DashbordAct.this, R.drawable.icon_sudah));
+
+                        }else {
+                            absen_belum.animate().alpha(1).setDuration(300).start();
+                            absen_sudah.animate().alpha(0).setDuration(300).start();
+//                    absen_belum.setBackgroundDrawable(ContextCompat.getDrawable(DashbordAct.this, R.drawable.icon_belum));
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
 
         reference3.addValueEventListener(new ValueEventListener() {
             @Override
@@ -148,21 +182,7 @@ public class DashbordAct extends AppCompatActivity{
 
 
 
-//Get Jumlah Data Karyawan
-        reference = FirebaseDatabase.getInstance().getReference().
-                child("Cabang").child(username_key_new).child("Karyawan");
-        reference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Integer jml = (int) dataSnapshot.getChildrenCount();
-                jmlkaryawan.setText(jml+" Karyawan" );
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
 
 
 //database

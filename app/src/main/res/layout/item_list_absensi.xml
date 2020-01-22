@@ -15,16 +15,34 @@
         android:layout_marginRight="10dp"
         android:background="@drawable/tgl_absensi"/>
 
-    <TextView
-        android:id="@+id/xtgl"
+    <LinearLayout
+        android:id="@+id/lay1"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:fontFamily="@font/mregular"
-        android:layout_toRightOf="@+id/imgabsen"
-        android:text=""
-        android:textColor="@color/color5"
-        android:textSize="16sp" />
+        android:layout_height="match_parent"
+        android:layout_toRightOf="@id/imgabsen"
+        android:paddingTop="18dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/xtgl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/mregular"
+            android:text="01 january 2020"
+            android:textColor="@color/color5"
+            android:textSize="16sp" />
+        <TextView
+            android:id="@+id/xket"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/mregular"
+            android:text="Hadir"
+            android:textColor="@color/color1"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+
 
     <Button
         android:id="@+id/delete"
