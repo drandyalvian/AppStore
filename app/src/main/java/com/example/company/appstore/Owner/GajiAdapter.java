@@ -3,20 +3,26 @@ package com.example.company.appstore.Owner;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.company.appstore.FileUtils;
+import com.example.company.appstore.KepalaCabang.DashbordAct;
+import com.example.company.appstore.KepalaCabang.LoginAct;
 import com.example.company.appstore.R;
 import com.example.company.appstore.permission.PermissionsActivity;
 import com.example.company.appstore.permission.PermissionsChecker;
@@ -25,13 +31,16 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import android.os.Handler;
 
 import butterknife.BindView;
 
@@ -40,7 +49,7 @@ import static com.example.company.appstore.permission.PermissionsChecker.REQUIRE
 
 public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> {
 
-    private DatabaseReference reference;
+    private DatabaseReference reference, reference2;
 
     PermissionsChecker checker;
 
@@ -49,7 +58,7 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
 
     private int totalMasuk, cicilanKe;
 
-    private Double gajiPokok, uangMakan, pinjaman, gajiTotal, gajiDiterima, komisi, jumlahGajiPokok, totalUangMakan, sisaPinjaman, cicilan;
+    private Double gajiPokok, gajiLembur, uangMakan, pinjaman, gajiTotal, gajiDiterima, komisi, jumlahGajiPokok, totalUangMakan, sisaPinjaman, cicilan;
 
     private String nama, namaCabang, fixGajiTotal;
 
@@ -94,24 +103,33 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
 
         myViewHolder.tNama.setText(gajiConst.get(i).getNama());
 
+//        long date = System.currentTimeMillis();
+//        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH);
+//        String dateString = sdf.format(date);
+
 
 
         final String getkey = gajiConst.get(i).getKey();
         final String cabangkey = gajiConst.get(i).getCabang();
 
-        reference =  FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabangkey).child("Karyawan").child(getkey).child("Count_gaji");
-        reference.addValueEventListener(new ValueEventListener() {
+        reference =  FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabangkey).child("Karyawan").child(getkey).child("Count_gaji").child("Tanggal");
+        Query query1 = reference.orderByChild("keterangan").equalTo("Hadir");
+        query1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                Log.d("count", String.valueOf(dataSnapshot.getChildrenCount()));
+
                 totalMasuk = (int)dataSnapshot.getChildrenCount();
                 gajiPokok = Double.parseDouble(gajiConst.get(i).getGaji_pokok());
+                gajiLembur = Double.parseDouble(gajiConst.get(i).getGaji_lembur());
                 pinjaman = Double.parseDouble(gajiConst.get(i).getPinjaman());
                 uangMakan = Double.parseDouble(gajiConst.get(i).getUang_makan());
                 komisi = Double.parseDouble(gajiConst.get(i).getKompensasi());
 
                 totalUangMakan = totalMasuk * uangMakan;
                 jumlahGajiPokok = gajiPokok * totalMasuk;
-                gajiTotal = totalUangMakan + komisi + jumlahGajiPokok;
+                gajiTotal = totalUangMakan + komisi + jumlahGajiPokok + gajiLembur;
                 gajiDiterima = gajiTotal - pinjaman;
 
                 namaCabang = gajiConst.get(i).getNama_cabang();
@@ -149,9 +167,12 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
                 builder.setView(dialogView);
 
                 viewTotalCicilan = dialogView.findViewById(R.id.viewTotalCicilan);
-                viewCicilanPinjaman = dialogView.findViewById(R.id.viewCicilanPinjaman);
+//                viewCicilanPinjaman = dialogView.findViewById(R.id.viewCicilanPinjaman);
+                TextView viewReset = dialogView.findViewById(R.id.viewReset);
                 viewTotalGaji = dialogView.findViewById(R.id.viewTotalGaji);
                 viewNamaPegawai = dialogView.findViewById(R.id.namaPegawai);
+                CheckBox check_setor_pinjaman = dialogView.findViewById(R.id.check_setor_pinjaman);
+//                check_setor_pinjaman.setChecked(true);
 //                kurangPinjaman = dialogView.findViewById(R.id.kurangPinjaman);
 
                 print = dialogView.findViewById(R.id.btnPrint);
@@ -164,78 +185,73 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
                 Cursor myCursor = db.rawQuery("SELECT * FROM "+ "gaji" +" WHERE "+"nama"+" = '" + gajiConst.get(i).getNama().toString() + "'",null);
                 myCursor.moveToFirst();
 
-
-                if (myCursor.getCount()>0) {
-                    myCursor.moveToPosition(0);
-                    viewNamaPegawai.setText(myCursor.getString(1).toString());
-                    nama = myCursor.getString(1).toString();
-                    gajiTotal = Double.parseDouble(myCursor.getString(2));
-                    totalMasuk = Integer.parseInt(myCursor.getString(3));
-                    pinjaman = Double.parseDouble(myCursor.getString(4));
-                    cicilan = Double.parseDouble(myCursor.getString(5));
-                    cicilanKe = Integer.parseInt(myCursor.getString(6));
-                    komisi = Double.parseDouble(myCursor.getString(7));
-                    gajiPokok = Double.parseDouble(myCursor.getString(8));
-                    uangMakan = Double.parseDouble(myCursor.getString(9));
-                    gajiDiterima = Double.parseDouble(myCursor.getString(10));
-                    namaCabang = myCursor.getString(11);
-                    totalUangMakan = Double.parseDouble(myCursor.getString(12));
-
-                    jumlahGajiPokok = totalMasuk * gajiPokok;
-
-                    if (Double.parseDouble(myCursor.getString(4)) == 0){
-                        save.setEnabled(false);
-                    }else{
-                        save.setEnabled(true);
-                    }
-                }
-
-
-
-                viewTotalCicilan.setText(formatRupiah.format(pinjaman));
-                viewTotalGaji.setText(formatRupiah.format(gajiTotal));
-
-                pdf.setOnClickListener(new View.OnClickListener() {
+                DatabaseReference reference4 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabangkey).child("Karyawan").child(getkey);
+                //mengembalikan checked angsuran menjadi 0
+                reference4.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
-                    public void onClick(View view) {
-                        checker = new PermissionsChecker(context);
-                        mContext = context.getApplicationContext();
-                        ExportAct exportAct = new ExportAct();
-                        if (checker.lacksPermissions(REQUIRED_PERMISSION)) {
-                            PermissionsActivity.startActivityForResult((Activity) context, PERMISSION_REQUEST_CODE, REQUIRED_PERMISSION);
-                            Toast.makeText(context, "File Disimpan : "+FileUtils.getAppPath(mContext) + " " + nama+".pdf", Toast.LENGTH_LONG).show();
-                            exportAct.createPdf(FileUtils.getAppPath(mContext) + nama + ".pdf", nama, formatRupiah.format(komisi), formatRupiah.format(gajiPokok), formatRupiah.format(pinjaman), formatRupiah.format(uangMakan), formatRupiah.format(gajiTotal), formatRupiah.format(gajiDiterima), ""+namaCabang, Integer.toString(totalMasuk), formatRupiah.format(totalUangMakan), formatRupiah.format(jumlahGajiPokok));
-                        } else {
-                            exportAct.createPdf(FileUtils.getAppPath(mContext) + nama + ".pdf", nama, formatRupiah.format(komisi), formatRupiah.format(gajiPokok), formatRupiah.format(pinjaman), formatRupiah.format(uangMakan), formatRupiah.format(gajiTotal), formatRupiah.format(gajiDiterima), ""+namaCabang, Integer.toString(totalMasuk), formatRupiah.format(totalUangMakan), formatRupiah.format(jumlahGajiPokok));
-                            Toast.makeText(context, "File Disimpan : "+FileUtils.getAppPath(mContext) + " " + nama +".pdf", Toast.LENGTH_LONG).show();
-                        }
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        dataSnapshot.getRef().child("checked_angsuran").setValue(String.valueOf(0));
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
                     }
                 });
 
-                print.setOnClickListener(new View.OnClickListener() {
+                //set data dialog view
+                reference4.addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onClick(View view) {
-                        ((GajiAct)context).printGaji(view, nama, formatRupiah.format(komisi), formatRupiah.format(gajiPokok), formatRupiah.format(pinjaman), formatRupiah.format(uangMakan), formatRupiah.format(gajiTotal), formatRupiah.format(gajiDiterima), ""+namaCabang, Integer.toString(totalMasuk), formatRupiah.format(totalUangMakan), formatRupiah.format(jumlahGajiPokok));
-                    }
-                });
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        int Gpokok = Integer.parseInt(dataSnapshot.child("gaji_pokok").getValue().toString());
+                        int Umakan = Integer.parseInt(dataSnapshot.child("uang_makan").getValue().toString());
+                        int Glembur = Integer.parseInt(dataSnapshot.child("gaji_lembur").getValue().toString());
 
-                save.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        reference = FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabangkey).child("Karyawan").child(getkey);
-                        reference.addListenerForSingleValueEvent(new ValueEventListener() {
+                        viewNamaPegawai.setText(dataSnapshot.child("nama").getValue().toString());
+
+                        DatabaseReference reference3 =  FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabangkey)
+                                .child("Karyawan").child(getkey).child("Count_gaji").child("Tanggal");
+                        Query query2 = reference3.orderByChild("keterangan").equalTo("Hadir");
+                        //
+                        query2.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                if (pinjaman < Integer.parseInt(kurangPinjaman.getText().toString())){
-                                    Toast.makeText(context, "Nominal melebihi pinjaman!", Toast.LENGTH_SHORT).show();
-                                    kurangPinjaman.setError("Melebihi nominal pinjaman");
-                                    kurangPinjaman.requestFocus();
-                                }else{
-                                    sisaPinjaman = pinjaman - Integer.parseInt(kurangPinjaman.getText().toString());
-                                    pinjaman = sisaPinjaman;
-                                    dataSnapshot.getRef().child("pinjaman").setValue(df.format(sisaPinjaman).toString());
-                                }
-                                viewTotalCicilan.setText(formatRupiah.format(pinjaman));
+                                int countG = (int) dataSnapshot.getChildrenCount();
+
+                                viewTotalGaji.setText(formatRupiah.format(((Gpokok*countG)+(Umakan*countG))+Glembur));
+
+//                                DatabaseReference reference5 =  FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabangkey)
+//                                        .child("Karyawan").child(getkey).child("Count_gaji");
+//                                //
+//                                reference5.addValueEventListener(new ValueEventListener() {
+//                                    @Override
+//                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                        viewTotalGaji.setText(formatRupiah.format(Double.parseDouble(dataSnapshot.child("total_gaji")
+//                                                .getValue().toString())));
+//
+//                                    }
+//
+//                                    @Override
+//                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                                    }
+//                                });
+//                                //
+//                                reference5.addListenerForSingleValueEvent(new ValueEventListener() {
+//                                    @Override
+//                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//
+//                                        dataSnapshot.getRef().child("total_gaji").setValue(((Gpokok*countG)+(Umakan*countG)+Glembur));
+//
+//
+//                                    }
+//
+//                                    @Override
+//                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                                    }
+//                                });
+
                             }
 
                             @Override
@@ -244,9 +260,386 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
                             }
                         });
 
-                        Toast.makeText(context, "clicked!", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+
+
+                });
+
+                //kondisi checked or uchecked angsuran
+                reference2 =  FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabangkey).child("Karyawan").child(getkey);
+                reference2.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        viewTotalCicilan.setText(formatRupiah.format(Double.parseDouble(dataSnapshot.child("pinjaman").getValue().toString())));
+//                        viewCicilanPinjaman.setText("Cicilan ke : "+dataSnapshot.child("cicilan")
+//                                .getValue().toString());
+
+                        int aPinjaman = Integer.valueOf(dataSnapshot.child("pinjaman").getValue().toString());
+
+                        if (aPinjaman != 0){
+
+                            check_setor_pinjaman.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                                @Override
+                                public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+
+                                    int aPinjaman = Integer.valueOf(dataSnapshot.child("pinjaman").getValue().toString());
+                                    int aAngsuran = Integer.valueOf(dataSnapshot.child("angsuran_pasti").getValue().toString());
+//                                    int aCicilan = Integer.valueOf(dataSnapshot.child("cicilan").getValue().toString());
+
+                                    if(checked){
+                                        int hasil = aPinjaman - aAngsuran;
+//                                        int plusCicilan = aCicilan+1;
+                                        reference2.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                dataSnapshot.getRef().child("pinjaman").setValue(String.valueOf(hasil));
+                                                dataSnapshot.getRef().child("checked_angsuran").setValue(String.valueOf(aAngsuran));
+//                                                dataSnapshot.getRef().child("cicilan").setValue(String.valueOf(plusCicilan));
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+//                                    Log.d("kurang", String.valueOf(angka-20000));
+
+                                    }else{
+                                        int hasil = aPinjaman + aAngsuran;
+//                                        int minCicilan = aCicilan-1;
+                                        reference2.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                dataSnapshot.getRef().child("pinjaman").setValue(String.valueOf(hasil));
+                                                dataSnapshot.getRef().child("checked_angsuran").setValue(String.valueOf(0));
+//                                                dataSnapshot.getRef().child("cicilan").setValue(String.valueOf(minCicilan));
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+//                                    Log.d("tmabah", String.valueOf(angka+20000));
+                                    }
+
+                                }
+                            });
+
+                        }else {
+//
+//                            reference2.addListenerForSingleValueEvent(new ValueEventListener() {
+//                                @Override
+//                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                    dataSnapshot.getRef().child("cicilan").setValue(String.valueOf(0));
+//                                }
+//
+//                                @Override
+//                                public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                                }
+//                            });
+
+                            check_setor_pinjaman.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                                @Override
+                                public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+
+                                    if (checked){
+
+                                        Toast.makeText(context, "Sisa pinjaman 0", Toast.LENGTH_SHORT).show();
+                                    }
+
+                                }
+                            });
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
                     }
                 });
+
+
+
+//                if (myCursor.getCount()>0) {
+//                    myCursor.moveToPosition(0);
+//                    viewNamaPegawai.setText(myCursor.getString(1).toString());
+//                    nama = myCursor.getString(1).toString();
+//                    gajiTotal = Double.parseDouble(myCursor.getString(2));
+//                    totalMasuk = Integer.parseInt(myCursor.getString(3));
+//                    pinjaman = Double.parseDouble(myCursor.getString(4));
+//                    cicilan = Double.parseDouble(myCursor.getString(5));
+//                    cicilanKe = Integer.parseInt(myCursor.getString(6));
+//                    komisi = Double.parseDouble(myCursor.getString(7));
+//                    gajiPokok = Double.parseDouble(myCursor.getString(8));
+//                    uangMakan = Double.parseDouble(myCursor.getString(9));
+//                    gajiDiterima = Double.parseDouble(myCursor.getString(10));
+//                    namaCabang = myCursor.getString(11);
+//                    totalUangMakan = Double.parseDouble(myCursor.getString(12));
+//
+//                    jumlahGajiPokok = totalMasuk * gajiPokok;
+//
+//                    try{
+//
+//                        if (Double.parseDouble(myCursor.getString(4)) == 0){
+//                            save.setEnabled(false);
+//                        }else{
+//                            save.setEnabled(true);
+//                        }
+//
+//                    }catch (Exception e){
+//
+//                        Log.d("error1", e.getMessage());
+//                    }
+//
+//                }
+
+
+
+//                viewTotalCicilan.setText(formatRupiah.format(pinjaman));
+//                viewTotalGaji.setText(formatRupiah.format(gajiTotal));
+
+//                pdf.setOnClickListener(new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View view) {
+//                        checker = new PermissionsChecker(context);
+//                        mContext = context.getApplicationContext();
+//                        ExportAct exportAct = new ExportAct();
+//                        if (checker.lacksPermissions(REQUIRED_PERMISSION)) {
+//                            PermissionsActivity.startActivityForResult((Activity) context, PERMISSION_REQUEST_CODE, REQUIRED_PERMISSION);
+//                            Toast.makeText(context, "File Disimpan : "+FileUtils.getAppPath(mContext) + " " + nama+".pdf", Toast.LENGTH_LONG).show();
+//                            exportAct.createPdf(FileUtils.getAppPath(mContext) + nama + ".pdf", nama, formatRupiah.format(komisi), formatRupiah.format(gajiPokok), formatRupiah.format(pinjaman), formatRupiah.format(uangMakan), formatRupiah.format(gajiTotal), formatRupiah.format(gajiDiterima), ""+namaCabang, Integer.toString(totalMasuk), formatRupiah.format(totalUangMakan), formatRupiah.format(jumlahGajiPokok));
+//                        } else {
+//                            exportAct.createPdf(FileUtils.getAppPath(mContext) + nama + ".pdf", nama, formatRupiah.format(komisi), formatRupiah.format(gajiPokok), formatRupiah.format(pinjaman), formatRupiah.format(uangMakan), formatRupiah.format(gajiTotal), formatRupiah.format(gajiDiterima), ""+namaCabang, Integer.toString(totalMasuk), formatRupiah.format(totalUangMakan), formatRupiah.format(jumlahGajiPokok));
+//                            Toast.makeText(context, "File Disimpan : "+FileUtils.getAppPath(mContext) + " " + nama +".pdf", Toast.LENGTH_LONG).show();
+//                        }
+//                    }
+//                });
+
+                viewReset.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        new AlertDialog.Builder(context)
+                                .setTitle("Reset Data Gaji")
+                                .setMessage("Hal ini dilakukan jika sudah berhasil melakukan print gaji")
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int whichButton) {
+
+                                        DatabaseReference db2 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabangkey)
+                                                .child("Karyawan").child(getkey).child("Count_gaji");
+                                        db2.removeValue();
+                                    }})
+                                .setNegativeButton(android.R.string.no, null).show();
+
+                    }
+                });
+
+                pdf.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        alertDialog.hide();
+                        checker = new PermissionsChecker(context);
+                        mContext = context.getApplicationContext();
+                        ExportAct exportAct = new ExportAct();
+
+                        reference2.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                String pdfnama = dataSnapshot.child("nama").getValue().toString();
+                                String pdfnama_cabang = dataSnapshot.child("nama_cabang").getValue().toString();
+                                String pdfGpokok = formatRupiah.format(Double.parseDouble(dataSnapshot.child("gaji_pokok").getValue().toString()));
+                                int pdfGpokok2 = Integer.parseInt(dataSnapshot.child("gaji_pokok").getValue().toString());
+                                String pdfKomisi = formatRupiah.format(Double.parseDouble(dataSnapshot.child("gaji_lembur").getValue().toString()));
+                                int pdfKomisi2 = Integer.parseInt(dataSnapshot.child("gaji_lembur").getValue().toString());
+                                String pdfUmakan = formatRupiah.format(Double.parseDouble(dataSnapshot.child("uang_makan").getValue().toString()));
+                                int pdfUmakan2 = Integer.valueOf(dataSnapshot.child("uang_makan").getValue().toString());
+                                int pdfAngsuran = Integer.parseInt(dataSnapshot.child("checked_angsuran").getValue().toString());
+//                                String pdfCicilan = dataSnapshot.child("cicilan").getValue().toString();
+                                String pdfPinjaman = formatRupiah.format(Double.parseDouble(dataSnapshot.child("pinjaman").getValue().toString()));
+                                DatabaseReference reference3 =  FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabangkey)
+                                        .child("Karyawan").child(getkey).child("Count_gaji").child("Tanggal");
+                                Query query3 = reference3.orderByChild("keterangan").equalTo("Hadir");
+
+                                query3.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        int countG = (int) dataSnapshot.getChildrenCount();
+                                        int pdfGtotal = ((pdfGpokok2*countG)+(pdfUmakan2*countG)+pdfKomisi2);
+                                        int pdfGditerima = ((pdfGpokok2*countG)+(pdfUmakan2*countG))+pdfKomisi2-pdfAngsuran;
+//                                        Log.d("count", String.valueOf(dataSnapshot.getChildrenCount()+formatRupiah.format(pdfGpokok2*countG)));
+
+                                        if (checker.lacksPermissions(REQUIRED_PERMISSION)) {
+                                            PermissionsActivity.startActivityForResult((Activity) context, PERMISSION_REQUEST_CODE, REQUIRED_PERMISSION);
+                                            Toast.makeText(context, "File Disimpan : "+FileUtils.getAppPath(mContext) + " " + pdfnama+".pdf", Toast.LENGTH_SHORT).show();
+                                            exportAct.createPdf(FileUtils.getAppPath(mContext) + pdfnama + ".pdf", pdfnama, pdfKomisi, pdfGpokok, formatRupiah.format(pdfAngsuran), pdfUmakan, formatRupiah.format(pdfGtotal), formatRupiah.format(pdfGditerima), ""+pdfnama_cabang, Integer.toString(countG), formatRupiah.format(pdfUmakan2*countG), formatRupiah.format(pdfGpokok2*countG), "", pdfPinjaman);
+                                        } else {
+                                            exportAct.createPdf(FileUtils.getAppPath(mContext) + pdfnama + ".pdf", pdfnama, pdfKomisi, pdfGpokok, formatRupiah.format(pdfAngsuran), pdfUmakan, formatRupiah.format(pdfGtotal), formatRupiah.format(pdfGditerima), ""+pdfnama_cabang, Integer.toString(countG), formatRupiah.format(pdfUmakan2*countG), formatRupiah.format(pdfGpokok2*countG), "", pdfPinjaman);
+                                            Toast.makeText(context, "File Disimpan : "+FileUtils.getAppPath(mContext) + " " + pdfnama +".pdf", Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+
+                        final Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                reference2.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                         int xpinjam = Integer.parseInt(dataSnapshot.child("checked_angsuran").getValue().toString());
+                                         int xpinjaman = Integer.parseInt(dataSnapshot.child("pinjaman").getValue().toString());
+//                                         int xcicilan = Integer.parseInt(dataSnapshot.child("cicilan").getValue().toString());
+//                                         int ncicilan = xcicilan -1;
+                                         int npinjam = xpinjam+xpinjaman;
+
+                                        reference2.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                dataSnapshot.getRef().child("pinjaman").setValue(String.valueOf(npinjam));
+//                                                dataSnapshot.getRef().child("cicilan").setValue(String.valueOf(ncicilan));
+
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+
+                            }
+                        }, 2000);
+
+
+                    }
+
+                });
+
+                print.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        reference2.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                String printnama = dataSnapshot.child("nama").getValue().toString();
+                                String printnama_cabang = dataSnapshot.child("nama_cabang").getValue().toString();
+                                String printGpokok = formatRupiah.format(Double.parseDouble(dataSnapshot.child("gaji_pokok").getValue().toString()));
+                                int printGpokok2 = Integer.parseInt(dataSnapshot.child("gaji_pokok").getValue().toString());
+                                String printKomisi = formatRupiah.format(Double.parseDouble(dataSnapshot.child("gaji_lembur").getValue().toString()));
+                                int printKomisi2 = Integer.parseInt(dataSnapshot.child("gaji_lembur").getValue().toString());
+                                String printUmakan = formatRupiah.format(Double.parseDouble(dataSnapshot.child("uang_makan").getValue().toString()));
+                                int printUmakan2 = Integer.valueOf(dataSnapshot.child("uang_makan").getValue().toString());
+                                int printAngsuran = Integer.parseInt(dataSnapshot.child("checked_angsuran").getValue().toString());
+//                                String printCicilan = dataSnapshot.child("cicilan").getValue().toString();
+                                String printPinjaman = formatRupiah.format(Double.parseDouble(dataSnapshot.child("pinjaman").getValue().toString()));
+//                                    String printPinjaman = formatRupiah.format(Double.parseDouble(dataSnapshot.child("pinjaman").getValue().toString()));
+                                DatabaseReference reference3 =  FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabangkey)
+                                        .child("Karyawan").child(getkey).child("Count_gaji").child("Tanggal");
+                                Query query3 = reference3.orderByChild("keterangan").equalTo("Hadir");
+                                query3.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        int countG = (int) dataSnapshot.getChildrenCount();
+                                        int printGtotal = ((printGpokok2*countG)+(printUmakan2*countG)+printKomisi2);
+                                        int printGditerima = ((printGpokok2*countG)+(printUmakan2*countG))+printKomisi2-printAngsuran;
+//                                        Log.d("count", String.valueOf(dataSnapshot.getChildrenCount()+formatRupiah.format(pdfGpokok2*countG)));
+
+                                        ((GajiAct)context).printGaji(view, printnama, printKomisi, printGpokok, formatRupiah.format(printAngsuran), printUmakan, formatRupiah.format(printGtotal), formatRupiah.format(printGditerima), ""+printnama_cabang, Integer.toString(countG), formatRupiah.format(printUmakan2*countG), formatRupiah.format(printGpokok2*countG), "", printPinjaman);
+
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+
+
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+
+//                        ((GajiAct)context).printGaji(view, nama, formatRupiah.format(komisi), formatRupiah.format(gajiPokok), formatRupiah.format(pinjaman), formatRupiah.format(uangMakan), formatRupiah.format(gajiTotal), formatRupiah.format(gajiDiterima), ""+namaCabang, Integer.toString(totalMasuk), formatRupiah.format(totalUangMakan), formatRupiah.format(jumlahGajiPokok));
+
+                    }
+                });
+
+//                try{
+//
+//                    save.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View view) {
+//                            reference = FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabangkey).child("Karyawan").child(getkey);
+//                            reference.addListenerForSingleValueEvent(new ValueEventListener() {
+//                                @Override
+//                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                    if (pinjaman < Integer.parseInt(kurangPinjaman.getText().toString())){
+//                                        Toast.makeText(context, "Nominal melebihi pinjaman!", Toast.LENGTH_SHORT).show();
+//                                        kurangPinjaman.setError("Melebihi nominal pinjaman");
+//                                        kurangPinjaman.requestFocus();
+//                                    }else{
+//                                        sisaPinjaman = pinjaman - Integer.parseInt(kurangPinjaman.getText().toString());
+//                                        pinjaman = sisaPinjaman;
+//                                        dataSnapshot.getRef().child("pinjaman").setValue(df.format(sisaPinjaman).toString());
+//                                    }
+//                                    viewTotalCicilan.setText(formatRupiah.format(pinjaman));
+//                                }
+//
+//                                @Override
+//                                public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                                }
+//                            });
+//
+//                            Toast.makeText(context, "clicked!", Toast.LENGTH_SHORT).show();
+//                        }
+//                    });
+//
+//                }catch (Exception e){
+//                    Log.d("error2", e.getMessage());
+//                }
+
 
 
             }

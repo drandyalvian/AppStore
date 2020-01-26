@@ -35,6 +35,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -415,7 +416,7 @@ public class DataKaryawanAct extends AppCompatActivity implements DataKaryawanAd
                                 String[] sampleString = new String[lengthku];
                                 int clength = lengthku+1;
                                 Log.d("Gaji " ,"kolom"+clength+"baris"+2 );
-                                Label labelgaji = new Label(clength, 2, "Gaji");
+                                Label labelgaji = new Label(clength, 2, "Gaji Total");
 
 
                                 for (int j = 0, j2 = 1; j < lengthku; j++, j2++) {
@@ -455,7 +456,9 @@ public class DataKaryawanAct extends AppCompatActivity implements DataKaryawanAd
 
                                                 final int x = i;
                                                 final int x2 = i2;
-                                                int angkaku = Integer.parseInt(users.get(i).getGaji_pokok());
+                                                int angkaGaji = Integer.parseInt(users.get(i).getGaji_pokok());
+                                                int angkaUangMakan = Integer.parseInt(users.get(i).getUang_makan());
+                                                int angkaLembur = Integer.parseInt(users.get(i).getGaji_lembur());
                                                 reference4 = FirebaseDatabase.getInstance().getReference()
                                                         .child("Cabang").child(cabang).child("Recap").child(String.valueOf(users.get(i).getKey_name())).child(fbulan+" "+ftahun);
                                                 Query query4 = reference4.orderByChild("keterangan").equalTo("Hadir");
@@ -465,10 +468,12 @@ public class DataKaryawanAct extends AppCompatActivity implements DataKaryawanAd
                                                     @Override
                                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                                        int jumlah = (int) (angkaku*dataSnapshot.getChildrenCount());
+                                                        int jumlahGaji = (int) (angkaGaji*dataSnapshot.getChildrenCount());
+                                                        int jumlahUangMakan = (int) (angkaUangMakan*dataSnapshot.getChildrenCount());
+                                                        String gajiTotal = NumberFormat.getNumberInstance().format(Double.parseDouble(String.valueOf(jumlahGaji+jumlahUangMakan+angkaLembur)));
 
-                                                        Label labelgaji2 = new Label(clength, x2, String.valueOf(jumlah));
-                                                        Log.d("aKolom " +clength +" baris "+x2 ,String.valueOf(jumlah));
+                                                        Label labelgaji2 = new Label(clength, x2, "Rp."+gajiTotal);
+                                                        Log.d("aKolom " +clength +" baris "+x2 ,"Rp. "+gajiTotal);
 //                                                        Log.d("aKolom " +clength +" baris "+x2 ,String.valueOf(dataSnapshot.getChildrenCount()));
 
                                                         try {

@@ -69,7 +69,7 @@ public class ExportAct extends AppCompatActivity {
                 if (checker.lacksPermissions(REQUIRED_PERMISSION)) {
                     PermissionsActivity.startActivityForResult(ExportAct.this, PERMISSION_REQUEST_CODE, REQUIRED_PERMISSION);
                 } else {
-                    createPdf(FileUtils.getAppPath(mContext),"","","","","","","","","", "", "");
+                    createPdf(FileUtils.getAppPath(mContext),"","","","","","","","","", "", "","","");
                 }
 
 
@@ -92,7 +92,7 @@ public class ExportAct extends AppCompatActivity {
 
     }
 
-    public void createPdf(String dest, String nama, String komisi, String gajiPokok, String pinjaman, String uangMakan, String gajiTotal, String gajiDiterima, String namaCabang, String totalMasuk, String totalUangMakan, String jumlahGajiPokok) {
+    public void createPdf(String dest, String nama, String komisi, String gajiPokok, String pinjaman, String uangMakan, String gajiTotal, String gajiDiterima, String namaCabang, String totalMasuk, String totalUangMakan, String jumlahGajiPokok, String hitungCicilan, String sisaPinjaman) {
 
         if (new File(dest).exists()) {
             new File(dest).delete();
@@ -223,7 +223,7 @@ public class ExportAct extends AppCompatActivity {
             mGajiTotalParagrap.add(mGajiTotalNominal);
             document.add(mGajiTotalParagrap);
 
-            Chunk mPeminjaman= new Chunk("Peminjaman :", mOrderIdValueFont);
+            Chunk mPeminjaman= new Chunk("Bayar Angsuran"+hitungCicilan, mOrderIdValueFont);
             Paragraph mPeminjamanParagrap = new Paragraph(mPeminjaman);
             mPeminjamanParagrap.add(new Chunk(glue));
             Chunk mPeminjamanNominal = new Chunk(pinjaman+"", mOrderIdValueFont);
@@ -240,6 +240,13 @@ public class ExportAct extends AppCompatActivity {
             Chunk mGajiDiterimaNominal = new Chunk(gajiDiterima+"", mOrderIdValueFont);
             mGajiDiterimaParagrap.add(mGajiDiterimaNominal);
             document.add(mGajiDiterimaParagrap);
+
+            Chunk mSisaPinjamanLabel= new Chunk("Sisa Pinjaman:", mOrderIdValueFont);
+            Paragraph mSisaPinjamanParagrap = new Paragraph(mSisaPinjamanLabel);
+            mSisaPinjamanParagrap .add(new Chunk(glue));
+            Chunk mSisaPinjamanNominal = new Chunk(sisaPinjaman+"", mOrderIdValueFont);
+            mSisaPinjamanParagrap.add(mSisaPinjamanNominal);
+            document.add(mSisaPinjamanParagrap);
 
             document.close();
 

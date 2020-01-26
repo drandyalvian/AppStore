@@ -105,6 +105,9 @@ public class AddKaryawanAct extends AppCompatActivity {
                         "0",
                         "0",
                         "0",
+                        "0",
+                        "0",
+                        "0",
                         "0");
 
 

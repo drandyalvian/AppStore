@@ -69,7 +69,7 @@ public class DashbordAct extends AppCompatActivity{
 
         //set tgl
         long date = System.currentTimeMillis();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH);
         String dateString = sdf.format(date);
 
         SimpleDateFormat sdflocal = new SimpleDateFormat("EEEE, dd MMMM yyyy", Locale.getDefault());

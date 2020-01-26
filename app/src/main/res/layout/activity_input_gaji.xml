@@ -181,7 +181,7 @@
                         android:textSize="16sp"
                         android:textColor="@color/color5"
                         android:layout_marginTop="20dp"
-                        android:text="Jumlah"/>
+                        android:text="Jumlah Pinjaman"/>
                     <EditText
                         android:id="@+id/xpinjaman"
                         android:layout_width="match_parent"

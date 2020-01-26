@@ -5,16 +5,17 @@ import java.io.Serializable;
 public class GajiConst implements Serializable {
 
     String nama,posisi,alamat,gender,nama_cabang, cabang, umur, telepon, key, gaji_lembur,
-            gaji_pokok, kompensasi, pinjaman, uang_makan, tgl_gaji, key_name;
+            gaji_pokok, kompensasi, pinjaman, uang_makan, tgl_gaji, key_name, angsuran_pasti, checked_angsuran, cicilan;
 
     public GajiConst() {
 
     }
 
-
-    public GajiConst(String nama,String key_name, String posisi, String alamat, String gender, String nama_cabang, String cabang, String umur, String telepon, String key, String gaji_lembur, String gaji_pokok, String kompensasi, String pinjaman, String uang_makan, String tgl_gaji) {
+    public GajiConst(String nama, String key_name, String posisi, String alamat, String gender, String nama_cabang, String cabang,
+                     String umur, String telepon, String key, String gaji_lembur, String gaji_pokok, String kompensasi,
+                     String pinjaman, String uang_makan, String tgl_gaji,  String angsuran_pasti,
+                     String checked_angsuran, String cicilan) {
         this.nama = nama;
-        this.key_name = key_name;
         this.posisi = posisi;
         this.alamat = alamat;
         this.gender = gender;
@@ -29,15 +30,10 @@ public class GajiConst implements Serializable {
         this.pinjaman = pinjaman;
         this.uang_makan = uang_makan;
         this.tgl_gaji = tgl_gaji;
-
-    }
-
-    public String getKey_name() {
-        return key_name;
-    }
-
-    public void setKey_name(String key_name) {
         this.key_name = key_name;
+        this.angsuran_pasti = angsuran_pasti;
+        this.checked_angsuran = checked_angsuran;
+        this.cicilan = cicilan;
     }
 
     public String getNama() {
@@ -158,6 +154,38 @@ public class GajiConst implements Serializable {
 
     public void setTgl_gaji(String tgl_gaji) {
         this.tgl_gaji = tgl_gaji;
+    }
+
+    public String getKey_name() {
+        return key_name;
+    }
+
+    public void setKey_name(String key_name) {
+        this.key_name = key_name;
+    }
+
+    public String getAngsuran_pasti() {
+        return angsuran_pasti;
+    }
+
+    public void setAngsuran_pasti(String angsuran_pasti) {
+        this.angsuran_pasti = angsuran_pasti;
+    }
+
+    public String getChecked_angsuran() {
+        return checked_angsuran;
+    }
+
+    public void setChecked_angsuran(String checked_angsuran) {
+        this.checked_angsuran = checked_angsuran;
+    }
+
+    public String getCicilan() {
+        return cicilan;
+    }
+
+    public void setCicilan(String cicilan) {
+        this.cicilan = cicilan;
     }
 }
 

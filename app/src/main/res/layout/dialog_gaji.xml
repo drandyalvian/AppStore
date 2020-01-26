@@ -39,16 +39,28 @@
             android:layout_marginTop="20dp"
             android:text="Total Gaji"/>
 
+
+<!--        <TextView-->
+<!--            android:id="@+id/viewCicilanPinjaman"-->
+<!--            android:layout_width="fill_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:fontFamily="@font/mlight"-->
+<!--            android:textSize="16sp"-->
+<!--            android:gravity="right"-->
+<!--            android:textColor="@color/color5"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            android:text="Cicilan ke : xx"/>-->
+
         <TextView
-            android:id="@+id/viewCicilanPinjaman"
+            android:id="@+id/viewReset"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/mlight"
+            android:fontFamily="@font/mregular"
             android:textSize="16sp"
             android:gravity="right"
-            android:textColor="@color/color5"
+            android:textColor="#FF0000"
             android:layout_marginTop="20dp"
-            android:text="Cicilan ke : xx"/>
+            android:text="Reset"/>
 
     </LinearLayout>
 

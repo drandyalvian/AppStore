@@ -174,7 +174,7 @@ public class ListAbsensiAdmin extends AppCompatActivity {
         DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("Cabang").child(nCabang).child("Karyawan").child(nKaryawan).child("Absensi").child(key);
         db.removeValue();
         DatabaseReference db2 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(nCabang)
-                .child("Karyawan").child(nKaryawan).child("Count_gaji").child(key);
+                .child("Karyawan").child(nKaryawan).child("Count_gaji").child("Tanggal").child(key);
         db2.removeValue();
         DatabaseReference db3 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(nCabang)
                 .child("CountAbsen").child(key).child(nKaryawan);
@@ -184,47 +184,6 @@ public class ListAbsensiAdmin extends AppCompatActivity {
         db4.removeValue();
     }
 
-    private void addAbsen2(String tanggal, String sket) {
-        // tambahkan semua ke dialog
-        DateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
-        Date date = new Date();
-        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC+7"));
-
-        DatabaseReference db = FirebaseDatabase.getInstance().getReference().child("Cabang").child(nCabang).child("Karyawan").child(nKaryawan);
-        ListAbsensiConst absensiConst = new ListAbsensiConst(
-                sket,
-                tanggal,
-                tanggal,
-                tanggal.substring(3)
-
-
-        );
-
-        DatabaseReference db3 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(nCabang);
-        CountAbsen countAbsen = new CountAbsen(
-                nKaryawan,nKaryawan, sket
-        );
-
-
-        DatabaseReference db4 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(nCabang).child("Recap").child(nKaryawan);
-        RecapAbsen recapAbsen = new RecapAbsen(
-                sket,tanggal
-        );
-
-        db.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                db.child("Absensi").child(tanggal).setValue(absensiConst);
-                db3.child("CountAbsen").child(tanggal).child(nKaryawan).setValue(countAbsen);
-                db4.child(tanggal.substring(3)).child(tanggal).setValue(recapAbsen);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-    }
 
     private void addAbsen(String tanggal, String sket) {
         // tambahkan semua ke dialog
@@ -248,7 +207,7 @@ public class ListAbsensiAdmin extends AppCompatActivity {
         );
 
         CountGajiEntity entity = new CountGajiEntity(
-                dateFormat.format(date),dateFormat.format(date)
+                dateFormat.format(date),dateFormat.format(date), sket
         );
 
         DatabaseReference db4 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(nCabang).child("Recap").child(nKaryawan);
@@ -260,7 +219,7 @@ public class ListAbsensiAdmin extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 db.child("Absensi").child(tanggal).setValue(absensiConst);
-                db.child("Count_gaji").child(tanggal).setValue(entity);
+                db.child("Count_gaji").child("Tanggal").child(tanggal).setValue(entity);
                 db3.child("CountAbsen").child(tanggal).child(nKaryawan).setValue(countAbsen);
                 db4.child(tanggal.substring(3)).child(tanggal).setValue(recapAbsen);
             }
@@ -317,20 +276,8 @@ public class ListAbsensiAdmin extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if (sket.getSelectedItem().toString().equals("Alpha")){
-
-                    //data karyawan, recap,
-                    addAbsen2(tanggalAbsen.getText().toString(), sket.getSelectedItem().toString());
-                    alertDialog.hide();
-
-                }else if(sket.getSelectedItem().toString().equals("Hadir")){
-                    //data karyawan, recap, count absen, count gaji
-                    addAbsen(tanggalAbsen.getText().toString(), sket.getSelectedItem().toString());
-                    alertDialog.hide();
-                }
-
-//                addAbsen(tanggalAbsen.getText().toString(), sket.getSelectedItem().toString());
-//                alertDialog.hide();
+                addAbsen(tanggalAbsen.getText().toString(), sket.getSelectedItem().toString());
+                alertDialog.hide();
             }
         });
 

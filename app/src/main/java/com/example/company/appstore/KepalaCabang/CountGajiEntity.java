@@ -3,11 +3,20 @@ package com.example.company.appstore.KepalaCabang;
 
 public class CountGajiEntity {
 
-    private String tanggal, key;
+    private String tanggal, key, keterangan;
 
-    public CountGajiEntity(String tanggal, String key) {
+    public CountGajiEntity(String tanggal, String key, String keterangan) {
         this.tanggal = tanggal;
         this.key = key;
+        this.keterangan = keterangan;
+    }
+
+    public String getTanggal() {
+        return tanggal;
+    }
+
+    public void setTanggal(String tanggal) {
+        this.tanggal = tanggal;
     }
 
     public String getKey() {
@@ -18,11 +27,11 @@ public class CountGajiEntity {
         this.key = key;
     }
 
-    public String getTanggal() {
-        return tanggal;
+    public String getKeterangan() {
+        return keterangan;
     }
 
-    public void setTanggal(String tanggal) {
-        this.tanggal = tanggal;
+    public void setKeterangan(String keterangan) {
+        this.keterangan = keterangan;
     }
 }
