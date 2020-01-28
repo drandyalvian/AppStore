@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +18,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.company.appstore.Owner.DataKaryawanConst;
+import com.example.company.appstore.Owner.InputLaporanOwner;
 import com.example.company.appstore.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -27,7 +30,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 
 public class InputLaporanUangAct extends AppCompatActivity  {
@@ -39,7 +45,7 @@ public class InputLaporanUangAct extends AppCompatActivity  {
     private Button addtgl,btnsave, back;
     EditText xnominal;
 
-    DatabaseReference reference, reference2, reference3;
+    DatabaseReference reference, reference2, reference3, reference4, reference5,  reference6,reference7, reference10;;
     String USERNAME_KEY = "usernamekey";
     String username_key ="";
     String username_key_new ="";
@@ -75,6 +81,11 @@ public class InputLaporanUangAct extends AppCompatActivity  {
                 .child(username_key_new).child("CountAbsen").child(dateString);
         reference3 = FirebaseDatabase.getInstance().getReference().child("Cabang")
                 .child(username_key_new).child("CekLaporan").child(dateString);
+        reference4 =  FirebaseDatabase.getInstance().getReference().child("Cabang")
+                .child(username_key_new).child("Karyawan");
+
+        reference10 = FirebaseDatabase.getInstance().getReference().child("Cabang")
+                .child(username_key_new).child("CountKomisi");
 
 
         addtgl.setOnClickListener(new View.OnClickListener() {
@@ -192,7 +203,7 @@ public class InputLaporanUangAct extends AppCompatActivity  {
                                             }
                                         });
 
-                                    }else if (count == 9){
+                                    }else if (count == 9 || count ==10){
                                         double jumlah = jml*25 * 0.17;
                                         DecimalFormat df = new DecimalFormat("###.#");
                                         dataSnapshot.getRef().child("nominal").setValue(String.valueOf(df.format(jumlah)));
@@ -208,6 +219,9 @@ public class InputLaporanUangAct extends AppCompatActivity  {
 
                                             }
                                         });
+                                    }else if (count > 10){
+                                        Toast.makeText(InputLaporanUangAct.this,
+                                                "tidak masuk dalam rumus, Jumlah karyawan "+count+", maksimal 10 orang", Toast.LENGTH_SHORT).show();
                                     }
 
 
@@ -228,6 +242,317 @@ public class InputLaporanUangAct extends AppCompatActivity  {
                             Toast.makeText(InputLaporanUangAct.this,
                                     "Jumlah karyawan yang hadir "+count+", minimal 4 orang", Toast.LENGTH_LONG).show();
                         }
+
+                        final Handler handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                //komisi perhari
+                                reference4.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                        Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+
+                                        List<DataKaryawanConst> users = new ArrayList<>();
+                                        while (iterator.hasNext()) {
+                                            DataSnapshot dataSnapshotChild = iterator.next();
+                                            DataKaryawanConst name = dataSnapshotChild.getValue(DataKaryawanConst.class);
+                                            users.add(name);
+                                        }
+
+                                        int lengthUser = (int) dataSnapshot.getChildrenCount();
+
+                                        try{
+
+                                            for (int u = 0 ; u < lengthUser; u++){
+
+                                                reference5 = FirebaseDatabase.getInstance().getReference().child("Cabang")
+                                                        .child(username_key_new).child("CountKomisi").child(users.get(u).getKey_name());
+
+                                                Query query1 = reference5.child("Absensi").orderByKey().limitToLast(1);
+                                                int finalU = u;
+                                                query1.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                        for (DataSnapshot child: dataSnapshot.getChildren()) {
+                                                            String keyTanggal = child.getKey();
+
+                                                            DatabaseReference reference7 = FirebaseDatabase.getInstance().getReference().child("Cabang")
+                                                                    .child(username_key_new).child("CountKomisi").child(users.get(finalU).getKey_name());
+                                                            reference7.child("Absensi").child(keyTanggal).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                @Override
+                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                    Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+
+                                                                    List<ListAbsensiConst> absens = new ArrayList<>();
+                                                                    while (iterator.hasNext()) {
+                                                                        DataSnapshot dataSnapshotChild = iterator.next();
+                                                                        ListAbsensiConst keyku = dataSnapshotChild.getValue(ListAbsensiConst.class);
+                                                                        absens.add(keyku);
+                                                                    }
+
+                                                                    int lengtAbsen = (int) dataSnapshot.getChildrenCount();
+
+                                                                    for (int i = 0; i < lengtAbsen; i++){
+
+//                                            Log.d("Coba",String.valueOf(absens.get(i).getKeterangan()));
+                                                                        if (absens.get(i).getKeterangan().equals("Hadir")){
+
+                                                                            reference3.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                @Override
+                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                    Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+
+                                                                                    List<LaporanUangConst> lapUang = new ArrayList<>();
+                                                                                    while (iterator.hasNext()) {
+                                                                                        DataSnapshot dataSnapshotChild = iterator.next();
+                                                                                        LaporanUangConst keyku = dataSnapshotChild.getValue(LaporanUangConst.class);
+                                                                                        lapUang.add(keyku);
+                                                                                    }
+
+                                                                                    int lengthLapUang = (int) dataSnapshot.getChildrenCount();
+                                                                                    for (int l = 0; l < lengthLapUang; l++){
+
+                                                                                        int nominal = Integer.parseInt(lapUang.get(l).getNominal());
+                                                                                        int hasilNominal = nominal*1;
+
+                                                                                        DatabaseReference reference8 = FirebaseDatabase.getInstance().getReference().child("Cabang")
+                                                                                                .child(username_key_new).child("CountKomisi").child(users.get(finalU).getKey_name());
+                                                                                        Query query2 = reference8.child("KomisiPerhari").child(keyTanggal);
+                                                                                        query2.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                            @Override
+                                                                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                dataSnapshot.getRef().child("nominal").setValue(String.valueOf(hasilNominal));
+                                                                                                dataSnapshot.getRef().child("key").setValue(users.get(finalU).getKey_name());
+
+                                                                                            }
+
+                                                                                            @Override
+                                                                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                            }
+                                                                                        });
+
+                                                                                    }
+
+                                                                                }
+
+                                                                                @Override
+                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                }
+                                                                            });
+
+                                                                        }else{
+
+                                                                            reference3.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                @Override
+                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                    Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+
+                                                                                    List<LaporanUangConst> lapUang = new ArrayList<>();
+                                                                                    while (iterator.hasNext()) {
+                                                                                        DataSnapshot dataSnapshotChild = iterator.next();
+                                                                                        LaporanUangConst key = dataSnapshotChild.getValue(LaporanUangConst.class);
+                                                                                        lapUang.add(key);
+                                                                                    }
+
+                                                                                    int lengthLapUang = (int) dataSnapshot.getChildrenCount();
+                                                                                    for (int l = 0; l < lengthLapUang; l++){
+
+                                                                                        int nominal = Integer.parseInt(lapUang.get(l).getNominal());
+                                                                                        int hasilNominal = nominal*0;
+                                                                                        DatabaseReference reference8 = FirebaseDatabase.getInstance().getReference().child("Cabang")
+                                                                                                .child(username_key_new).child("CountKomisi").child(users.get(finalU).getKey_name());
+                                                                                        Query query2 = reference8.child("KomisiPerhari").child(keyTanggal);
+                                                                                        query2.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                            @Override
+                                                                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                dataSnapshot.getRef().child("nominal").setValue(String.valueOf(hasilNominal));
+                                                                                                dataSnapshot.getRef().child("key").setValue(users.get(finalU).getKey_name());
+
+                                                                                            }
+
+                                                                                            @Override
+                                                                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                            }
+                                                                                        });
+
+                                                                                    }
+
+                                                                                }
+
+                                                                                @Override
+                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                }
+                                                                            });
+
+                                                                        }
+
+                                                                    }
+
+
+                                                                }
+
+                                                                @Override
+                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                }
+                                                            });
+
+                                                        }
+
+
+
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                                                });
+
+                                            }
+
+                                        }catch (Exception e){
+
+
+                                        }
+
+
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+
+
+                                    }
+                                });
+
+                                //total Komisi
+                                reference4.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                        Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+
+                                        List<DataKaryawanConst> users = new ArrayList<>();
+                                        while (iterator.hasNext()) {
+                                            DataSnapshot dataSnapshotChild = iterator.next();
+                                            DataKaryawanConst name = dataSnapshotChild.getValue(DataKaryawanConst.class);
+                                            users.add(name);
+                                        }
+
+                                        int lengthUser = (int) dataSnapshot.getChildrenCount();
+
+                                        try {
+
+                                            for (int i = 0 ; i < lengthUser ; i++){
+
+                                                DatabaseReference reference9 = FirebaseDatabase.getInstance().getReference().child("Cabang")
+                                                        .child(username_key_new).child("CountKomisi").child(users.get(i).getKey_name());
+
+                                                reference9.child("KomisiPerhari").addValueEventListener(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                        Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+
+                                                        List<LaporanUangConst> komisis = new ArrayList<>();
+                                                        while (iterator.hasNext()) {
+                                                            DataSnapshot dataSnapshotChild = iterator.next();
+                                                            LaporanUangConst nkomisi = dataSnapshotChild.getValue(LaporanUangConst.class);
+                                                            komisis.add(nkomisi);
+                                                        }
+
+                                                        int lengthuang = (int) dataSnapshot.getChildrenCount();
+
+                                                        int hasil = 0;
+
+                                                        try {
+
+                                                            for (int u = 0 ; u < lengthuang; u++){
+
+                                                                hasil +=  Integer.valueOf(komisis.get(u).getNominal());
+                                                                Log.d("Hasil", String.valueOf(hasil));
+                                                                reference10 = FirebaseDatabase.getInstance().getReference().child("Cabang")
+
+                                                                        .child(username_key_new).child("CountKomisi").child(komisis.get(u).getKey())
+                                                                        .child("TotalKomisi");
+                                                                reference7 = FirebaseDatabase.getInstance().getReference().child("Cabang")
+                                                                        .child(username_key_new).child("Karyawan").child(komisis.get(u).getKey());
+                                                            }
+
+                                                        }catch (Exception e){
+
+                                                        }
+
+                                                        int finalHasil = hasil;
+                                                        reference10.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                            @Override
+                                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                dataSnapshot.getRef().child("total_komisi").setValue(String.valueOf(finalHasil));
+
+                                                            }
+
+                                                            @Override
+                                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                            }
+                                                        });
+
+                                                        reference7.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                            @Override
+                                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                dataSnapshot.getRef().child("kompensasi").setValue(String.valueOf(finalHasil));
+                                                            }
+
+                                                            @Override
+                                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                            }
+                                                        });
+
+
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                                                });
+
+                                            }
+
+                                        }catch (Exception e){
+
+                                        }
+
+
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+
+
+                            }
+                        }, 1000);
 
                     }
                 });

@@ -459,6 +459,7 @@ public class DataKaryawanAct extends AppCompatActivity implements DataKaryawanAd
                                                 int angkaGaji = Integer.parseInt(users.get(i).getGaji_pokok());
                                                 int angkaUangMakan = Integer.parseInt(users.get(i).getUang_makan());
                                                 int angkaLembur = Integer.parseInt(users.get(i).getGaji_lembur());
+                                                int angkaKomisi = Integer.parseInt(users.get(i).getKompensasi());
                                                 reference4 = FirebaseDatabase.getInstance().getReference()
                                                         .child("Cabang").child(cabang).child("Recap").child(String.valueOf(users.get(i).getKey_name())).child(fbulan+" "+ftahun);
                                                 Query query4 = reference4.orderByChild("keterangan").equalTo("Hadir");
@@ -470,7 +471,7 @@ public class DataKaryawanAct extends AppCompatActivity implements DataKaryawanAd
 
                                                         int jumlahGaji = (int) (angkaGaji*dataSnapshot.getChildrenCount());
                                                         int jumlahUangMakan = (int) (angkaUangMakan*dataSnapshot.getChildrenCount());
-                                                        String gajiTotal = NumberFormat.getNumberInstance().format(Double.parseDouble(String.valueOf(jumlahGaji+jumlahUangMakan+angkaLembur)));
+                                                        String gajiTotal = NumberFormat.getNumberInstance().format(Double.parseDouble(String.valueOf(jumlahGaji+jumlahUangMakan+angkaLembur+angkaKomisi)));
 
                                                         Label labelgaji2 = new Label(clength, x2, "Rp."+gajiTotal);
                                                         Log.d("aKolom " +clength +" baris "+x2 ,"Rp. "+gajiTotal);

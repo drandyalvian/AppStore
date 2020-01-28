@@ -34,6 +34,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.ButterKnife;
@@ -47,7 +49,7 @@ public class LaporanOwnerAct extends AppCompatActivity implements LaporanUangAda
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<LaporanUangConst> laporanUangConsts;
-    DatabaseReference reference, reference2;
+    DatabaseReference reference, reference2, reference3, reference4;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +83,16 @@ public class LaporanOwnerAct extends AppCompatActivity implements LaporanUangAda
                 .child(cabang).child("LaporanUang");
 
         reference2 = FirebaseDatabase.getInstance().getReference().child("Cabang")
-                .child(cabang).child("CekLaporan").child(dateString);
+                .child(cabang).child("CekLaporan");
+
+        reference3 = FirebaseDatabase.getInstance().getReference().child("Cabang")
+                .child(cabang).child("Karyawan");
+
+        reference4 = FirebaseDatabase.getInstance().getReference().child("Cabang")
+                .child(cabang).child("CountKomisi");
+
+
+
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -138,12 +149,57 @@ public class LaporanOwnerAct extends AppCompatActivity implements LaporanUangAda
                     Toast.makeText(LaporanOwnerAct.this,"success delete", Toast.LENGTH_SHORT).show();
                 }
             });
-            reference2.child(laporanUangConst.getKey()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+            reference2.child(laporanUangConst.getKey()).child(laporanUangConst.getKey()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void aVoid) {
 
                 }
             });
+
+            reference3.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+
+                    List<DataKaryawanConst> users = new ArrayList<>();
+                    while (iterator.hasNext()) {
+                        DataSnapshot dataSnapshotChild = iterator.next();
+                        DataKaryawanConst name = dataSnapshotChild.getValue(DataKaryawanConst.class);
+                        users.add(name);
+                    }
+
+                    int lengthku = (int) dataSnapshot.getChildrenCount();
+
+                    try {
+
+                        for (int i = 0 ; i < lengthku; i++){
+
+                            reference4.child(users.get(i).getKey_name()).child("KomisiPerhari").child(laporanUangConst.getKey()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+
+                                }
+                            });
+
+
+                        }
+
+                    }catch (Exception e){
+
+                    }
+
+
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+
+
 
         }
     }

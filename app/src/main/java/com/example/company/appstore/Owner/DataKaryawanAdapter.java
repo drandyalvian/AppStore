@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +22,11 @@ import com.example.company.appstore.KepalaCabang.AbsensiConst;
 import com.example.company.appstore.KepalaCabang.LaporanUangConst;
 import com.example.company.appstore.KepalaCabang.ListAbsensiAct;
 import com.example.company.appstore.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -36,7 +40,7 @@ public class DataKaryawanAdapter extends RecyclerView.Adapter<DataKaryawanAdapte
     Context context;
     ArrayList<DataKaryawanConst> dataKaryawanConsts;
 
-    DatabaseReference reference, reference2, reference3;
+    DatabaseReference reference, reference2, reference3, reference4;
 
     public DataKaryawanAdapter(ArrayList<DataKaryawanConst> p, Context c, Context b){
         context = c;
@@ -113,7 +117,8 @@ public class DataKaryawanAdapter extends RecyclerView.Adapter<DataKaryawanAdapte
                     reference = FirebaseDatabase.getInstance().getReference()
                             .child("Cabang").child(cabang).child("Karyawan");
                     reference2 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabang).child("Recap");
-//                    reference3 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabang).child("CountAbsen").child(dateString);
+                    reference3 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabang).child("CountKomisi");
+//                    reference4 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabang).child("CountAbsen");
 
                     new AlertDialog.Builder(context)
                             .setTitle("Hapus")
@@ -125,7 +130,31 @@ public class DataKaryawanAdapter extends RecyclerView.Adapter<DataKaryawanAdapte
 
                                         reference.child(dataKaryawanConsts.get(i).getKey()).removeValue();
                                         reference2.child(dataKaryawanConsts.get(i).getKey()).removeValue();
-//                                        reference3.child(dataKaryawanConsts.get(i).getKey()).removeValue();
+                                        reference3.child(dataKaryawanConsts.get(i).getKey()).removeValue();
+
+//                                        reference4.addListenerForSingleValueEvent(new ValueEventListener() {
+//                                            @Override
+//                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//
+//                                                try {
+//                                                    for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()){
+//
+//                                                        reference3.child(String.valueOf(dataSnapshot1.getKey())).child(dataKaryawanConsts.get(i).getKey()).removeValue();
+//                                                    }
+//
+//                                                }catch (Exception e){
+//
+//                                                }
+//
+//                                            }
+//
+//                                            @Override
+//                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                                            }
+//                                        });
+
+
                                         Toast.makeText(context, "Berhasil dihapus!", Toast.LENGTH_SHORT).show();
 
                                     }catch (Exception e){

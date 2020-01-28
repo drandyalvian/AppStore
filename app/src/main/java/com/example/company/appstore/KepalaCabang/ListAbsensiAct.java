@@ -182,6 +182,10 @@ public class ListAbsensiAct extends AppCompatActivity {
         DatabaseReference db4 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(username_key_new)
                 .child("Recap").child(nKaryawan).child(key.substring(3)).child(key);
         db4.removeValue();
+
+        DatabaseReference db5 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(username_key_new)
+                .child("CountKomisi").child(nKaryawan).child("Absensi").child(key);
+        db5.removeValue();
     }
 
     private void addAbsen(String tanggal, String sket) {
@@ -210,6 +214,9 @@ public class ListAbsensiAct extends AppCompatActivity {
                 sket,tanggal
         );
 
+        DatabaseReference db5 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(username_key_new).child("CountKomisi").child(nKaryawan)
+                .child("Absensi");
+
         CountGajiEntity entity = new CountGajiEntity(
                 dateFormat.format(date), dateFormat.format(date), sket
         );
@@ -221,6 +228,7 @@ public class ListAbsensiAct extends AppCompatActivity {
                 db.child("Count_gaji").child("Tanggal").child(tanggal).setValue(entity);
                 db3.child("CountAbsen").child(tanggal).child(nKaryawan).setValue(countAbsen);
                 db4.child(tanggal.substring(3)).child(tanggal).setValue(recapAbsen);
+                db5.child(tanggal).child(tanggal).setValue(recapAbsen);
 
             }
 

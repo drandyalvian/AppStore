@@ -69,7 +69,7 @@ public class ExportAct extends AppCompatActivity {
                 if (checker.lacksPermissions(REQUIRED_PERMISSION)) {
                     PermissionsActivity.startActivityForResult(ExportAct.this, PERMISSION_REQUEST_CODE, REQUIRED_PERMISSION);
                 } else {
-                    createPdf(FileUtils.getAppPath(mContext),"","","","","","","","","", "", "","","");
+                    createPdf(FileUtils.getAppPath(mContext),"","","","","","","","","","", "", "","","");
                 }
 
 
@@ -92,7 +92,7 @@ public class ExportAct extends AppCompatActivity {
 
     }
 
-    public void createPdf(String dest, String nama, String komisi, String gajiPokok, String pinjaman, String uangMakan, String gajiTotal, String gajiDiterima, String namaCabang, String totalMasuk, String totalUangMakan, String jumlahGajiPokok, String hitungCicilan, String sisaPinjaman) {
+    public void createPdf(String dest, String nama,String komisi, String gajiLembur, String gajiPokok, String pinjaman, String uangMakan, String gajiTotal, String gajiDiterima, String namaCabang, String totalMasuk, String totalUangMakan, String jumlahGajiPokok, String hitungCicilan, String sisaPinjaman) {
 
         if (new File(dest).exists()) {
             new File(dest).delete();
@@ -183,16 +183,25 @@ public class ExportAct extends AppCompatActivity {
             document.add(new Paragraph(""));
 
             // Fields of Order Details...
-            Font mOrderDateValueFont = new Font(urName, mValueFontSize, Font.NORMAL, BaseColor.BLACK);
-            Chunk mOrderDateChunk = new Chunk("Komisi", mOrderDateValueFont);
-            Paragraph mOrderDateParagraph = new Paragraph(mOrderDateChunk);
-            document.add(mOrderDateParagraph);
+            Chunk mGajiLembur = new Chunk("Gaji Lembur :", mOrderIdValueFont);
+            Paragraph mGajiLemburParagrap = new Paragraph(mGajiLembur);
+            mGajiLemburParagrap.add(new Chunk(glue));
+            Chunk mGajiLemburNominal = new Chunk(gajiLembur+"", mOrderIdValueFont);
+            mGajiLemburParagrap.add(mGajiLemburNominal);
+            document.add(mGajiLemburParagrap);
 
 
-            Chunk mOrderDateValueChunk = new Chunk(komisi+"", mOrderDateValueFont);
-            Paragraph mOrderDateValueParagraph = new Paragraph(mOrderDateValueChunk);
-            mOrderDateValueParagraph.setAlignment(Element.ALIGN_RIGHT);
-            document.add(mOrderDateValueParagraph);
+            document.add(new Paragraph(""));
+            document.add(new Chunk(lineSeparator));
+            document.add(new Paragraph(""));
+
+            // Fields of Order Details...
+            Chunk mKomisi = new Chunk("Komisi :", mOrderIdValueFont);
+            Paragraph mKomisiParagrap = new Paragraph(mKomisi);
+            mKomisiParagrap.add(new Chunk(glue));
+            Chunk mKomisiNominal = new Chunk(komisi+"", mOrderIdValueFont);
+            mKomisiParagrap.add(mKomisiNominal);
+            document.add(mKomisiParagrap);
 
             document.add(new Paragraph(""));
             document.add(new Chunk(lineSeparator));

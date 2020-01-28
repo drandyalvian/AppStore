@@ -35,7 +35,7 @@ public class InputGajiAct extends AppCompatActivity {
 
 
     TextView xnama, xposisi, xtgl;
-    EditText xgajipokok,xgajilembur, xAngsuranPasti, xuangmakan, xpinjaman;
+    EditText xgajipokok,xgajilembur, xAngsuranPasti, xuangmakan, xpinjaman, xKomisi;
     Button btnsave, back, addtgl;
 
 
@@ -52,6 +52,7 @@ public class InputGajiAct extends AppCompatActivity {
         xAngsuranPasti = findViewById(R.id.x_angsuran_pasti);
         xuangmakan = findViewById(R.id.xuangmakan);
         xpinjaman = findViewById(R.id.xpinjaman);
+        xKomisi = findViewById(R.id.xKomisi);
         btnsave = findViewById(R.id.btnsave);
         back = findViewById(R.id.back);
 
@@ -74,6 +75,7 @@ public class InputGajiAct extends AppCompatActivity {
                 xAngsuranPasti.setText(dataSnapshot.child("angsuran_pasti").getValue().toString());
                 xuangmakan.setText(dataSnapshot.child("uang_makan").getValue().toString());
                 xpinjaman.setText(dataSnapshot.child("pinjaman").getValue().toString());
+                xKomisi.setText(dataSnapshot.child("kompensasi").getValue().toString());
 
             }
 
@@ -101,6 +103,7 @@ public class InputGajiAct extends AppCompatActivity {
                         dataSnapshot.getRef().child("angsuran_pasti").setValue(xAngsuranPasti.getText().toString());
                         dataSnapshot.getRef().child("uang_makan").setValue(xuangmakan.getText().toString());
                         dataSnapshot.getRef().child("pinjaman").setValue(xpinjaman.getText().toString());
+                        dataSnapshot.getRef().child("kompensasi").setValue(xKomisi.getText().toString());
                     }
 
                     @Override

@@ -264,7 +264,7 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
         }
     }
 
-    public void printGaji(View view, String nama, String komisi, String gajiPokok, String pinjaman, String uangMakan, String gajiTotal, String gajiDiterima, String namaCabang, String totalMasuk, String totalUangMakan, String jumlahGajiPokok, String hitungCicilan, String sisaPinjaman) {
+    public void printGaji(View view, String nama, String komisi, String gajiLembur, String gajiPokok, String pinjaman, String uangMakan, String gajiTotal, String gajiDiterima, String namaCabang, String totalMasuk, String totalUangMakan, String jumlahGajiPokok, String hitungCicilan, String sisaPinjaman) {
         if (!mService.isAvailable()) {
             Log.i(TAG, "printText: perangkat tidak support bluetooth");
             return;
@@ -284,6 +284,14 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
             String lineHasilGajiPokok = jumlahGajiPokok ;
             mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
             mService.sendMessage(lineHasilGajiPokok, "");
+
+            String lineGajiLembur = "Gaji Lembur :";
+            mService.write(PrinterCommands.ESC_ALIGN_LEFT);
+            mService.sendMessage(lineGajiLembur, "");
+
+            String lineHasilGajiLembur = gajiLembur ;
+            mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
+            mService.sendMessage(lineHasilGajiLembur, "");
 
             String lineKomisi = "Komisi :";
             mService.write(PrinterCommands.ESC_ALIGN_LEFT);

@@ -13,6 +13,7 @@ public class DataKaryawanConst implements Serializable {
     String umur;
     String telepon;
     String key;
+    String key_name;
     String cabang;
 
     public DataKaryawanConst () {
@@ -20,7 +21,7 @@ public class DataKaryawanConst implements Serializable {
     }
 
     public DataKaryawanConst(String nama, String posisi, String alamat, String gender,
-                             String nama_cabang, String umur, String telepon, String key, String cabang) {
+                             String nama_cabang, String umur, String telepon, String key, String cabang, String key_name) {
         this.nama = nama;
         this.posisi = posisi;
         this.alamat = alamat;
@@ -30,6 +31,15 @@ public class DataKaryawanConst implements Serializable {
         this.telepon = telepon;
         this.key = key;
         this.cabang = cabang;
+        this.key_name = key_name;
+    }
+
+    public String getKey_name() {
+        return key_name;
+    }
+
+    public void setKey_name(String key_name) {
+        this.key_name = key_name;
     }
 
     public String getNama() {

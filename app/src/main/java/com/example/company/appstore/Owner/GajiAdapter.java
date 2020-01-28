@@ -127,6 +127,8 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
                 uangMakan = Double.parseDouble(gajiConst.get(i).getUang_makan());
                 komisi = Double.parseDouble(gajiConst.get(i).getKompensasi());
 
+
+
                 totalUangMakan = totalMasuk * uangMakan;
                 jumlahGajiPokok = gajiPokok * totalMasuk;
                 gajiTotal = totalUangMakan + komisi + jumlahGajiPokok + gajiLembur;
@@ -167,13 +169,13 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
                 builder.setView(dialogView);
 
                 viewTotalCicilan = dialogView.findViewById(R.id.viewTotalCicilan);
+                TextView viewTextSisaPinjaman = dialogView.findViewById(R.id.viewTextSisaPinjaman);
 //                viewCicilanPinjaman = dialogView.findViewById(R.id.viewCicilanPinjaman);
                 TextView viewReset = dialogView.findViewById(R.id.viewReset);
                 viewTotalGaji = dialogView.findViewById(R.id.viewTotalGaji);
                 viewNamaPegawai = dialogView.findViewById(R.id.namaPegawai);
                 CheckBox check_setor_pinjaman = dialogView.findViewById(R.id.check_setor_pinjaman);
-//                check_setor_pinjaman.setChecked(true);
-//                kurangPinjaman = dialogView.findViewById(R.id.kurangPinjaman);
+
 
                 print = dialogView.findViewById(R.id.btnPrint);
                 pdf = dialogView.findViewById(R.id.btnPdf);
@@ -206,6 +208,7 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
                         int Gpokok = Integer.parseInt(dataSnapshot.child("gaji_pokok").getValue().toString());
                         int Umakan = Integer.parseInt(dataSnapshot.child("uang_makan").getValue().toString());
                         int Glembur = Integer.parseInt(dataSnapshot.child("gaji_lembur").getValue().toString());
+                        int tKomisi = Integer.parseInt(dataSnapshot.child("kompensasi").getValue().toString());
 
                         viewNamaPegawai.setText(dataSnapshot.child("nama").getValue().toString());
 
@@ -218,7 +221,7 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 int countG = (int) dataSnapshot.getChildrenCount();
 
-                                viewTotalGaji.setText(formatRupiah.format(((Gpokok*countG)+(Umakan*countG))+Glembur));
+                                viewTotalGaji.setText(formatRupiah.format(((Gpokok*countG)+(Umakan*countG))+Glembur+tKomisi));
 
 //                                DatabaseReference reference5 =  FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabangkey)
 //                                        .child("Karyawan").child(getkey).child("Count_gaji");
@@ -280,8 +283,16 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
 //                                .getValue().toString());
 
                         int aPinjaman = Integer.valueOf(dataSnapshot.child("pinjaman").getValue().toString());
+                        check_setor_pinjaman.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
 
-                        if (aPinjaman != 0){
+
+                            }
+                        });
+
+
+                        if (aPinjaman != 0 ){
 
                             check_setor_pinjaman.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                                 @Override
@@ -331,19 +342,66 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
                                 }
                             });
 
-                        }else {
-//
-//                            reference2.addListenerForSingleValueEvent(new ValueEventListener() {
-//                                @Override
-//                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                                    dataSnapshot.getRef().child("cicilan").setValue(String.valueOf(0));
-//                                }
-//
-//                                @Override
-//                                public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//                                }
-//                            });
+                        }else if (aPinjaman == 0 && check_setor_pinjaman.isChecked()){
+
+                            viewTextSisaPinjaman.animate().alpha(1).setDuration(200).start();
+                            check_setor_pinjaman.animate().alpha(1).setDuration(200).start();
+                            viewTotalCicilan.animate().alpha(1).setDuration(200).start();
+
+                            check_setor_pinjaman.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                                @Override
+                                public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
+
+                                    int aPinjaman = Integer.valueOf(dataSnapshot.child("pinjaman").getValue().toString());
+                                    int aAngsuran = Integer.valueOf(dataSnapshot.child("angsuran_pasti").getValue().toString());
+//                                    int aCicilan = Integer.valueOf(dataSnapshot.child("cicilan").getValue().toString());
+
+                                    if(checked){
+                                        int hasil = aPinjaman - aAngsuran;
+//                                        int plusCicilan = aCicilan+1;
+                                        reference2.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                dataSnapshot.getRef().child("pinjaman").setValue(String.valueOf(hasil));
+                                                dataSnapshot.getRef().child("checked_angsuran").setValue(String.valueOf(aAngsuran));
+//                                                dataSnapshot.getRef().child("cicilan").setValue(String.valueOf(plusCicilan));
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+//                                    Log.d("kurang", String.valueOf(angka-20000));
+
+                                    }else{
+                                        int hasil = aPinjaman + aAngsuran;
+//                                        int minCicilan = aCicilan-1;
+                                        reference2.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                dataSnapshot.getRef().child("pinjaman").setValue(String.valueOf(hasil));
+                                                dataSnapshot.getRef().child("checked_angsuran").setValue(String.valueOf(0));
+//                                                dataSnapshot.getRef().child("cicilan").setValue(String.valueOf(minCicilan));
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+//                                    Log.d("tmabah", String.valueOf(angka+20000));
+                                    }
+
+                                }
+                            });
+
+                        }
+                        else {
+
+                            viewTextSisaPinjaman.animate().alpha(0).setDuration(200).start();
+                            check_setor_pinjaman.animate().alpha(0).setDuration(200).start();
+                            viewTotalCicilan.animate().alpha(0).setDuration(200).start();
 
                             check_setor_pinjaman.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                                 @Override
@@ -437,6 +495,30 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
                                         DatabaseReference db2 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabangkey)
                                                 .child("Karyawan").child(getkey).child("Count_gaji");
                                         db2.removeValue();
+
+                                        DatabaseReference db3 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabangkey)
+                                                .child("CountKomisi").child(getkey);
+                                        db3.removeValue();
+
+                                        DatabaseReference dbreference = FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabangkey)
+                                                .child("Karyawan").child(getkey);
+                                        dbreference.addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                dataSnapshot.getRef().child("kompensasi").setValue(String.valueOf(0));
+
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                            }
+                                        });
+
+
+
+
                                     }})
                                 .setNegativeButton(android.R.string.no, null).show();
 
@@ -458,8 +540,10 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
                                 String pdfnama_cabang = dataSnapshot.child("nama_cabang").getValue().toString();
                                 String pdfGpokok = formatRupiah.format(Double.parseDouble(dataSnapshot.child("gaji_pokok").getValue().toString()));
                                 int pdfGpokok2 = Integer.parseInt(dataSnapshot.child("gaji_pokok").getValue().toString());
-                                String pdfKomisi = formatRupiah.format(Double.parseDouble(dataSnapshot.child("gaji_lembur").getValue().toString()));
-                                int pdfKomisi2 = Integer.parseInt(dataSnapshot.child("gaji_lembur").getValue().toString());
+                                String pdfGLembur = formatRupiah.format(Double.parseDouble(dataSnapshot.child("gaji_lembur").getValue().toString()));
+                                int pdfGLembur2 = Integer.parseInt(dataSnapshot.child("gaji_lembur").getValue().toString());
+                                String pdfKomisi = formatRupiah.format(Double.parseDouble(dataSnapshot.child("kompensasi").getValue().toString()));
+                                int pdfGKomisi2 = Integer.parseInt(dataSnapshot.child("kompensasi").getValue().toString());
                                 String pdfUmakan = formatRupiah.format(Double.parseDouble(dataSnapshot.child("uang_makan").getValue().toString()));
                                 int pdfUmakan2 = Integer.valueOf(dataSnapshot.child("uang_makan").getValue().toString());
                                 int pdfAngsuran = Integer.parseInt(dataSnapshot.child("checked_angsuran").getValue().toString());
@@ -473,16 +557,26 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         int countG = (int) dataSnapshot.getChildrenCount();
-                                        int pdfGtotal = ((pdfGpokok2*countG)+(pdfUmakan2*countG)+pdfKomisi2);
-                                        int pdfGditerima = ((pdfGpokok2*countG)+(pdfUmakan2*countG))+pdfKomisi2-pdfAngsuran;
+                                        int pdfGtotal = ((pdfGpokok2*countG)+(pdfUmakan2*countG)+pdfGLembur2+pdfGKomisi2);
+                                        int pdfGditerima = ((pdfGpokok2*countG)+(pdfUmakan2*countG))+pdfGLembur2+pdfGKomisi2-pdfAngsuran;
 //                                        Log.d("count", String.valueOf(dataSnapshot.getChildrenCount()+formatRupiah.format(pdfGpokok2*countG)));
 
                                         if (checker.lacksPermissions(REQUIRED_PERMISSION)) {
                                             PermissionsActivity.startActivityForResult((Activity) context, PERMISSION_REQUEST_CODE, REQUIRED_PERMISSION);
+
+                                            exportAct.createPdf(FileUtils.getAppPath(mContext) + pdfnama + ".pdf", pdfnama, pdfKomisi, pdfGLembur, pdfGpokok,
+                                                    formatRupiah.format(pdfAngsuran), pdfUmakan, formatRupiah.format(pdfGtotal), formatRupiah.format(pdfGditerima),
+                                                    ""+pdfnama_cabang, Integer.toString(countG), formatRupiah.format(pdfUmakan2*countG),
+                                                    formatRupiah.format(pdfGpokok2*countG), "", pdfPinjaman);
+
                                             Toast.makeText(context, "File Disimpan : "+FileUtils.getAppPath(mContext) + " " + pdfnama+".pdf", Toast.LENGTH_SHORT).show();
-                                            exportAct.createPdf(FileUtils.getAppPath(mContext) + pdfnama + ".pdf", pdfnama, pdfKomisi, pdfGpokok, formatRupiah.format(pdfAngsuran), pdfUmakan, formatRupiah.format(pdfGtotal), formatRupiah.format(pdfGditerima), ""+pdfnama_cabang, Integer.toString(countG), formatRupiah.format(pdfUmakan2*countG), formatRupiah.format(pdfGpokok2*countG), "", pdfPinjaman);
+
                                         } else {
-                                            exportAct.createPdf(FileUtils.getAppPath(mContext) + pdfnama + ".pdf", pdfnama, pdfKomisi, pdfGpokok, formatRupiah.format(pdfAngsuran), pdfUmakan, formatRupiah.format(pdfGtotal), formatRupiah.format(pdfGditerima), ""+pdfnama_cabang, Integer.toString(countG), formatRupiah.format(pdfUmakan2*countG), formatRupiah.format(pdfGpokok2*countG), "", pdfPinjaman);
+                                            exportAct.createPdf(FileUtils.getAppPath(mContext) + pdfnama + ".pdf", pdfnama, pdfKomisi, pdfGLembur, pdfGpokok,
+                                                    formatRupiah.format(pdfAngsuran), pdfUmakan, formatRupiah.format(pdfGtotal), formatRupiah.format(pdfGditerima),
+                                                    ""+pdfnama_cabang, Integer.toString(countG), formatRupiah.format(pdfUmakan2*countG),
+                                                    formatRupiah.format(pdfGpokok2*countG), "", pdfPinjaman);
+
                                             Toast.makeText(context, "File Disimpan : "+FileUtils.getAppPath(mContext) + " " + pdfnama +".pdf", Toast.LENGTH_SHORT).show();
                                         }
 
@@ -559,8 +653,10 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
                                 String printnama_cabang = dataSnapshot.child("nama_cabang").getValue().toString();
                                 String printGpokok = formatRupiah.format(Double.parseDouble(dataSnapshot.child("gaji_pokok").getValue().toString()));
                                 int printGpokok2 = Integer.parseInt(dataSnapshot.child("gaji_pokok").getValue().toString());
-                                String printKomisi = formatRupiah.format(Double.parseDouble(dataSnapshot.child("gaji_lembur").getValue().toString()));
-                                int printKomisi2 = Integer.parseInt(dataSnapshot.child("gaji_lembur").getValue().toString());
+                                String printGLembur = formatRupiah.format(Double.parseDouble(dataSnapshot.child("gaji_lembur").getValue().toString()));
+                                int printGLembur2 = Integer.parseInt(dataSnapshot.child("gaji_lembur").getValue().toString());
+                                String printKomisi = formatRupiah.format(Double.parseDouble(dataSnapshot.child("kompensasi").getValue().toString()));
+                                int printKomisi2 = Integer.parseInt(dataSnapshot.child("kompensasi").getValue().toString());
                                 String printUmakan = formatRupiah.format(Double.parseDouble(dataSnapshot.child("uang_makan").getValue().toString()));
                                 int printUmakan2 = Integer.valueOf(dataSnapshot.child("uang_makan").getValue().toString());
                                 int printAngsuran = Integer.parseInt(dataSnapshot.child("checked_angsuran").getValue().toString());
@@ -574,11 +670,13 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         int countG = (int) dataSnapshot.getChildrenCount();
-                                        int printGtotal = ((printGpokok2*countG)+(printUmakan2*countG)+printKomisi2);
-                                        int printGditerima = ((printGpokok2*countG)+(printUmakan2*countG))+printKomisi2-printAngsuran;
+                                        int printGtotal = ((printGpokok2*countG)+(printUmakan2*countG)+printKomisi2+printGLembur2);
+                                        int printGditerima = ((printGpokok2*countG)+(printUmakan2*countG))+printKomisi2+printGLembur2-printAngsuran;
 //                                        Log.d("count", String.valueOf(dataSnapshot.getChildrenCount()+formatRupiah.format(pdfGpokok2*countG)));
 
-                                        ((GajiAct)context).printGaji(view, printnama, printKomisi, printGpokok, formatRupiah.format(printAngsuran), printUmakan, formatRupiah.format(printGtotal), formatRupiah.format(printGditerima), ""+printnama_cabang, Integer.toString(countG), formatRupiah.format(printUmakan2*countG), formatRupiah.format(printGpokok2*countG), "", printPinjaman);
+                                        ((GajiAct)context).printGaji(view, printnama, printKomisi, printGLembur, printGpokok, formatRupiah.format(printAngsuran),
+                                                printUmakan, formatRupiah.format(printGtotal), formatRupiah.format(printGditerima), ""+printnama_cabang,
+                                                Integer.toString(countG), formatRupiah.format(printUmakan2*countG), formatRupiah.format(printGpokok2*countG), "", printPinjaman);
 
 
                                     }
