@@ -134,12 +134,6 @@ public class ExportAct extends AppCompatActivity {
 
             // Title Order Details...
             // Adding Title....
-            Font mOrderDetailsTitleFont = new Font(urName, 36.0f, Font.NORMAL, BaseColor.BLACK);
-            Chunk mOrderDetailsTitleChunk = new Chunk("Toko Andhika ", mOrderDetailsTitleFont);
-            Paragraph mOrderDetailsTitleParagraph = new Paragraph(mOrderDetailsTitleChunk);
-            mOrderDetailsTitleParagraph.setAlignment(Element.ALIGN_CENTER);
-            document.add(mOrderDetailsTitleParagraph);
-
             Font mOrderDetailsTitleFont2 = new Font(urName, 29.0f, Font.NORMAL, BaseColor.BLACK);
             Chunk mOrderDetailsTitleChunk2 = new Chunk(namaCabang+"", mOrderDetailsTitleFont2);
             Paragraph mOrderDetailsTitleParagraph2 = new Paragraph(mOrderDetailsTitleChunk2);
@@ -188,12 +182,12 @@ public class ExportAct extends AppCompatActivity {
             mGajiLemburParagrap.add(new Chunk(glue));
             Chunk mGajiLemburNominal = new Chunk(gajiLembur+"", mOrderIdValueFont);
             mGajiLemburParagrap.add(mGajiLemburNominal);
-            document.add(mGajiLemburParagrap);
+           // document.add(mGajiLemburParagrap);
 
 
-            document.add(new Paragraph(""));
-            document.add(new Chunk(lineSeparator));
-            document.add(new Paragraph(""));
+//            document.add(new Paragraph(""));
+//            document.add(new Chunk(lineSeparator));
+//            document.add(new Paragraph(""));
 
             // Fields of Order Details...
             Chunk mKomisi = new Chunk("Komisi :", mOrderIdValueFont);
@@ -208,22 +202,28 @@ public class ExportAct extends AppCompatActivity {
             document.add(new Paragraph(""));
 
             // Fields of Order Details...
-            Font mOrderAcNameValueFont = new Font(urName, mValueFontSize, Font.NORMAL, BaseColor.BLACK);
-            Chunk mOrderAcNameChunk = new Chunk("Uang Makan:", mOrderAcNameValueFont);
-            Paragraph mOrderAcNameParagraph = new Paragraph(mOrderAcNameChunk);
-            document.add(mOrderAcNameParagraph);
 
 
-            Chunk mUangMakan = new Chunk(totalMasuk+" x "+uangMakan, mOrderIdValueFont);
-            Paragraph mUangMakanParagrap = new Paragraph(mUangMakan);
-            mUangMakanParagrap.add(new Chunk(glue));
-            Chunk mUangMakanTotal = new Chunk(totalUangMakan+"", mOrderIdValueFont);
-            mUangMakanParagrap.add(mUangMakanTotal);
-            document.add(mUangMakanParagrap);
 
-            document.add(new Paragraph(""));
-            document.add(new Chunk(lineSeparator));
-            document.add(new Paragraph(""));
+            if (uangMakan.contains("Rp") || !uangMakan.equals("0")) {
+                Font mOrderAcNameValueFont = new Font(urName, mValueFontSize, Font.NORMAL, BaseColor.BLACK);
+                Chunk mOrderAcNameChunk = new Chunk("Uang Makan:", mOrderAcNameValueFont);
+                Paragraph mOrderAcNameParagraph = new Paragraph(mOrderAcNameChunk);
+                document.add(mOrderAcNameParagraph);
+
+                Chunk mUangMakan = new Chunk("");
+                Paragraph mUangMakanParagrap = new Paragraph(mUangMakan);
+                mUangMakanParagrap.add(new Chunk(glue));
+                Chunk mUangMakanTotal = new Chunk(totalUangMakan + "", mOrderIdValueFont);
+                mUangMakanParagrap.add(mUangMakanTotal);
+                document.add(mUangMakanParagrap);
+
+                document.add(new Paragraph(""));
+                document.add(new Chunk(lineSeparator));
+                document.add(new Paragraph(""));
+            }
+
+
 
             Chunk mGajiTotal = new Chunk("Gaji Total :", mOrderIdValueFont);
             Paragraph mGajiTotalParagrap = new Paragraph(mGajiTotal);
@@ -232,12 +232,28 @@ public class ExportAct extends AppCompatActivity {
             mGajiTotalParagrap.add(mGajiTotalNominal);
             document.add(mGajiTotalParagrap);
 
-            Chunk mPeminjaman= new Chunk("Bayar Angsuran"+hitungCicilan, mOrderIdValueFont);
-            Paragraph mPeminjamanParagrap = new Paragraph(mPeminjaman);
-            mPeminjamanParagrap.add(new Chunk(glue));
-            Chunk mPeminjamanNominal = new Chunk(pinjaman+"", mOrderIdValueFont);
-            mPeminjamanParagrap.add(mPeminjamanNominal);
-            document.add(mPeminjamanParagrap);
+            if (!sisaPinjaman.equals(0) || !sisaPinjaman.equals("0")) {
+
+                Chunk mPeminjaman = new Chunk("Bayar Angsuran" + hitungCicilan, mOrderIdValueFont);
+                Paragraph mPeminjamanParagrap = new Paragraph(mPeminjaman);
+                mPeminjamanParagrap.add(new Chunk(glue));
+                Chunk mPeminjamanNominal = new Chunk(pinjaman + "", mOrderIdValueFont);
+                mPeminjamanParagrap.add(mPeminjamanNominal);
+                document.add(mPeminjamanParagrap);
+
+                if (pinjaman.contains("Rp") && !sisaPinjaman.contains("Rp")){
+                    sisaPinjaman = "Lunas";
+                }
+
+                Chunk mSisaPinjamanLabel = new Chunk("Sisa Pinjaman:", mOrderIdValueFont);
+                Paragraph mSisaPinjamanParagrap = new Paragraph(mSisaPinjamanLabel);
+                mSisaPinjamanParagrap.add(new Chunk(glue));
+                Chunk mSisaPinjamanNominal = new Chunk(sisaPinjaman + "", mOrderIdValueFont);
+                mSisaPinjamanParagrap.add(mSisaPinjamanNominal);
+                document.add(mSisaPinjamanParagrap);
+
+            }
+
 
             document.add(new Paragraph(""));
             document.add(new Chunk(lineSeparator));
@@ -250,12 +266,7 @@ public class ExportAct extends AppCompatActivity {
             mGajiDiterimaParagrap.add(mGajiDiterimaNominal);
             document.add(mGajiDiterimaParagrap);
 
-            Chunk mSisaPinjamanLabel= new Chunk("Sisa Pinjaman:", mOrderIdValueFont);
-            Paragraph mSisaPinjamanParagrap = new Paragraph(mSisaPinjamanLabel);
-            mSisaPinjamanParagrap .add(new Chunk(glue));
-            Chunk mSisaPinjamanNominal = new Chunk(sisaPinjaman+"", mOrderIdValueFont);
-            mSisaPinjamanParagrap.add(mSisaPinjamanNominal);
-            document.add(mSisaPinjamanParagrap);
+
 
             document.close();
 

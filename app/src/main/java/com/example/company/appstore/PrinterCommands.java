@@ -58,4 +58,9 @@ public class PrinterCommands {
 
     public static final byte[] ESC_ENTER = new byte[] { 0x1B, 0x4A, 0x40 };
     public static final byte[] PRINTE_TEST = new byte[] { 0x1D, 0x28, 0x41 };
+
+    public static final byte[] TXT_BOLD_ON     = new byte[] {0x1b,0x45,0x01}; // Bold font ON
+
+    public static final byte[] TXT_2HEIGHT     = new byte[] {0x1b,0x21,0x10}; // Double height text
+    public static final byte[] TXT_2WIDTH      = new byte[] {0x1b,0x21,0x20}; // Double width text
 }
