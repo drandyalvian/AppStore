@@ -366,8 +366,7 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
             return;
         }
         if (isPrinterReady) {
-            String coba = "Toko Andhika\n" +
-                    namaCabang + "\n" +
+            String coba = namaCabang + "\n" +
                     "================================";
             mService.write(PrinterCommands.ESC_ALIGN_CENTER);
             mService.sendMessage(coba, "");
@@ -381,14 +380,6 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
             mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
             mService.sendMessage(lineHasilGajiPokok, "");
 
-            String lineGajiLembur = "Gaji Lembur :";
-            mService.write(PrinterCommands.ESC_ALIGN_LEFT);
-            mService.sendMessage(lineGajiLembur, "");
-
-            String lineHasilGajiLembur = gajiLembur ;
-            mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
-            mService.sendMessage(lineHasilGajiLembur, "");
-
             String lineKomisi = "Komisi :";
             mService.write(PrinterCommands.ESC_ALIGN_LEFT);
             mService.sendMessage(lineKomisi, "");
@@ -397,14 +388,16 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
             mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
             mService.sendMessage(lineHasilKomisi, "");
 
-            String lineUangMakan = "Uang Makan : \n" + totalMasuk + " x " + uangMakan;
-            mService.write(PrinterCommands.ESC_ALIGN_LEFT);
-            mService.sendMessage(lineUangMakan, "");
+            if (Integer.parseInt(uangMakan) != 0) {
 
-            String lineHasilUangMakan = totalUangMakan;
-            mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
-            mService.sendMessage(lineHasilUangMakan, "");
+                String lineUangMakan = "Uang Makan : \n";
+                mService.write(PrinterCommands.ESC_ALIGN_LEFT);
+                mService.sendMessage(lineUangMakan, "");
 
+                String lineHasilUangMakan = totalUangMakan;
+                mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
+                mService.sendMessage(lineHasilUangMakan, "");
+            }
             String garis = "================================";
 
             mService.write(PrinterCommands.ESC_ALIGN_CENTER);
@@ -418,31 +411,36 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
             mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
             mService.sendMessage(lineHasilTotalGaji, "");
 
-            String linePinjaman = "Bayar Angsuran :"+hitungCicilan;
-            mService.write(PrinterCommands.ESC_ALIGN_LEFT);
-            mService.sendMessage(linePinjaman, "");
+            if(Integer.parseInt(hitungCicilan) != 0 ) {
+                String linePinjaman = "Bayar Angsuran :" + hitungCicilan;
+                mService.write(PrinterCommands.ESC_ALIGN_LEFT);
+                mService.sendMessage(linePinjaman, "");
 
-            String lineHasilPinjaman = pinjaman;
-            mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
-            mService.sendMessage(lineHasilPinjaman, "");
+                String lineHasilPinjaman = pinjaman;
+                mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
+                mService.sendMessage(lineHasilPinjaman, "");
+            }
+            if (Integer.parseInt(sisaPinjaman) != 0) {
+                String lineSisaPinjaman = "Sisa Pinjaman : ";
+                mService.write(PrinterCommands.ESC_ALIGN_LEFT);
+                mService.sendMessage(lineSisaPinjaman, "");
+
+                String lineHasilSisaPinjaman = sisaPinjaman + "\n";
+                mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
+                mService.sendMessage(lineHasilSisaPinjaman, "");
+            }
 
             mService.sendMessage(garis, "");
 
             String lineGajiDiterima = "Gaji Diterima : ";
             mService.write(PrinterCommands.ESC_ALIGN_LEFT);
+            mService.write(PrinterCommands.TXT_BOLD_ON);
             mService.sendMessage(lineGajiDiterima, "");
 
             String lineHasilGajiDiterima = gajiDiterima + "\n";
             mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
+            mService.write(PrinterCommands.TXT_BOLD_ON);
             mService.sendMessage(lineHasilGajiDiterima, "");
-
-            String lineSisaPinjaman = "Sisa Pinjaman : ";
-            mService.write(PrinterCommands.ESC_ALIGN_LEFT);
-            mService.sendMessage(lineSisaPinjaman, "");
-
-            String lineHasilSisaPinjaman = sisaPinjaman + "\n";
-            mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
-            mService.sendMessage(lineHasilSisaPinjaman, "");
 
             mService.write(PrinterCommands.ESC_ENTER);
         } else {
