@@ -672,7 +672,9 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
                     @Override
                     public void onClick(View view) {
 
-                        reference2.addValueEventListener(new ValueEventListener() {
+                        alertDialog.hide();
+
+                        reference2.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 String printnama = dataSnapshot.child("nama").getValue().toString();
@@ -693,7 +695,7 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
                                 DatabaseReference reference3 =  FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabangkey)
                                         .child("Karyawan").child(getkey).child("Count_gaji").child("Tanggal");
                                 Query query3 = reference3.orderByChild("keterangan").equalTo("Hadir");
-                                query3.addValueEventListener(new ValueEventListener() {
+                                query3.addListenerForSingleValueEvent(new ValueEventListener() {
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         int countG = (int) dataSnapshot.getChildrenCount();
@@ -705,7 +707,7 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
                                                 printUmakan, formatRupiah.format(printGtotal), formatRupiah.format(printGditerima), ""+printnama_cabang,
                                                 Integer.toString(countG), printUmakan2*countG, formatRupiah.format(printGpokok2*countG), "", printPinjaman, printCheckedAngsuran, dateString);
 
-
+                                        Log.d("checked", printCheckedAngsuran);
                                     }
 
                                     @Override
