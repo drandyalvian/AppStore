@@ -589,7 +589,7 @@ public class InputLaporanOwner extends AppCompatActivity {
                                                                                                 int jmlLaporan = Integer.parseInt(xnominal.getText().toString());
 
                                                                                                 if (count == 4) {
-                                                                                                    int operasi = komisiTukang - ((jmlLaporan * 30) / lengthSisa);
+                                                                                                    int operasi = (komisiTukang - (jmlLaporan * 30)) / lengthSisa;
                                                                                                     int hasil = operasi * (-1);
                                                                                                     int rounded = (int) Math.round(hasil / 100d) * 100; // bulat 100
                                                                                                     Log.d("hasil", String.valueOf(komisiTukang) + " - "
@@ -647,7 +647,7 @@ public class InputLaporanOwner extends AppCompatActivity {
 
                                                                                                 } else if (count == 5) {
 //
-                                                                                                    int operasi = komisiTukang - ((jmlLaporan * 29) / lengthSisa);
+                                                                                                    int operasi = (komisiTukang - (jmlLaporan * 29)) / lengthSisa;
                                                                                                     int hasil = operasi * (-1);
                                                                                                     int rounded = (int) Math.round(hasil / 100d) * 100; // bulat 100
                                                                                                     Log.d("hasil", String.valueOf(komisiTukang) + " - "
@@ -704,7 +704,7 @@ public class InputLaporanOwner extends AppCompatActivity {
 
 
                                                                                                 } else if (count == 6) {
-                                                                                                    int operasi = komisiTukang - ((jmlLaporan * 28) / lengthSisa);
+                                                                                                    int operasi = (komisiTukang - (jmlLaporan * 28)) / lengthSisa;
                                                                                                     int hasil = operasi * (-1);
                                                                                                     int rounded = (int) Math.round(hasil / 100d) * 100; // bulat 100
                                                                                                     Log.d("hasil", String.valueOf(komisiTukang) + " - "
@@ -760,7 +760,7 @@ public class InputLaporanOwner extends AppCompatActivity {
                                                                                                             });
 
                                                                                                 } else if (count == 7) {
-                                                                                                    int operasi = komisiTukang - ((jmlLaporan * 27) / lengthSisa);
+                                                                                                    int operasi = (komisiTukang - (jmlLaporan * 27)) / lengthSisa;
                                                                                                     int hasil = operasi * (-1);
                                                                                                     int rounded = (int) Math.round(hasil / 100d) * 100; // bulat 100
                                                                                                     Log.d("hasil", String.valueOf(komisiTukang) + " - "
@@ -816,7 +816,7 @@ public class InputLaporanOwner extends AppCompatActivity {
                                                                                                             });
 
                                                                                                 } else if (count == 8) {
-                                                                                                    int operasi = komisiTukang - ((jmlLaporan * 26) / lengthSisa);
+                                                                                                    int operasi = (komisiTukang - (jmlLaporan * 26)) / lengthSisa;
                                                                                                     int hasil = operasi * (-1);
                                                                                                     int rounded = (int) Math.round(hasil / 100d) * 100; // bulat 100
                                                                                                     Log.d("hasil", String.valueOf(komisiTukang) + " - "
@@ -873,7 +873,7 @@ public class InputLaporanOwner extends AppCompatActivity {
                                                                                                             });
 
                                                                                                 } else if (count == 9 || count == 10) {
-                                                                                                    int operasi = komisiTukang - ((jmlLaporan * 25) / lengthSisa);
+                                                                                                    int operasi = (komisiTukang - (jmlLaporan * 25)) / lengthSisa;
                                                                                                     int hasil = operasi * (-1);
                                                                                                     int rounded = (int) Math.round(hasil / 100d) * 100; // bulat 100
                                                                                                     Log.d("hasil", String.valueOf(komisiTukang) + " - "
@@ -1053,7 +1053,7 @@ public class InputLaporanOwner extends AppCompatActivity {
                                                                                 int jmlLaporan = Integer.parseInt(xnominal.getText().toString());
 
                                                                                 if (count == 4) {
-                                                                                    int operasi = komisiTukang - ((jmlLaporan * 30) / lengthSisa);
+                                                                                    int operasi = (komisiTukang - (jmlLaporan * 30)) / lengthSisa;
                                                                                     int hasil = operasi * (-1);
                                                                                     int rounded = (int) Math.round(hasil / 100d) * 100; // bulat 100
                                                                                     Log.d("hasil", String.valueOf(komisiTukang) + " - "
@@ -1113,7 +1113,7 @@ public class InputLaporanOwner extends AppCompatActivity {
 
                                                                                 } else if (count == 5) {
 //
-                                                                                    int operasi = komisiTukang - ((jmlLaporan * 29) / lengthSisa);
+                                                                                    int operasi = (komisiTukang - (jmlLaporan * 29)) / lengthSisa;
                                                                                     int hasil = operasi * (-1);
                                                                                     int rounded = (int) Math.round(hasil / 100d) * 100; // bulat 100
 
@@ -1169,7 +1169,7 @@ public class InputLaporanOwner extends AppCompatActivity {
 
                                                                                 }else if (count == 6) {
 //
-                                                                                    int operasi = komisiTukang - ((jmlLaporan * 28) / lengthSisa);
+                                                                                    int operasi = (komisiTukang - (jmlLaporan * 28)) / lengthSisa;
                                                                                     int hasil = operasi * (-1);
                                                                                     int rounded = (int) Math.round(hasil / 100d) * 100; // bulat 100
 
@@ -1225,7 +1225,7 @@ public class InputLaporanOwner extends AppCompatActivity {
 
                                                                                 }else if (count == 7) {
 //
-                                                                                    int operasi = komisiTukang - ((jmlLaporan * 27) / lengthSisa);
+                                                                                    int operasi = (komisiTukang - (jmlLaporan * 27)) / lengthSisa;
                                                                                     int hasil = operasi * (-1);
                                                                                     int rounded = (int) Math.round(hasil / 100d) * 100; // bulat 100
 
@@ -1281,7 +1281,7 @@ public class InputLaporanOwner extends AppCompatActivity {
 
                                                                                 }else if (count == 8) {
 //
-                                                                                    int operasi = komisiTukang - ((jmlLaporan * 26) / lengthSisa);
+                                                                                    int operasi = (komisiTukang - (jmlLaporan * 26)) / lengthSisa;
                                                                                     int hasil = operasi * (-1);
                                                                                     int rounded = (int) Math.round(hasil / 100d) * 100; // bulat 100
 
@@ -1337,7 +1337,7 @@ public class InputLaporanOwner extends AppCompatActivity {
 
                                                                                 }else if (count == 9 || count == 10) {
 //
-                                                                                    int operasi = komisiTukang - ((jmlLaporan * 29) / lengthSisa);
+                                                                                    int operasi = (komisiTukang - (jmlLaporan * 29)) / lengthSisa;
                                                                                     int hasil = operasi * (-1);
                                                                                     int rounded = (int) Math.round(hasil / 100d) * 100; // bulat 100
 
