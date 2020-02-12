@@ -34,9 +34,11 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.zj.btsdk.BluetoothService;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -360,12 +362,19 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
         }
     }
 
-    public void printGaji(View view, String nama, String komisi, String gajiLembur, String gajiPokok, String pinjaman, String uangMakan, String gajiTotal, String gajiDiterima, String namaCabang, String totalMasuk, String totalUangMakan, String jumlahGajiPokok, String hitungCicilan, String sisaPinjaman, String checkedAngsuran, String tanggal) {
-        if (!mService.isAvailable()) {
-            Log.i(TAG, "printText: perangkat tidak support bluetooth");
-            return;
+    public void printGaji(View view, String nama, String komisi, String gajiLembur, String gajiPokok, String pinjaman, Integer uangMakan, String gajiTotal, String gajiDiterima, String namaCabang, String totalMasuk, Integer totalUangMakan, String jumlahGajiPokok, String hitungCicilan, String sisaPinjaman, String checkedAngsuran, String tanggal) {
+        try{
+            if (!mService.isAvailable()) {
+                Log.i(TAG, "printText: perangkat tidak support bluetooth");
+                return;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
         if (isPrinterReady) {
+            Locale localeID = new Locale("in", "ID");
+            NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
+
             String coba = namaCabang + "\n" +
                     "================================";
             mService.write(PrinterCommands.ESC_ALIGN_CENTER);
@@ -403,13 +412,13 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
             mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
             mService.sendMessage(lineHasilKomisi, "");
 
-            if (Integer.parseInt(uangMakan) != 0) {
+            if (uangMakan != 0) {
 
                 String lineUangMakan = "Uang Makan : \n";
                 mService.write(PrinterCommands.ESC_ALIGN_LEFT);
                 mService.sendMessage(lineUangMakan, "");
 
-                String lineHasilUangMakan = totalUangMakan;
+                String lineHasilUangMakan = formatRupiah.format(Double.parseDouble(String.valueOf(totalUangMakan)));
                 mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
                 mService.sendMessage(lineHasilUangMakan, "");
             }

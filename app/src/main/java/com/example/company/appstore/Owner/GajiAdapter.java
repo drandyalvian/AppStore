@@ -683,7 +683,7 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
                                 int printGLembur2 = Integer.parseInt(dataSnapshot.child("gaji_lembur").getValue().toString());
                                 String printKomisi = formatRupiah.format(Double.parseDouble(dataSnapshot.child("kompensasi").getValue().toString()));
                                 int printKomisi2 = Integer.parseInt(dataSnapshot.child("kompensasi").getValue().toString());
-                                String printUmakan = formatRupiah.format(Double.parseDouble(dataSnapshot.child("uang_makan").getValue().toString()));
+                                Integer printUmakan = Integer.parseInt(dataSnapshot.child("uang_makan").getValue().toString());
                                 int printUmakan2 = Integer.valueOf(dataSnapshot.child("uang_makan").getValue().toString());
                                 int printAngsuran = Integer.parseInt(dataSnapshot.child("checked_angsuran").getValue().toString());
                                 String printCheckedAngsuran = dataSnapshot.child("checked_angsuran").getValue().toString();
@@ -703,7 +703,7 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
 
                                         ((GajiAct)context).printGaji(view, printnama, printKomisi, formatRupiah.format(printGLembur2*countG), printGpokok, formatRupiah.format(printAngsuran),
                                                 printUmakan, formatRupiah.format(printGtotal), formatRupiah.format(printGditerima), ""+printnama_cabang,
-                                                Integer.toString(countG), formatRupiah.format(printUmakan2*countG), formatRupiah.format(printGpokok2*countG), "", printPinjaman, printCheckedAngsuran, dateString);
+                                                Integer.toString(countG), printUmakan2*countG, formatRupiah.format(printGpokok2*countG), "", printPinjaman, printCheckedAngsuran, dateString);
 
 
                                     }
