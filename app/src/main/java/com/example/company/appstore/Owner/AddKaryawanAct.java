@@ -33,8 +33,8 @@ import java.util.TimeZone;
 public class AddKaryawanAct extends AppCompatActivity {
 
     Button back, save;
-    Spinner xspiner, xcabangtoko;
-    EditText  xnama, xumur, xalamat, xnohp, xgajipokok, xusername, xposisi;
+    Spinner xspiner, xcabangtoko,xposisi;
+    EditText  xnama, xumur, xalamat, xnohp, xgajipokok, xusername;
     String cabangx, karyawanx, cabangToko, key;
 
     DatabaseReference reference, reference2;
@@ -64,6 +64,9 @@ public class AddKaryawanAct extends AppCompatActivity {
         final ArrayAdapter pilihGender = ArrayAdapter.createFromResource(this, R.array.pilih_gender, android.R.layout.simple_spinner_dropdown_item);
         xspiner.setAdapter(pilihGender);
 
+        final ArrayAdapter pilihPosisi = ArrayAdapter.createFromResource(this, R.array.posisiSpinner, android.R.layout.simple_spinner_dropdown_item);
+        xposisi.setAdapter(pilihPosisi);
+
 //      mengambil data dari intent
         Bundle bundle = getIntent().getExtras();
         cabangx = bundle.getString("cabang");
@@ -92,7 +95,7 @@ public class AddKaryawanAct extends AppCompatActivity {
                 GajiConst gajiConst = new GajiConst(
                         xnama.getText().toString(),
                         xnama.getText().toString(),
-                        xposisi.getText().toString(),
+                        xposisi.getSelectedItem().toString(),
                         xalamat.getText().toString(),
                         xspiner.getSelectedItem().toString(),
                         cabangToko,
@@ -126,9 +129,6 @@ public class AddKaryawanAct extends AppCompatActivity {
                 if (xnama.length() == 0) {
                     xnama.setError("Masukan nama karyawan");
                     xnama.requestFocus();
-                } else if (xposisi.length() == 0) {
-                    xposisi.setError("Masukan posisi karyawan");
-                    xposisi.requestFocus();
                 } else if (xumur.length() == 0) {
                     xumur.setError("Masukan umur karyawan");
                     xumur.requestFocus();

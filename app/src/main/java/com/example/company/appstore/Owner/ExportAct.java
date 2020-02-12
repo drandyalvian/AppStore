@@ -69,7 +69,7 @@ public class ExportAct extends AppCompatActivity {
                 if (checker.lacksPermissions(REQUIRED_PERMISSION)) {
                     PermissionsActivity.startActivityForResult(ExportAct.this, PERMISSION_REQUEST_CODE, REQUIRED_PERMISSION);
                 } else {
-                    createPdf(FileUtils.getAppPath(mContext),"","","","","","","","","","", "", "","","");
+                    createPdf(FileUtils.getAppPath(mContext),"","","","","","","","","","","", "", "","","", "");
                 }
 
 
@@ -92,7 +92,7 @@ public class ExportAct extends AppCompatActivity {
 
     }
 
-    public void createPdf(String dest, String nama,String komisi, String gajiLembur, String gajiPokok, String pinjaman, String uangMakan, String gajiTotal, String gajiDiterima, String namaCabang, String totalMasuk, String totalUangMakan, String jumlahGajiPokok, String hitungCicilan, String sisaPinjaman) {
+    public void createPdf(String dest, String nama,String komisi, String gajiLembur, String gajiPokok, String pinjaman, String uangMakan, String gajiTotal, String gajiDiterima, String namaCabang, String totalMasuk, String totalUangMakan, String jumlahGajiPokok, String hitungCicilan, String sisaPinjaman, String checkedAngsuran, String tanggal) {
 
         if (new File(dest).exists()) {
             new File(dest).delete();
@@ -142,12 +142,23 @@ public class ExportAct extends AppCompatActivity {
 
             document.add(new Paragraph(""));
 
+            Font mOrderDetailsTitleFont3 = new Font(urName, 20.0f, Font.NORMAL, BaseColor.BLACK);
+            Chunk mOrderChunkTanggal = new Chunk(tanggal+"", mOrderDetailsTitleFont3);
+            Paragraph mOrderTanggalParagraph = new Paragraph(mOrderChunkTanggal);
+            mOrderTanggalParagraph.setAlignment(Element.ALIGN_RIGHT);
+            document.add(mOrderTanggalParagraph);
+
+            document.add(new Paragraph(""));
+
             // Fields of Order Details...
             // Adding Chunks for Title and value
             Font mOrderIdFont = new Font(urName, mValueFontSize, Font.NORMAL, BaseColor.BLACK);
             Chunk mOrderIdChunk = new Chunk("Nama : " +nama, mOrderIdFont);
             Paragraph mOrderIdParagraph = new Paragraph(mOrderIdChunk);
             document.add(mOrderIdParagraph);
+
+
+
 
             // Adding Line Breakable Space....
             document.add(new Paragraph(""));
@@ -182,12 +193,12 @@ public class ExportAct extends AppCompatActivity {
             mGajiLemburParagrap.add(new Chunk(glue));
             Chunk mGajiLemburNominal = new Chunk(gajiLembur+"", mOrderIdValueFont);
             mGajiLemburParagrap.add(mGajiLemburNominal);
-           // document.add(mGajiLemburParagrap);
+            document.add(mGajiLemburParagrap);
 
 
-//            document.add(new Paragraph(""));
-//            document.add(new Chunk(lineSeparator));
-//            document.add(new Paragraph(""));
+            document.add(new Paragraph(""));
+            document.add(new Chunk(lineSeparator));
+            document.add(new Paragraph(""));
 
             // Fields of Order Details...
             Chunk mKomisi = new Chunk("Komisi :", mOrderIdValueFont);
@@ -232,9 +243,11 @@ public class ExportAct extends AppCompatActivity {
             mGajiTotalParagrap.add(mGajiTotalNominal);
             document.add(mGajiTotalParagrap);
 
-            if (!sisaPinjaman.equals(0) || !sisaPinjaman.equals("0")) {
+            if (checkedAngsuran.equals("0") && sisaPinjaman.equals("0")){
 
-                Chunk mPeminjaman = new Chunk("Bayar Angsuran" + hitungCicilan, mOrderIdValueFont);
+            }else if(!checkedAngsuran.equals("0")&& sisaPinjaman.equals("0")){
+
+                Chunk mPeminjaman = new Chunk("Bayar Angsuran :", mOrderIdValueFont);
                 Paragraph mPeminjamanParagrap = new Paragraph(mPeminjaman);
                 mPeminjamanParagrap.add(new Chunk(glue));
                 Chunk mPeminjamanNominal = new Chunk(pinjaman + "", mOrderIdValueFont);
@@ -252,7 +265,42 @@ public class ExportAct extends AppCompatActivity {
                 mSisaPinjamanParagrap.add(mSisaPinjamanNominal);
                 document.add(mSisaPinjamanParagrap);
 
+
+            }else if (checkedAngsuran.equals("0") && !sisaPinjaman.equals("0")){
+
+                Chunk mSisaPinjamanLabel = new Chunk("Sisa Pinjaman:", mOrderIdValueFont);
+                Paragraph mSisaPinjamanParagrap = new Paragraph(mSisaPinjamanLabel);
+                mSisaPinjamanParagrap.add(new Chunk(glue));
+                Chunk mSisaPinjamanNominal = new Chunk(sisaPinjaman + "", mOrderIdValueFont);
+                mSisaPinjamanParagrap.add(mSisaPinjamanNominal);
+                document.add(mSisaPinjamanParagrap);
+
             }
+
+//                if (!sisaPinjaman.equals(0) || !sisaPinjaman.equals("0") ) {
+//
+//                    Chunk mPeminjaman = new Chunk("Bayar Angsuran" + hitungCicilan, mOrderIdValueFont);
+//                    Paragraph mPeminjamanParagrap = new Paragraph(mPeminjaman);
+//                    mPeminjamanParagrap.add(new Chunk(glue));
+//                    Chunk mPeminjamanNominal = new Chunk(pinjaman + "", mOrderIdValueFont);
+//                    mPeminjamanParagrap.add(mPeminjamanNominal);
+//                    document.add(mPeminjamanParagrap);
+//
+//                    if (pinjaman.contains("Rp") && !sisaPinjaman.contains("Rp")){
+//                        sisaPinjaman = "Lunas";
+//                    }
+//
+//                    Chunk mSisaPinjamanLabel = new Chunk("Sisa Pinjaman:", mOrderIdValueFont);
+//                    Paragraph mSisaPinjamanParagrap = new Paragraph(mSisaPinjamanLabel);
+//                    mSisaPinjamanParagrap.add(new Chunk(glue));
+//                    Chunk mSisaPinjamanNominal = new Chunk(sisaPinjaman + "", mOrderIdValueFont);
+//                    mSisaPinjamanParagrap.add(mSisaPinjamanNominal);
+//                    document.add(mSisaPinjamanParagrap);
+//
+//                }
+
+
+
 
 
             document.add(new Paragraph(""));

@@ -360,7 +360,7 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
         }
     }
 
-    public void printGaji(View view, String nama, String komisi, String gajiLembur, String gajiPokok, String pinjaman, String uangMakan, String gajiTotal, String gajiDiterima, String namaCabang, String totalMasuk, String totalUangMakan, String jumlahGajiPokok, String hitungCicilan, String sisaPinjaman) {
+    public void printGaji(View view, String nama, String komisi, String gajiLembur, String gajiPokok, String pinjaman, String uangMakan, String gajiTotal, String gajiDiterima, String namaCabang, String totalMasuk, String totalUangMakan, String jumlahGajiPokok, String hitungCicilan, String sisaPinjaman, String checkedAngsuran, String tanggal) {
         if (!mService.isAvailable()) {
             Log.i(TAG, "printText: perangkat tidak support bluetooth");
             return;
@@ -371,6 +371,13 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
             mService.write(PrinterCommands.ESC_ALIGN_CENTER);
             mService.sendMessage(coba, "");
 
+            String lineNama = "\nnama : "+ nama;
+            mService.write(PrinterCommands.ESC_ALIGN_LEFT);
+            mService.sendMessage(lineNama, "");
+
+            String lineDate = tanggal;
+            mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
+            mService.sendMessage(lineDate, "");
 
             String lineGajiPokok = "\nGaji Pokok : \n" + totalMasuk + " x " + gajiPokok;
             mService.write(PrinterCommands.ESC_ALIGN_LEFT);
@@ -379,6 +386,14 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
             String lineHasilGajiPokok = jumlahGajiPokok ;
             mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
             mService.sendMessage(lineHasilGajiPokok, "");
+
+            String lineGajiLembur = "GajiLembur :";
+            mService.write(PrinterCommands.ESC_ALIGN_LEFT);
+            mService.sendMessage(lineGajiLembur, "");
+
+            String lineHasilGajiLembur = gajiLembur ;
+            mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
+            mService.sendMessage(lineHasilGajiLembur, "");
 
             String lineKomisi = "Komisi :";
             mService.write(PrinterCommands.ESC_ALIGN_LEFT);
@@ -411,16 +426,22 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
             mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
             mService.sendMessage(lineHasilTotalGaji, "");
 
-            if(Integer.parseInt(hitungCicilan) != 0 ) {
-                String linePinjaman = "Bayar Angsuran :" + hitungCicilan;
+            if (checkedAngsuran.equals("0") && sisaPinjaman.equals("0")){
+
+            }else if(!checkedAngsuran.equals("0")&& sisaPinjaman.equals("0")){
+
+                String linePinjaman = "Bayar Angsuran :" ;
                 mService.write(PrinterCommands.ESC_ALIGN_LEFT);
                 mService.sendMessage(linePinjaman, "");
 
                 String lineHasilPinjaman = pinjaman;
                 mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
                 mService.sendMessage(lineHasilPinjaman, "");
-            }
-            if (Integer.parseInt(sisaPinjaman) != 0) {
+
+                if (pinjaman.contains("Rp") && !sisaPinjaman.contains("Rp")){
+                    sisaPinjaman = "Lunas";
+                }
+
                 String lineSisaPinjaman = "Sisa Pinjaman : ";
                 mService.write(PrinterCommands.ESC_ALIGN_LEFT);
                 mService.sendMessage(lineSisaPinjaman, "");
@@ -428,7 +449,39 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
                 String lineHasilSisaPinjaman = sisaPinjaman + "\n";
                 mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
                 mService.sendMessage(lineHasilSisaPinjaman, "");
+
+
+
+            }else if (checkedAngsuran.equals("0") && !sisaPinjaman.equals("0")){
+
+                String lineSisaPinjaman = "Sisa Pinjaman : ";
+                mService.write(PrinterCommands.ESC_ALIGN_LEFT);
+                mService.sendMessage(lineSisaPinjaman, "");
+
+                String lineHasilSisaPinjaman = sisaPinjaman + "\n";
+                mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
+                mService.sendMessage(lineHasilSisaPinjaman, "");
+
             }
+
+//            if(Integer.parseInt(hitungCicilan) != 0 ) {
+//                String linePinjaman = "Bayar Angsuran :" + hitungCicilan;
+//                mService.write(PrinterCommands.ESC_ALIGN_LEFT);
+//                mService.sendMessage(linePinjaman, "");
+//
+//                String lineHasilPinjaman = pinjaman;
+//                mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
+//                mService.sendMessage(lineHasilPinjaman, "");
+//            }
+//            if (Integer.parseInt(sisaPinjaman) != 0) {
+//                String lineSisaPinjaman = "Sisa Pinjaman : ";
+//                mService.write(PrinterCommands.ESC_ALIGN_LEFT);
+//                mService.sendMessage(lineSisaPinjaman, "");
+//
+//                String lineHasilSisaPinjaman = sisaPinjaman + "\n";
+//                mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
+//                mService.sendMessage(lineHasilSisaPinjaman, "");
+//            }
 
             mService.sendMessage(garis, "");
 

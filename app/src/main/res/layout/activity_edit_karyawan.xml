@@ -95,16 +95,22 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:layout_marginBottom="20dp"
                     android:background="@drawable/bg_form">
-                    <Spinner
+                    <TextView
                         android:id="@+id/xcabangtoko"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
-                        android:fontFamily="@font/mlight"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginLeft="12dp"
+                        android:fontFamily="@font/mregular"
                         android:paddingLeft="10dp"
+                        android:layout_gravity="center"
+                        android:text=""
+                        android:textStyle="bold"
                         android:drawSelectorOnTop="true"
-                        android:textColor="@color/color4"
-                        android:textSize="14sp"/>
+                        android:textColor="@color/color5"
+                        android:textSize="16sp"/>
 
                 </LinearLayout>
 
@@ -141,21 +147,23 @@
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
-                <EditText
-                    android:id="@+id/xposisi"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="20dp"
-                    android:background="@drawable/bg_form"
-                    android:fontFamily="@font/mregular"
-                    android:maxLines="1"
-                    android:paddingLeft="20dp"
-                    android:paddingTop="8dp"
-                    android:text=""
-                    android:textColor="@color/color5"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:background="@drawable/bg_form">
+                    <Spinner
+                        android:id="@+id/xposisi"
+                        android:layout_width="match_parent"
+                        android:layout_height="40dp"
+                        android:fontFamily="@font/mlight"
+                        android:paddingLeft="10dp"
+                        android:drawSelectorOnTop="true"
+                        android:textColor="@color/color4"
+                        android:textSize="14sp"/>
+
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="wrap_content"

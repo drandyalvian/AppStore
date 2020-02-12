@@ -26,9 +26,9 @@ import org.w3c.dom.Text;
 public class EditKaryawanAct extends AppCompatActivity {
 
     Button back, save;
-    Spinner xspiner, xcabangtoko;
-    TextView xusername;
-    EditText xnama, xumur, xalamat, xnohp, xgajipokok, xposisi;
+    Spinner xspiner, xposisi;
+    TextView xusername, xcabangtoko;
+    EditText xnama, xumur, xalamat, xnohp, xgajipokok;
     String cabangx, karyawanx;
 
     DatabaseReference reference;
@@ -65,8 +65,10 @@ public class EditKaryawanAct extends AppCompatActivity {
         final ArrayAdapter pilihGender=ArrayAdapter.createFromResource(this, R.array.pilih_gender, android.R.layout.simple_spinner_dropdown_item);
         xspiner.setAdapter(pilihGender);
 
-        final ArrayAdapter cabangToko=ArrayAdapter.createFromResource(this, R.array.cabangToko, android.R.layout.simple_spinner_dropdown_item);
-        xcabangtoko.setAdapter(cabangToko);
+//        final ArrayAdapter cabangToko=ArrayAdapter.createFromResource(this, R.array.cabangToko, android.R.layout.simple_spinner_dropdown_item);
+//        xcabangtoko.setAdapter(cabangToko);
+
+
 
 //mengambil data dari intent
         Bundle bundle = getIntent().getExtras();
@@ -78,9 +80,10 @@ public class EditKaryawanAct extends AppCompatActivity {
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                final ArrayAdapter pilihPosisi = ArrayAdapter.createFromResource(EditKaryawanAct.this, R.array.posisiSpinner, android.R.layout.simple_spinner_dropdown_item);
                 xnama.setText(dataSnapshot.child("nama").getValue().toString());
-                xposisi.setText(dataSnapshot.child("posisi").getValue().toString());
-                xcabangtoko.setSelection(cabangToko.getPosition(dataSnapshot.child("nama_cabang").getValue().toString()));
+                xposisi.setSelection(pilihPosisi.getPosition(dataSnapshot.child("posisi").getValue().toString()));
+                xcabangtoko.setText(dataSnapshot.child("nama_cabang").getValue().toString());
                 xumur.setText(dataSnapshot.child("umur").getValue().toString());
                 xalamat.setText(dataSnapshot.child("alamat").getValue().toString());
                 xnohp.setText(dataSnapshot.child("telepon").getValue().toString());
@@ -101,12 +104,12 @@ public class EditKaryawanAct extends AppCompatActivity {
                 reference.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
+                        final ArrayAdapter pilihPosisi = ArrayAdapter.createFromResource(EditKaryawanAct.this, R.array.posisiSpinner, android.R.layout.simple_spinner_dropdown_item);
                         dataSnapshot.getRef().child("nama").setValue(xnama.getText().toString());
                         dataSnapshot.getRef().child("key").setValue(xnama.getText().toString());
                         dataSnapshot.getRef().child("key_name").setValue(xnama.getText().toString());
-                        dataSnapshot.getRef().child("posisi").setValue(xposisi.getText().toString());
-                        dataSnapshot.getRef().child("nama_cabang").setValue(xcabangtoko.getSelectedItem().toString());
+                        dataSnapshot.getRef().child("posisi").setValue(xposisi.getSelectedItem().toString());
+                        dataSnapshot.getRef().child("nama_cabang").setValue(xcabangtoko.getText().toString());
                         dataSnapshot.getRef().child("umur").setValue(xumur.getText().toString());
                         dataSnapshot.getRef().child("alamat").setValue(xalamat.getText().toString());
                         dataSnapshot.getRef().child("telepon").setValue(xnohp.getText().toString());

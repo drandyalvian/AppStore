@@ -103,9 +103,6 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
 
         myViewHolder.tNama.setText(gajiConst.get(i).getNama());
 
-//        long date = System.currentTimeMillis();
-//        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH);
-//        String dateString = sdf.format(date);
 
 
 
@@ -176,6 +173,10 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
                 viewTotalGaji = dialogView.findViewById(R.id.viewTotalGaji);
                 viewNamaPegawai = dialogView.findViewById(R.id.namaPegawai);
                 CheckBox check_setor_pinjaman = dialogView.findViewById(R.id.check_setor_pinjaman);
+
+                long date = System.currentTimeMillis();
+                SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
+                String dateString = sdf.format(date);
 
 
                 print = dialogView.findViewById(R.id.btnPrint);
@@ -543,6 +544,7 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 String pdfUmakan;
                                 String pdfnama = dataSnapshot.child("nama").getValue().toString();
+
                                 String pdfnama_cabang = dataSnapshot.child("nama_cabang").getValue().toString();
                                 String pdfGpokok = formatRupiah.format(Double.parseDouble(dataSnapshot.child("gaji_pokok").getValue().toString()));
                                 int pdfGpokok2 = Integer.parseInt(dataSnapshot.child("gaji_pokok").getValue().toString());
@@ -550,6 +552,9 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
                                 int pdfGLembur2 = Integer.parseInt(dataSnapshot.child("gaji_lembur").getValue().toString());
                                 String pdfKomisi = formatRupiah.format(Double.parseDouble(dataSnapshot.child("kompensasi").getValue().toString()));
                                 int pdfGKomisi2 = Integer.parseInt(dataSnapshot.child("kompensasi").getValue().toString());
+//
+                                String pdfCheckedAngsuran = dataSnapshot.child("checked_angsuran").getValue().toString();
+
                                 if (dataSnapshot.child("uang_makan").getValue().equals(0) || dataSnapshot.child("uang_makan").getValue().equals("0")) {
                                     pdfUmakan = "0";
                                 }else{
@@ -578,25 +583,25 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         int countG = (int) dataSnapshot.getChildrenCount();
-                                        int pdfGtotal = ((pdfGpokok2*countG)+(pdfUmakan2*countG)+pdfGLembur2+pdfGKomisi2);
-                                        int pdfGditerima = ((pdfGpokok2*countG)+(pdfUmakan2*countG))+pdfGLembur2+pdfGKomisi2-pdfAngsuran;
+                                        int pdfGtotal = ((pdfGpokok2*countG)+(pdfUmakan2*countG)+(pdfGLembur2*countG))+pdfGKomisi2;
+                                        int pdfGditerima = (((pdfGpokok2*countG)+(pdfUmakan2*countG)+(pdfGLembur2*countG))+pdfGKomisi2)-pdfAngsuran;
 //                                        Log.d("count", String.valueOf(dataSnapshot.getChildrenCount()+formatRupiah.format(pdfGpokok2*countG)));
 
                                         if (checker.lacksPermissions(REQUIRED_PERMISSION)) {
                                             PermissionsActivity.startActivityForResult((Activity) context, PERMISSION_REQUEST_CODE, REQUIRED_PERMISSION);
 
-                                            exportAct.createPdf(FileUtils.getAppPath(mContext) + pdfnama + ".pdf", pdfnama, pdfKomisi, pdfGLembur, pdfGpokok,
+                                            exportAct.createPdf(FileUtils.getAppPath(mContext) + pdfnama + ".pdf", pdfnama, pdfKomisi, formatRupiah.format(pdfGLembur2*countG), pdfGpokok,
                                                     String.valueOf(pdfAngsuran), pdfUmakan, formatRupiah.format(pdfGtotal), formatRupiah.format(pdfGditerima),
-                                                    ""+pdfnama_cabang, Integer.toString(countG), String.valueOf(pdfUmakan2*countG),
-                                                    formatRupiah.format(pdfGpokok2*countG), "", pdfPinjaman);
+                                                    ""+pdfnama_cabang, Integer.toString(countG), formatRupiah.format(pdfUmakan2*countG),
+                                                    formatRupiah.format(pdfGpokok2*countG), "", pdfPinjaman, pdfCheckedAngsuran, dateString);
 
                                             Toast.makeText(context, "File Disimpan : "+FileUtils.getAppPath(mContext) + " " + pdfnama+".pdf", Toast.LENGTH_SHORT).show();
 
                                         } else {
-                                            exportAct.createPdf(FileUtils.getAppPath(mContext) + pdfnama + ".pdf", pdfnama, pdfKomisi, pdfGLembur, pdfGpokok,
+                                            exportAct.createPdf(FileUtils.getAppPath(mContext) + pdfnama + ".pdf", pdfnama, pdfKomisi, formatRupiah.format(pdfGLembur2*countG), pdfGpokok,
                                                     formatRupiah.format(pdfAngsuran), pdfUmakan, formatRupiah.format(pdfGtotal), formatRupiah.format(pdfGditerima),
-                                                    ""+pdfnama_cabang, Integer.toString(countG), String.valueOf(pdfUmakan2*countG),
-                                                    formatRupiah.format(pdfGpokok2*countG), "", pdfPinjaman);
+                                                    ""+pdfnama_cabang, Integer.toString(countG), formatRupiah.format(pdfUmakan2*countG),
+                                                    formatRupiah.format(pdfGpokok2*countG), "", pdfPinjaman, pdfCheckedAngsuran, dateString);
 
                                             Toast.makeText(context, "File Disimpan : "+FileUtils.getAppPath(mContext) + " " + pdfnama +".pdf", Toast.LENGTH_SHORT).show();
                                         }
@@ -681,6 +686,7 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
                                 String printUmakan = formatRupiah.format(Double.parseDouble(dataSnapshot.child("uang_makan").getValue().toString()));
                                 int printUmakan2 = Integer.valueOf(dataSnapshot.child("uang_makan").getValue().toString());
                                 int printAngsuran = Integer.parseInt(dataSnapshot.child("checked_angsuran").getValue().toString());
+                                String printCheckedAngsuran = dataSnapshot.child("checked_angsuran").getValue().toString();
 //                                String printCicilan = dataSnapshot.child("cicilan").getValue().toString();
                                 String printPinjaman = formatRupiah.format(Double.parseDouble(dataSnapshot.child("pinjaman").getValue().toString()));
 //                                    String printPinjaman = formatRupiah.format(Double.parseDouble(dataSnapshot.child("pinjaman").getValue().toString()));
@@ -691,13 +697,13 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
                                     @Override
                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                         int countG = (int) dataSnapshot.getChildrenCount();
-                                        int printGtotal = ((printGpokok2*countG)+(printUmakan2*countG)+printKomisi2+printGLembur2);
-                                        int printGditerima = ((printGpokok2*countG)+(printUmakan2*countG))+printKomisi2+printGLembur2-printAngsuran;
+                                        int printGtotal = ((printGpokok2*countG)+(printUmakan2*countG)+(printGLembur2*countG))+printKomisi2;
+                                        int printGditerima = ((printGpokok2*countG)+(printUmakan2*countG)+(printGLembur2*countG)+printKomisi2)-printAngsuran;
 //                                        Log.d("count", String.valueOf(dataSnapshot.getChildrenCount()+formatRupiah.format(pdfGpokok2*countG)));
 
-                                        ((GajiAct)context).printGaji(view, printnama, printKomisi, printGLembur, printGpokok, formatRupiah.format(printAngsuran),
+                                        ((GajiAct)context).printGaji(view, printnama, printKomisi, formatRupiah.format(printGLembur2*countG), printGpokok, formatRupiah.format(printAngsuran),
                                                 printUmakan, formatRupiah.format(printGtotal), formatRupiah.format(printGditerima), ""+printnama_cabang,
-                                                Integer.toString(countG), formatRupiah.format(printUmakan2*countG), formatRupiah.format(printGpokok2*countG), "", printPinjaman);
+                                                Integer.toString(countG), formatRupiah.format(printUmakan2*countG), formatRupiah.format(printGpokok2*countG), "", printPinjaman, printCheckedAngsuran, dateString);
 
 
                                     }
