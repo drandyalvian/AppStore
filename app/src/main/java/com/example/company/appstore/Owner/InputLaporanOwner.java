@@ -17,8 +17,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.company.appstore.KepalaCabang.InputLaporanUangAct;
-import com.example.company.appstore.KepalaCabang.LaporanUangAct;
+
 import com.example.company.appstore.KepalaCabang.LaporanUangConst;
 import com.example.company.appstore.KepalaCabang.ListAbsensiConst;
 import com.example.company.appstore.R;
@@ -45,10 +44,13 @@ public class InputLaporanOwner extends AppCompatActivity {
     private Button addtgl,btnsave, back;
     EditText xnominal;
 
-    DatabaseReference reference, reference2, reference3, reference4, reference5,  reference6, reference7, reference10;
+    DatabaseReference reference, reference2, reference3, reference4, reference5,  reference6,reference7, reference9, reference10, reference11;
     String USERNAME_KEY = "usernamekey";
     String username_key ="";
     String username_key_new ="";
+
+
+    String cabangku;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,8 @@ public class InputLaporanOwner extends AppCompatActivity {
         setContentView(R.layout.activity_input_laporan_owner);
 
         final String cabang = getIntent().getStringExtra("cabang");
+        cabangku = cabang;
+
 
         getUsernameLocal();
 
@@ -72,25 +76,24 @@ public class InputLaporanOwner extends AppCompatActivity {
         long date = System.currentTimeMillis();
         SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy", Locale.ENGLISH);
         String dateString = sdf.format(date);
-        xtgl.setText(dateString);
+//        xtgl.setText(dateString);
 
         reference = FirebaseDatabase.getInstance().getReference().child("Cabang")
                 .child(cabang).child("LaporanUang");
 
         reference2 = FirebaseDatabase.getInstance().getReference().child("Cabang")
-                .child(cabang).child("CountAbsen").child(dateString);
+                .child(cabang).child("CountAbsen");
 
         reference3 = FirebaseDatabase.getInstance().getReference().child("Cabang")
-                .child(cabang).child("CekLaporan").child(dateString);
-
+                .child(cabang).child("CekLaporan");
         reference4 =  FirebaseDatabase.getInstance().getReference().child("Cabang")
                 .child(cabang).child("Karyawan");
-
+        reference9 = FirebaseDatabase.getInstance().getReference().child("Cabang")
+                .child(cabang).child("Recap");
         reference10 = FirebaseDatabase.getInstance().getReference().child("Cabang")
                 .child(cabang).child("CountKomisi");
-
-
-
+        reference11 = FirebaseDatabase.getInstance().getReference().child("Cabang")
+                .child(cabang).child("CountKaryawan");
 
 
         addtgl.setOnClickListener(new View.OnClickListener() {
@@ -101,38 +104,22 @@ public class InputLaporanOwner extends AppCompatActivity {
         });
 
 
-//        reference.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//                Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
-//
-//                List<LaporanUangConst> uangs = new ArrayList<>();
-//                while (iterator.hasNext()) {
-//                    DataSnapshot dataSnapshotChild = iterator.next();
-//                    LaporanUangConst lapUang = dataSnapshotChild.getValue(LaporanUangConst.class);
-//                    uangs.add(lapUang);
-//                }
-//
-//                int lengthuang = (int) dataSnapshot.getChildrenCount();
-//
-//                int hasil = 0;
-//                for (int u = 0 ; u < lengthuang; u++){
-//
-//                    hasil +=  Integer.valueOf(uangs.get(u).getNominal());
-////                            Log.d(String.valueOf(u), String.valueOf(uangs.get(u).getNominal()));
-//                    Log.d("Hasil", String.valueOf(hasil));
-//                }
-//                hasilKomisi(hasil);
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
 
-        Query query = reference2.orderByChild("keterangan").equalTo("Hadir");
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent go = new Intent(InputLaporanOwner.this, LaporanOwnerAct.class);
+                go.putExtra("cabang",cabang);
+                startActivity(go);
+            }
+        });
+
+
+    }
+
+    public void saveAction(String tanggal){
+
+        Query query = reference2.child(tanggal).orderByChild("keterangan").equalTo("Hadir");
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -142,12 +129,12 @@ public class InputLaporanOwner extends AppCompatActivity {
                     @Override
                     public void onClick(View view) {
 ////                        Log.d("count", s);
+                        btnsave.setText("PROSES...");
 
                         if (count > 3){
                             int jml = Integer.parseInt(xnominal.getText().toString());
 
-
-                            reference.child(xtgl.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            reference.child(tanggal).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     dataSnapshot.getRef().child("tanggal").setValue(xtgl.getText().toString());
@@ -155,10 +142,12 @@ public class InputLaporanOwner extends AppCompatActivity {
                                     dataSnapshot.getRef().child("key").setValue(xtgl.getText().toString());
 //                            dataSnapshot.getRef().child("nominal").setValue(xnominal.getText().toString());
                                     if (count == 4){
-                                        double jumlah = jml*30 * 0.3;
+                                        double rounded = jml*30 * 0.3;
+                                        double jumlah = (double) Math.round(rounded/100d)*100;
                                         DecimalFormat df = new DecimalFormat("###.#");
                                         dataSnapshot.getRef().child("nominal").setValue(String.valueOf(df.format(jumlah)));
-                                        reference3.child(xtgl.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
+
+                                        reference3.child(tanggal).child(tanggal).addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                                 dataSnapshot.getRef().child("key").setValue(xtgl.getText().toString());
@@ -172,10 +161,11 @@ public class InputLaporanOwner extends AppCompatActivity {
                                         });
 
                                     }else if (count == 5){
-                                        double jumlah = jml*29 * 0.24;
+                                        double rounded = jml*29 * 0.24;
+                                        double jumlah = (double) Math.round(rounded/100d)*100;
                                         DecimalFormat df = new DecimalFormat("###.#");
                                         dataSnapshot.getRef().child("nominal").setValue(String.valueOf(df.format(jumlah)));
-                                        reference3.child(xtgl.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        reference3.child(tanggal).child(tanggal).addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                                 dataSnapshot.getRef().child("key").setValue(xtgl.getText().toString());
@@ -189,10 +179,11 @@ public class InputLaporanOwner extends AppCompatActivity {
                                         });
 
                                     }else if (count == 6){
-                                        double jumlah = jml*28 * 0.22;
+                                        double rounded = jml*28 * 0.22;
+                                        double jumlah = (double) Math.round(rounded/100d)*100;
                                         DecimalFormat df = new DecimalFormat("###.#");
                                         dataSnapshot.getRef().child("nominal").setValue(String.valueOf(df.format(jumlah)));
-                                        reference3.child(xtgl.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        reference3.child(tanggal).child(tanggal).addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                                 dataSnapshot.getRef().child("key").setValue(xtgl.getText().toString());
@@ -206,10 +197,11 @@ public class InputLaporanOwner extends AppCompatActivity {
                                         });
 
                                     }else if (count == 7){
-                                        double jumlah = jml*27 * 0.2;
+                                        double rounded = jml*27 * 0.2;
+                                        double jumlah = (double) Math.round(rounded/100d)*100;
                                         DecimalFormat df = new DecimalFormat("###.#");
                                         dataSnapshot.getRef().child("nominal").setValue(String.valueOf(df.format(jumlah)));
-                                        reference3.child(xtgl.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        reference3.child(tanggal).child(tanggal).addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                                 dataSnapshot.getRef().child("key").setValue(xtgl.getText().toString());
@@ -223,10 +215,11 @@ public class InputLaporanOwner extends AppCompatActivity {
                                         });
 
                                     }else if (count == 8){
-                                        double jumlah = jml*26 * 0.18;
+                                        double rounded = jml*26 * 0.18;
+                                        double jumlah = (double) Math.round(rounded/100d)*100;
                                         DecimalFormat df = new DecimalFormat("###.#");
                                         dataSnapshot.getRef().child("nominal").setValue(String.valueOf(df.format(jumlah)));
-                                        reference3.child(xtgl.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        reference3.child(tanggal).child(tanggal).addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                                 dataSnapshot.getRef().child("key").setValue(xtgl.getText().toString());
@@ -239,11 +232,12 @@ public class InputLaporanOwner extends AppCompatActivity {
                                             }
                                         });
 
-                                    }else if (count == 9 || count == 10){
-                                        double jumlah = jml*25 * 0.17;
+                                    }else if (count == 9 || count ==10){
+                                        double rounded = jml*25 * 0.17;
+                                        double jumlah = (double) Math.round(rounded/100d)*100;
                                         DecimalFormat df = new DecimalFormat("###.#");
                                         dataSnapshot.getRef().child("nominal").setValue(String.valueOf(df.format(jumlah)));
-                                        reference3.child(xtgl.getText().toString()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        reference3.child(tanggal).child(tanggal).addListenerForSingleValueEvent(new ValueEventListener() {
                                             @Override
                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                                 dataSnapshot.getRef().child("key").setValue(xtgl.getText().toString());
@@ -270,114 +264,81 @@ public class InputLaporanOwner extends AppCompatActivity {
 
                             });
 
+                            //komisi perhari
+                            reference4.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                            Intent go = new Intent(InputLaporanOwner.this, LaporanOwnerAct.class);
-                            go.putExtra("cabang",cabang);
-                            startActivity(go);
+                                    Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
 
-                        }else{
-                            Toast.makeText(InputLaporanOwner.this,
-                                    "Jumlah karyawan yang hadir "+count+", minimal 4 orang", Toast.LENGTH_LONG).show();
-                        }
+                                    List<DataKaryawanConst> users = new ArrayList<>();
+                                    while (iterator.hasNext()) {
+                                        DataSnapshot dataSnapshotChild = iterator.next();
+                                        DataKaryawanConst name = dataSnapshotChild.getValue(DataKaryawanConst.class);
+                                        users.add(name);
+                                    }
 
+                                    int lengthUser = (int) dataSnapshot.getChildrenCount();
 
-                        final Handler handler = new Handler();
-                        handler.postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
+                                    try{
 
-                                //komisi perhari
-                                reference4.addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        for (int u = 0 ; u < lengthUser; u++){
 
-                                        Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+                                            for (DataSnapshot child: dataSnapshot.getChildren()) {
 
-                                        List<DataKaryawanConst> users = new ArrayList<>();
-                                        while (iterator.hasNext()) {
-                                            DataSnapshot dataSnapshotChild = iterator.next();
-                                            DataKaryawanConst name = dataSnapshotChild.getValue(DataKaryawanConst.class);
-                                            users.add(name);
-                                        }
-
-                                        int lengthUser = (int) dataSnapshot.getChildrenCount();
-
-                                        try{
-
-                                            for (int u = 0 ; u < lengthUser; u++){
-
-                                                reference5 = FirebaseDatabase.getInstance().getReference().child("Cabang")
-                                                        .child(cabang).child("CountKomisi").child(users.get(u).getKey_name());
-
-                                                Query query1 = reference5.child("Absensi").orderByKey().limitToLast(1);
+                                                DatabaseReference reference7 = FirebaseDatabase.getInstance().getReference().child("Cabang")
+                                                        .child(cabangku).child("CountKomisi").child(users.get(u).getKey_name());
                                                 int finalU = u;
-                                                query1.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                reference7.child("Absensi").child(tanggal).addListenerForSingleValueEvent(new ValueEventListener() {
                                                     @Override
                                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                                        for (DataSnapshot child: dataSnapshot.getChildren()) {
-                                                            String keyTanggal = child.getKey();
+                                                        Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
 
-                                                            DatabaseReference reference7 = FirebaseDatabase.getInstance().getReference().child("Cabang")
-                                                                    .child(cabang).child("CountKomisi").child(users.get(finalU).getKey_name());
-                                                            reference7.child("Absensi").child(keyTanggal).addListenerForSingleValueEvent(new ValueEventListener() {
-                                                                @Override
-                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                        List<ListAbsensiConst> absens = new ArrayList<>();
+                                                        while (iterator.hasNext()) {
+                                                            DataSnapshot dataSnapshotChild = iterator.next();
+                                                            ListAbsensiConst keyku = dataSnapshotChild.getValue(ListAbsensiConst.class);
+                                                            absens.add(keyku);
+                                                        }
 
-                                                                    Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+                                                        int lengtAbsen = (int) dataSnapshot.getChildrenCount();
 
-                                                                    List<ListAbsensiConst> absens = new ArrayList<>();
-                                                                    while (iterator.hasNext()) {
-                                                                        DataSnapshot dataSnapshotChild = iterator.next();
-                                                                        ListAbsensiConst keyku = dataSnapshotChild.getValue(ListAbsensiConst.class);
-                                                                        absens.add(keyku);
-                                                                    }
-
-                                                                    int lengtAbsen = (int) dataSnapshot.getChildrenCount();
-
-                                                                    for (int i = 0; i < lengtAbsen; i++){
+                                                        for (int i = 0; i < lengtAbsen; i++){
 
 //                                            Log.d("Coba",String.valueOf(absens.get(i).getKeterangan()));
-                                                                        if (absens.get(i).getKeterangan().equals("Hadir")){
+                                                            if (absens.get(i).getKeterangan().equals("Hadir")){
 
-                                                                            reference3.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                reference3.child(tanggal).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                    @Override
+                                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                        Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+
+                                                                        List<LaporanUangConst> lapUang = new ArrayList<>();
+                                                                        while (iterator.hasNext()) {
+                                                                            DataSnapshot dataSnapshotChild = iterator.next();
+                                                                            LaporanUangConst keyku = dataSnapshotChild.getValue(LaporanUangConst.class);
+                                                                            lapUang.add(keyku);
+                                                                        }
+
+                                                                        int lengthLapUang = (int) dataSnapshot.getChildrenCount();
+                                                                        for (int l = 0; l < lengthLapUang; l++){
+
+                                                                            int nominal = Integer.parseInt(lapUang.get(l).getNominal());
+                                                                            int hasilNominal = nominal*1;
+
+                                                                            DatabaseReference reference8 = FirebaseDatabase.getInstance().getReference().child("Cabang")
+                                                                                    .child(cabangku).child("CountKomisi").child(users.get(finalU).getKey_name());
+                                                                            Query query2 = reference8.child("KomisiPerhari").child(tanggal).child(tanggal);
+                                                                            query2.addListenerForSingleValueEvent(new ValueEventListener() {
                                                                                 @Override
                                                                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                                                                    Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(hasilNominal));
+                                                                                    dataSnapshot.getRef().child("key").setValue(users.get(finalU).getKey_name());
 
-                                                                                    List<LaporanUangConst> lapUang = new ArrayList<>();
-                                                                                    while (iterator.hasNext()) {
-                                                                                        DataSnapshot dataSnapshotChild = iterator.next();
-                                                                                        LaporanUangConst keyku = dataSnapshotChild.getValue(LaporanUangConst.class);
-                                                                                        lapUang.add(keyku);
-                                                                                    }
-
-                                                                                    int lengthLapUang = (int) dataSnapshot.getChildrenCount();
-                                                                                    for (int l = 0; l < lengthLapUang; l++){
-
-                                                                                        int nominal = Integer.parseInt(lapUang.get(l).getNominal());
-                                                                                        int hasilNominal = nominal*1;
-
-                                                                                        DatabaseReference reference8 = FirebaseDatabase.getInstance().getReference().child("Cabang")
-                                                                                                .child(cabang).child("CountKomisi").child(users.get(finalU).getKey_name());
-                                                                                        Query query2 = reference8.child("KomisiPerhari").child(keyTanggal);
-                                                                                        query2.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                                                            @Override
-                                                                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                                                                                                dataSnapshot.getRef().child("nominal").setValue(String.valueOf(hasilNominal));
-                                                                                                dataSnapshot.getRef().child("key").setValue(users.get(finalU).getKey_name());
-
-                                                                                            }
-
-                                                                                            @Override
-                                                                                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                                                                            }
-                                                                                        });
-
-                                                                                    }
+                                                                                    Log.d("nominal", String.valueOf(hasilNominal));
 
                                                                                 }
 
@@ -387,69 +348,620 @@ public class InputLaporanOwner extends AppCompatActivity {
                                                                                 }
                                                                             });
 
-                                                                        }else{
+                                                                            //suportTotalKomisi
+                                                                            reference8.child("TotalKomisi").child(tanggal).
+                                                                                    addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                        @Override
+                                                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                                                            reference3.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                                                @Override
-                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                                            dataSnapshot.getRef().child("nominal").setValue(String.valueOf(hasilNominal));
+                                                                                            dataSnapshot.getRef().child("key").setValue(users.get(finalU).getKey_name());
 
-                                                                                    Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+                                                                                        }
 
-                                                                                    List<LaporanUangConst> lapUang = new ArrayList<>();
-                                                                                    while (iterator.hasNext()) {
-                                                                                        DataSnapshot dataSnapshotChild = iterator.next();
-                                                                                        LaporanUangConst key = dataSnapshotChild.getValue(LaporanUangConst.class);
-                                                                                        lapUang.add(key);
-                                                                                    }
+                                                                                        @Override
+                                                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                                                                    int lengthLapUang = (int) dataSnapshot.getChildrenCount();
-                                                                                    for (int l = 0; l < lengthLapUang; l++){
+                                                                                        }
+                                                                                    });
 
-                                                                                        int nominal = Integer.parseInt(lapUang.get(l).getNominal());
-                                                                                        int hasilNominal = nominal*0;
-                                                                                        DatabaseReference reference8 = FirebaseDatabase.getInstance().getReference().child("Cabang")
-                                                                                                .child(cabang).child("CountKomisi").child(users.get(finalU).getKey_name());
-                                                                                        Query query2 = reference8.child("KomisiPerhari").child(keyTanggal);
-                                                                                        query2.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                                                            @Override
-                                                                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                            //recap
+                                                                            reference9.child(users.get(finalU).getKey_name()).child(tanggal.substring(3)).child(tanggal).
+                                                                                    addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                        @Override
+                                                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                                                                                dataSnapshot.getRef().child("nominal").setValue(String.valueOf(hasilNominal));
-                                                                                                dataSnapshot.getRef().child("key").setValue(users.get(finalU).getKey_name());
+                                                                                            dataSnapshot.getRef().child("nominal").setValue(String.valueOf(hasilNominal));
 
-                                                                                            }
+                                                                                        }
 
-                                                                                            @Override
-                                                                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                                                        @Override
+                                                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                                                                            }
-                                                                                        });
-
-                                                                                    }
-
-                                                                                }
-
-                                                                                @Override
-                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                                                                }
-                                                                            });
+                                                                                        }
+                                                                                    });
 
                                                                         }
 
                                                                     }
 
+                                                                    @Override
+                                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                                                                }
+                                                                    }
+                                                                });
 
-                                                                @Override
-                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                                            }else{
 
-                                                                }
-                                                            });
+                                                                reference3.child(tanggal).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                    @Override
+                                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                        Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+
+                                                                        List<LaporanUangConst> lapUang = new ArrayList<>();
+                                                                        while (iterator.hasNext()) {
+                                                                            DataSnapshot dataSnapshotChild = iterator.next();
+                                                                            LaporanUangConst key = dataSnapshotChild.getValue(LaporanUangConst.class);
+                                                                            lapUang.add(key);
+                                                                        }
+
+                                                                        int lengthLapUang = (int) dataSnapshot.getChildrenCount();
+                                                                        for (int l = 0; l < lengthLapUang; l++){
+
+                                                                            int nominal = Integer.parseInt(lapUang.get(l).getNominal());
+                                                                            int hasilNominal = nominal*0;
+                                                                            DatabaseReference reference8 = FirebaseDatabase.getInstance().getReference().child("Cabang")
+                                                                                    .child(cabangku).child("CountKomisi").child(users.get(finalU).getKey_name());
+                                                                            Query query2 = reference8.child("KomisiPerhari").child(tanggal).child(tanggal);
+                                                                            query2.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                @Override
+                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(hasilNominal));
+                                                                                    dataSnapshot.getRef().child("key").setValue(users.get(finalU).getKey_name());
+
+                                                                                }
+
+                                                                                @Override
+                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                }
+                                                                            });
+
+                                                                            //suportTotalKomisi
+                                                                            reference8.child("TotalKomisi").child(tanggal).
+                                                                                    addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                        @Override
+                                                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                            dataSnapshot.getRef().child("nominal").setValue(String.valueOf(hasilNominal));
+                                                                                            dataSnapshot.getRef().child("key").setValue(users.get(finalU).getKey_name());
+
+                                                                                        }
+
+                                                                                        @Override
+                                                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                        }
+                                                                                    });
+
+                                                                            //recap
+                                                                            reference9.child(users.get(finalU).getKey_name()).child(tanggal.substring(3)).child(tanggal).
+                                                                                    addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                        @Override
+                                                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                            dataSnapshot.getRef().child("nominal").setValue(String.valueOf(hasilNominal));
+
+                                                                                        }
+
+                                                                                        @Override
+                                                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                        }
+                                                                                    });
+
+
+                                                                        }
+
+                                                                    }
+
+                                                                    @Override
+                                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                    }
+                                                                });
+
+                                                            }
 
                                                         }
 
+
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                                                });
+
+
+                                            }
+
+
+
+                                        }
+
+                                    }catch (Exception e){
+
+
+                                    }
+
+
+
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+
+
+                                }
+                            });
+
+                            //komisiKepalaCabang dan komisiKaryawan
+                            final Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    //komisiKepalaCabang
+                                    Query queryKep = reference4.orderByChild("posisi").equalTo("Kepala Cabang");
+                                    queryKep.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                            Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+
+                                            List<DataKaryawanConst> users = new ArrayList<>();
+                                            while (iterator.hasNext()) {
+                                                DataSnapshot dataSnapshotChild = iterator.next();
+                                                DataKaryawanConst name = dataSnapshotChild.getValue(DataKaryawanConst.class);
+                                                users.add(name);
+                                            }
+
+                                            int lengthK = (int) dataSnapshot.getChildrenCount();
+
+                                            for (int u = 0 ; u < lengthK ; u++){
+
+                                                int finalU = u;
+                                                Query queryKepala = reference10.child(users.get(u).getKey_name()).child("Absensi").child(tanggal).
+                                                        orderByChild("keterangan").equalTo("Hadir");
+                                                queryKepala.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                        if (dataSnapshot.exists()){
+                                                            int lengthKepala = (int) dataSnapshot.getChildrenCount();
+
+                                                            Log.d("cek", String.valueOf(dataSnapshot.exists()));
+
+                                                            reference10.child(users.get(finalU).getKey_name()).child("KomisiPerhari").child(tanggal)
+                                                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                        @Override
+                                                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                            Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+
+                                                                            List<LaporanUangConst> lapUang = new ArrayList<>();
+                                                                            while (iterator.hasNext()) {
+                                                                                DataSnapshot dataSnapshotChild = iterator.next();
+                                                                                LaporanUangConst keyku = dataSnapshotChild.getValue(LaporanUangConst.class);
+                                                                                lapUang.add(keyku);
+                                                                            }
+
+                                                                            int lengthKomisi = (int) dataSnapshot.getChildrenCount();
+
+                                                                            Log.d("lengthkey", String.valueOf(lengthKomisi));
+
+                                                                            for (int i = 0 ; i < lengthKomisi ; i++){
+
+                                                                                Log.d("nominalkuApa", lapUang.get(i).getNominal());
+                                                                                int komisiTukang = Integer.parseInt(lapUang.get(i).getNominal());
+
+                                                                                Query query = reference2.child(tanggal).orderByChild("keterangan").equalTo("Hadir");
+                                                                                query.addValueEventListener(new ValueEventListener() {
+                                                                                    @Override
+                                                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                                        long count = dataSnapshot.getChildrenCount();
+
+                                                                                        Query queryKaryawan =  reference11.child(tanggal)
+                                                                                                .orderByChild("keterangan").equalTo("Hadir");
+                                                                                        queryKaryawan.addValueEventListener(new ValueEventListener() {
+                                                                                            @Override
+                                                                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                int lengthKaryawan = (int) dataSnapshot.getChildrenCount();
+                                                                                                Log.d("lengthKaryawan", String.valueOf(lengthKaryawan));
+
+                                                                                                int lengthSisa = lengthKepala + lengthKaryawan;
+                                                                                                int jmlLaporan = Integer.parseInt(xnominal.getText().toString());
+
+                                                                                                if (count == 4) {
+                                                                                                    int operasi = komisiTukang - ((jmlLaporan * 30) / lengthSisa);
+                                                                                                    int hasil = operasi * (-1);
+                                                                                                    int rounded = (int) Math.round(hasil / 100d) * 100; // bulat 100
+                                                                                                    Log.d("hasil", String.valueOf(komisiTukang) + " - "
+                                                                                                            + String.valueOf(jmlLaporan) + " x 29" + " / " + lengthSisa + " " + hasil);
+
+                                                                                                    reference10.child(users.get(finalU).getKey_name()).child("KomisiPerhari").child(tanggal)
+                                                                                                            .child(tanggal)
+                                                                                                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                                @Override
+                                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                                }
+
+                                                                                                                @Override
+                                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                                }
+                                                                                                            });
+
+                                                                                                    //suportTotalKomisi
+                                                                                                    reference10.child(users.get(finalU).getKey_name()).child("TotalKomisi")
+                                                                                                            .child(tanggal)
+                                                                                                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                                @Override
+                                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                                }
+
+                                                                                                                @Override
+                                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                                }
+                                                                                                            });
+
+                                                                                                    //recap
+                                                                                                    reference9.child(users.get(finalU).getKey_name())
+                                                                                                            .child(tanggal.substring(3)).child(tanggal).
+                                                                                                            addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                                @Override
+                                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                                }
+
+                                                                                                                @Override
+                                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                                }
+                                                                                                            });
+
+                                                                                                } else if (count == 5) {
+//
+                                                                                                    int operasi = komisiTukang - ((jmlLaporan * 29) / lengthSisa);
+                                                                                                    int hasil = operasi * (-1);
+                                                                                                    int rounded = (int) Math.round(hasil / 100d) * 100; // bulat 100
+                                                                                                    Log.d("hasil", String.valueOf(komisiTukang) + " - "
+                                                                                                            + String.valueOf(jmlLaporan) + " x 29" + " / " + lengthSisa + " " + hasil);
+
+                                                                                                    reference10.child(users.get(finalU).getKey_name()).child("KomisiPerhari").child(tanggal)
+                                                                                                            .child(tanggal)
+                                                                                                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                                @Override
+                                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                                }
+
+                                                                                                                @Override
+                                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                                }
+                                                                                                            });
+
+                                                                                                    //suportTotalKomisi
+                                                                                                    reference10.child(users.get(finalU).getKey_name()).child("TotalKomisi")
+                                                                                                            .child(tanggal)
+                                                                                                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                                @Override
+                                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                                }
+
+                                                                                                                @Override
+                                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                                }
+                                                                                                            });
+                                                                                                    //recap
+                                                                                                    reference9.child(users.get(finalU).getKey_name())
+                                                                                                            .child(tanggal.substring(3)).child(tanggal).
+                                                                                                            addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                                @Override
+                                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                                }
+
+                                                                                                                @Override
+                                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                                }
+                                                                                                            });
+
+
+                                                                                                } else if (count == 6) {
+                                                                                                    int operasi = komisiTukang - ((jmlLaporan * 28) / lengthSisa);
+                                                                                                    int hasil = operasi * (-1);
+                                                                                                    int rounded = (int) Math.round(hasil / 100d) * 100; // bulat 100
+                                                                                                    Log.d("hasil", String.valueOf(komisiTukang) + " - "
+                                                                                                            + String.valueOf(jmlLaporan) + " x 29" + " / " + lengthSisa + " " + hasil);
+
+                                                                                                    reference10.child(users.get(finalU).getKey_name()).child("KomisiPerhari").child(tanggal)
+                                                                                                            .child(tanggal)
+                                                                                                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                                @Override
+                                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                                }
+
+                                                                                                                @Override
+                                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                                }
+                                                                                                            });
+
+                                                                                                    //suportTotalKomisi
+                                                                                                    reference10.child(users.get(finalU).getKey_name()).child("TotalKomisi")
+                                                                                                            .child(tanggal)
+                                                                                                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                                @Override
+                                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                                }
+
+                                                                                                                @Override
+                                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                                }
+                                                                                                            });
+                                                                                                    //recap
+                                                                                                    reference9.child(users.get(finalU).getKey_name())
+                                                                                                            .child(tanggal.substring(3)).child(tanggal).
+                                                                                                            addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                                @Override
+                                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                                }
+
+                                                                                                                @Override
+                                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                                }
+                                                                                                            });
+
+                                                                                                } else if (count == 7) {
+                                                                                                    int operasi = komisiTukang - ((jmlLaporan * 27) / lengthSisa);
+                                                                                                    int hasil = operasi * (-1);
+                                                                                                    int rounded = (int) Math.round(hasil / 100d) * 100; // bulat 100
+                                                                                                    Log.d("hasil", String.valueOf(komisiTukang) + " - "
+                                                                                                            + String.valueOf(jmlLaporan) + " x 29" + " / " + lengthSisa + " " + hasil);
+
+                                                                                                    reference10.child(users.get(finalU).getKey_name()).child("KomisiPerhari").child(tanggal)
+                                                                                                            .child(tanggal)
+                                                                                                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                                @Override
+                                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                                }
+
+                                                                                                                @Override
+                                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                                }
+                                                                                                            });
+
+                                                                                                    //suportTotalKomisi
+                                                                                                    reference10.child(users.get(finalU).getKey_name()).child("TotalKomisi")
+                                                                                                            .child(tanggal)
+                                                                                                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                                @Override
+                                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                                }
+
+                                                                                                                @Override
+                                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                                }
+                                                                                                            });
+                                                                                                    //recap
+                                                                                                    reference9.child(users.get(finalU).getKey_name())
+                                                                                                            .child(tanggal.substring(3)).child(tanggal).
+                                                                                                            addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                                @Override
+                                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                                }
+
+                                                                                                                @Override
+                                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                                }
+                                                                                                            });
+
+                                                                                                } else if (count == 8) {
+                                                                                                    int operasi = komisiTukang - ((jmlLaporan * 26) / lengthSisa);
+                                                                                                    int hasil = operasi * (-1);
+                                                                                                    int rounded = (int) Math.round(hasil / 100d) * 100; // bulat 100
+                                                                                                    Log.d("hasil", String.valueOf(komisiTukang) + " - "
+                                                                                                            + String.valueOf(jmlLaporan) + " x 29" + " / " + lengthSisa + " " + hasil);
+
+                                                                                                    reference10.child(users.get(finalU).getKey_name()).child("KomisiPerhari").child(tanggal)
+                                                                                                            .child(tanggal)
+                                                                                                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                                @Override
+                                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                                }
+
+                                                                                                                @Override
+                                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                                }
+                                                                                                            });
+
+                                                                                                    //suportTotalKomisi
+                                                                                                    reference10.child(users.get(finalU).getKey_name()).child("TotalKomisi")
+                                                                                                            .child(tanggal)
+                                                                                                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                                @Override
+                                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                                }
+
+                                                                                                                @Override
+                                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                                }
+                                                                                                            });
+
+                                                                                                    //recap
+                                                                                                    reference9.child(users.get(finalU).getKey_name())
+                                                                                                            .child(tanggal.substring(3)).child(tanggal).
+                                                                                                            addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                                @Override
+                                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                                }
+
+                                                                                                                @Override
+                                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                                }
+                                                                                                            });
+
+                                                                                                } else if (count == 9 || count == 10) {
+                                                                                                    int operasi = komisiTukang - ((jmlLaporan * 25) / lengthSisa);
+                                                                                                    int hasil = operasi * (-1);
+                                                                                                    int rounded = (int) Math.round(hasil / 100d) * 100; // bulat 100
+                                                                                                    Log.d("hasil", String.valueOf(komisiTukang) + " - "
+                                                                                                            + String.valueOf(jmlLaporan) + " x 29" + " / " + lengthSisa + " " + hasil);
+
+                                                                                                    reference10.child(users.get(finalU).getKey_name()).child("KomisiPerhari").child(tanggal)
+                                                                                                            .child(tanggal)
+                                                                                                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                                @Override
+                                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                                }
+
+                                                                                                                @Override
+                                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                                }
+                                                                                                            });
+                                                                                                    //suportTotalKomisi
+                                                                                                    reference10.child(users.get(finalU).getKey_name()).child("TotalKomisi")
+                                                                                                            .child(tanggal)
+                                                                                                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                                @Override
+                                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                                }
+
+                                                                                                                @Override
+                                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                                }
+                                                                                                            });
+
+                                                                                                    //recap
+                                                                                                    reference9.child(users.get(finalU).getKey_name())
+                                                                                                            .child(tanggal.substring(3)).child(tanggal)
+                                                                                                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                                @Override
+                                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                                }
+
+                                                                                                                @Override
+                                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                                }
+                                                                                                            });
+
+
+
+                                                                                                }
+                                                                                            }
+
+                                                                                            @Override
+                                                                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                            }
+                                                                                        });
+
+
+                                                                                    }
+
+                                                                                    @Override
+                                                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                    }
+                                                                                });
+
+
+
+                                                                            }
+
+
+
+                                                                        }
+
+                                                                        @Override
+                                                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                        }
+                                                                    });
+                                                        }
 
 
                                                     }
@@ -462,90 +974,438 @@ public class InputLaporanOwner extends AppCompatActivity {
 
                                             }
 
-                                        }catch (Exception e){
+
+
 
 
                                         }
 
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
-
-
-
-                                    }
-                                });
-
-                                //total Komisi
-                                reference4.addValueEventListener(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                                        Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
-
-                                        List<DataKaryawanConst> users = new ArrayList<>();
-                                        while (iterator.hasNext()) {
-                                            DataSnapshot dataSnapshotChild = iterator.next();
-                                            DataKaryawanConst name = dataSnapshotChild.getValue(DataKaryawanConst.class);
-                                            users.add(name);
                                         }
+                                    });
 
-                                        int lengthUser = (int) dataSnapshot.getChildrenCount();
+                                    //komisiKaryawan
+                                    Query queryKaryawan =  reference11.child(tanggal)
+                                            .orderByChild("keterangan").equalTo("Hadir");
+                                    queryKaryawan.addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
 
-                                        try {
+                                            List<DataKaryawanConst> usersK = new ArrayList<>();
+                                            while (iterator.hasNext()) {
+                                                DataSnapshot dataSnapshotChild = iterator.next();
+                                                DataKaryawanConst name = dataSnapshotChild.getValue(DataKaryawanConst.class);
+                                                usersK.add(name);
+                                            }
+                                            int lengthKaryawan = (int) dataSnapshot.getChildrenCount();
+//                                        int jmlLaporan = Integer.parseInt(xnominal.getText().toString());
 
-                                            for (int i = 0 ; i < lengthUser ; i++){
-
-                                                DatabaseReference reference9 = FirebaseDatabase.getInstance().getReference().child("Cabang")
-                                                        .child(cabang).child("CountKomisi").child(users.get(i).getKey_name());
-
-
-
-                                                reference9.child("KomisiPerhari").addValueEventListener(new ValueEventListener() {
+                                            for (int u = 0 ; u < lengthKaryawan ; u++){
+                                                int finalU = u;
+                                                Log.d("karyawanku", usersK.get(u).getKey());
+                                                reference10.child(usersK.get(u).getKey()).child("KomisiPerhari")
+                                                        .child(tanggal).addListenerForSingleValueEvent(new ValueEventListener() {
                                                     @Override
                                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                                         Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
 
-                                                        List<LaporanUangConst> komisis = new ArrayList<>();
+                                                        List<LaporanUangConst> lapUang = new ArrayList<>();
                                                         while (iterator.hasNext()) {
                                                             DataSnapshot dataSnapshotChild = iterator.next();
-                                                            LaporanUangConst nkomisi = dataSnapshotChild.getValue(LaporanUangConst.class);
-                                                            komisis.add(nkomisi);
+                                                            LaporanUangConst keyku = dataSnapshotChild.getValue(LaporanUangConst.class);
+                                                            lapUang.add(keyku);
                                                         }
 
-                                                        int lengthuang = (int) dataSnapshot.getChildrenCount();
+                                                        int lengthKomisi = (int) dataSnapshot.getChildrenCount();
+                                                        for (int i = 0 ; i < lengthKomisi ; i++){
 
-                                                        int hasil = 0;
+                                                            int komisiTukang = Integer.parseInt(lapUang.get(i).getNominal());
 
-                                                        try {
-
-                                                            for (int u = 0 ; u < lengthuang; u++){
-
-                                                                hasil +=  Integer.valueOf(komisis.get(u).getNominal());
-                                                                Log.d("Hasil", String.valueOf(hasil));
-                                                                reference10 = FirebaseDatabase.getInstance().getReference().child("Cabang")
-                                                                        .child(cabang).child("CountKomisi").child(komisis.get(u).getKey())
-                                                                        .child("TotalKomisi");
-
-                                                                reference7 = FirebaseDatabase.getInstance().getReference().child("Cabang")
-                                                                        .child(cabang).child("Karyawan").child(komisis.get(u).getKey());
-                                                            }
-
-                                                        }catch (Exception e){
-
-                                                        }
-
-                                                        int finalHasil = hasil;
-                                                        try {
-
-                                                            reference10.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                            Query queryKep = reference4.orderByChild("posisi").equalTo("Kepala Cabang");
+                                                            queryKep.addValueEventListener(new ValueEventListener() {
                                                                 @Override
                                                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
-                                                                    dataSnapshot.getRef().child("total_komisi").setValue(String.valueOf(finalHasil));
+                                                                    Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+
+                                                                    List<DataKaryawanConst> users = new ArrayList<>();
+                                                                    while (iterator.hasNext()) {
+                                                                        DataSnapshot dataSnapshotChild = iterator.next();
+                                                                        DataKaryawanConst name = dataSnapshotChild.getValue(DataKaryawanConst.class);
+                                                                        users.add(name);
+                                                                    }
+
+                                                                    int lengthK = (int) dataSnapshot.getChildrenCount();
+                                                                    for (int i = 0 ; i < lengthK ; i++){
+
+                                                                        Query queryKepala = reference10.child(users.get(i).getKey_name()).child("Absensi").child(tanggal).
+                                                                                orderByChild("keterangan").equalTo("Hadir");
+                                                                        queryKepala.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                            @Override
+                                                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                                int lengthKepala = (int) dataSnapshot.getChildrenCount();
+
+
+                                                                                int lengthSisa = lengthKepala + lengthKaryawan;
+                                                                                int jmlLaporan = Integer.parseInt(xnominal.getText().toString());
+
+                                                                                if (count == 4) {
+                                                                                    int operasi = komisiTukang - ((jmlLaporan * 30) / lengthSisa);
+                                                                                    int hasil = operasi * (-1);
+                                                                                    int rounded = (int) Math.round(hasil / 100d) * 100; // bulat 100
+                                                                                    Log.d("hasil", String.valueOf(komisiTukang) + " - "
+                                                                                            + String.valueOf(jmlLaporan) + " x 29" + " / " + lengthSisa + " " + hasil);
+
+                                                                                    reference10.child(usersK.get(finalU).getKey()).child("KomisiPerhari").child(tanggal)
+                                                                                            .child(tanggal)
+                                                                                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                @Override
+                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                }
+
+                                                                                                @Override
+                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                }
+                                                                                            });
+
+                                                                                    //suportTotalKomisi
+                                                                                    reference10.child(usersK.get(finalU).getKey()).child("TotalKomisi")
+                                                                                            .child(tanggal)
+                                                                                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                @Override
+                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                }
+
+                                                                                                @Override
+                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                }
+                                                                                            });
+
+                                                                                    //recap
+                                                                                    reference9.child(usersK.get(finalU).getKey())
+                                                                                            .child(tanggal.substring(3)).child(tanggal).
+                                                                                            addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                @Override
+                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                }
+
+                                                                                                @Override
+                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                }
+                                                                                            });
+
+
+
+                                                                                } else if (count == 5) {
+//
+                                                                                    int operasi = komisiTukang - ((jmlLaporan * 29) / lengthSisa);
+                                                                                    int hasil = operasi * (-1);
+                                                                                    int rounded = (int) Math.round(hasil / 100d) * 100; // bulat 100
+
+                                                                                    reference10.child(usersK.get(finalU).getKey()).child("KomisiPerhari").child(tanggal)
+                                                                                            .child(tanggal)
+                                                                                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                @Override
+                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                }
+
+                                                                                                @Override
+                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                }
+                                                                                            });
+                                                                                    //suportTotalKomisi
+                                                                                    reference10.child(usersK.get(finalU).getKey()).child("TotalKomisi")
+                                                                                            .child(tanggal)
+                                                                                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                @Override
+                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                }
+
+                                                                                                @Override
+                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                }
+                                                                                            });
+
+                                                                                    //recap
+                                                                                    reference9.child(usersK.get(finalU).getKey())
+                                                                                            .child(tanggal.substring(3)).child(tanggal).
+                                                                                            addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                @Override
+                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                }
+
+                                                                                                @Override
+                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                }
+                                                                                            });
+
+
+                                                                                }else if (count == 6) {
+//
+                                                                                    int operasi = komisiTukang - ((jmlLaporan * 28) / lengthSisa);
+                                                                                    int hasil = operasi * (-1);
+                                                                                    int rounded = (int) Math.round(hasil / 100d) * 100; // bulat 100
+
+                                                                                    reference10.child(usersK.get(finalU).getKey()).child("KomisiPerhari").child(tanggal)
+                                                                                            .child(tanggal)
+                                                                                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                @Override
+                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                }
+
+                                                                                                @Override
+                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                }
+                                                                                            });
+                                                                                    //suportTotalKomisi
+                                                                                    reference10.child(usersK.get(finalU).getKey()).child("TotalKomisi")
+                                                                                            .child(tanggal)
+                                                                                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                @Override
+                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                }
+
+                                                                                                @Override
+                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                }
+                                                                                            });
+
+                                                                                    //recap
+                                                                                    reference9.child(usersK.get(finalU).getKey())
+                                                                                            .child(tanggal.substring(3)).child(tanggal).
+                                                                                            addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                @Override
+                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                }
+
+                                                                                                @Override
+                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                }
+                                                                                            });
+
+
+                                                                                }else if (count == 7) {
+//
+                                                                                    int operasi = komisiTukang - ((jmlLaporan * 27) / lengthSisa);
+                                                                                    int hasil = operasi * (-1);
+                                                                                    int rounded = (int) Math.round(hasil / 100d) * 100; // bulat 100
+
+                                                                                    reference10.child(usersK.get(finalU).getKey()).child("KomisiPerhari").child(tanggal)
+                                                                                            .child(tanggal)
+                                                                                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                @Override
+                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                }
+
+                                                                                                @Override
+                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                }
+                                                                                            });
+                                                                                    //suportTotalKomisi
+                                                                                    reference10.child(usersK.get(finalU).getKey()).child("TotalKomisi")
+                                                                                            .child(tanggal)
+                                                                                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                @Override
+                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                }
+
+                                                                                                @Override
+                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                }
+                                                                                            });
+
+                                                                                    //recap
+                                                                                    reference9.child(usersK.get(finalU).getKey())
+                                                                                            .child(tanggal.substring(3)).child(tanggal).
+                                                                                            addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                @Override
+                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                }
+
+                                                                                                @Override
+                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                }
+                                                                                            });
+
+
+                                                                                }else if (count == 8) {
+//
+                                                                                    int operasi = komisiTukang - ((jmlLaporan * 26) / lengthSisa);
+                                                                                    int hasil = operasi * (-1);
+                                                                                    int rounded = (int) Math.round(hasil / 100d) * 100; // bulat 100
+
+                                                                                    reference10.child(usersK.get(finalU).getKey()).child("KomisiPerhari").child(tanggal)
+                                                                                            .child(tanggal)
+                                                                                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                @Override
+                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                }
+
+                                                                                                @Override
+                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                }
+                                                                                            });
+                                                                                    //suportTotalKomisi
+                                                                                    reference10.child(usersK.get(finalU).getKey()).child("TotalKomisi")
+                                                                                            .child(tanggal)
+                                                                                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                @Override
+                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                }
+
+                                                                                                @Override
+                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                }
+                                                                                            });
+
+                                                                                    //recap
+                                                                                    reference9.child(usersK.get(finalU).getKey())
+                                                                                            .child(tanggal.substring(3)).child(tanggal).
+                                                                                            addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                @Override
+                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                }
+
+                                                                                                @Override
+                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                }
+                                                                                            });
+
+
+                                                                                }else if (count == 9 || count == 10) {
+//
+                                                                                    int operasi = komisiTukang - ((jmlLaporan * 29) / lengthSisa);
+                                                                                    int hasil = operasi * (-1);
+                                                                                    int rounded = (int) Math.round(hasil / 100d) * 100; // bulat 100
+
+                                                                                    reference10.child(usersK.get(finalU).getKey()).child("KomisiPerhari").child(tanggal)
+                                                                                            .child(tanggal)
+                                                                                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                @Override
+                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                }
+
+                                                                                                @Override
+                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                }
+                                                                                            });
+                                                                                    //suportTotalKomisi
+                                                                                    reference10.child(usersK.get(finalU).getKey()).child("TotalKomisi")
+                                                                                            .child(tanggal)
+                                                                                            .addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                @Override
+                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                }
+
+                                                                                                @Override
+                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                }
+                                                                                            });
+
+                                                                                    //recap
+                                                                                    reference9.child(usersK.get(finalU).getKey())
+                                                                                            .child(tanggal.substring(3)).child(tanggal).
+                                                                                            addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                                                @Override
+                                                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                                                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(rounded));
+
+                                                                                                }
+
+                                                                                                @Override
+                                                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                                                }
+                                                                                            });
+
+
+                                                                                }
+
+
+                                                                            }
+
+                                                                            @Override
+                                                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                                            }
+                                                                        });
+
+                                                                    }
+
+
+
 
                                                                 }
 
@@ -555,23 +1415,7 @@ public class InputLaporanOwner extends AppCompatActivity {
                                                                 }
                                                             });
 
-                                                            reference7.addListenerForSingleValueEvent(new ValueEventListener() {
-                                                                @Override
-                                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                                                    dataSnapshot.getRef().child("kompensasi").setValue(String.valueOf(finalHasil));
-                                                                }
-
-                                                                @Override
-                                                                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                                                }
-                                                            });
-
-                                                        }catch (Exception e){
-
                                                         }
-
-
 
                                                     }
 
@@ -583,28 +1427,168 @@ public class InputLaporanOwner extends AppCompatActivity {
 
                                             }
 
-                                        }catch (Exception e){
+
 
                                         }
 
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
 
 
-                                    }
 
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                                }
+                            }, 1000);
 
-                                    }
-                                });
+                            final Handler handler2 = new Handler();
+                            handler2.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    Intent go = new Intent(InputLaporanOwner.this,LaporanOwnerAct.class);
+                                    go.putExtra("key","TotalKomisi");
+                                    go.putExtra("cabang",cabangku);
+                                    startActivity(go);
+                                    finish();
+                                }
+                            }, 10000);
+
+//                            //total Komisi
+//                            reference4.addListenerForSingleValueEvent(new ValueEventListener() {
+//                                @Override
+//                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//
+//                                    Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+//
+//                                    List<DataKaryawanConst> users = new ArrayList<>();
+//                                    while (iterator.hasNext()) {
+//                                        DataSnapshot dataSnapshotChild = iterator.next();
+//                                        DataKaryawanConst name = dataSnapshotChild.getValue(DataKaryawanConst.class);
+//                                        users.add(name);
+//                                    }
+//
+//                                    int lengthUser = (int) dataSnapshot.getChildrenCount();
+//
+//                                    try {
+//
+//                                        for (int i = 0 ; i < lengthUser ; i++){
+//
+//                                            DatabaseReference reference9 = FirebaseDatabase.getInstance().getReference().child("Cabang")
+//                                                    .child(cabang).child("CountKomisi").child(users.get(i).getKey_name());
+//
+//                                            reference9.child("KomisiPerhari").addListenerForSingleValueEvent(new ValueEventListener() {
+//                                                @Override
+//                                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                                    Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+//
+//                                                    List<LaporanUangConst> komisis = new ArrayList<>();
+//                                                    while (iterator.hasNext()) {
+//                                                        DataSnapshot dataSnapshotChild = iterator.next();
+//                                                        LaporanUangConst nkomisi = dataSnapshotChild.getValue(LaporanUangConst.class);
+//                                                        komisis.add(nkomisi);
+//                                                    }
+//
+//                                                    int lengthuang = (int) dataSnapshot.getChildrenCount();
+//
+//                                                    int hasil = 0;
+//
+//                                                    try {
+//
+//                                                        for (int u = 0 ; u < lengthuang; u++){
+//
+//                                                            hasil +=  Integer.valueOf(komisis.get(u).getNominal());
+//                                                            Log.d("Hasil", String.valueOf(hasil));
+//                                                            reference10 = FirebaseDatabase.getInstance().getReference().child("Cabang")
+//
+//                                                                    .child(username_key_new).child("CountKomisi").child(komisis.get(u).getKey())
+//                                                                    .child("TotalKomisi");
+//                                                            reference7 = FirebaseDatabase.getInstance().getReference().child("Cabang")
+//                                                                    .child(username_key_new).child("Karyawan").child(komisis.get(u).getKey());
+//                                                        }
+//
+//                                                    }catch (Exception e){
+//
+//                                                    }
+//
+//                                                    int finalHasil = hasil;
+//
+//                                                    Log.d("hasilnya", String.valueOf(finalHasil));
+//
+//                                                    try {
+//
+//                                                        reference10.addValueEventListener(new ValueEventListener() {
+//                                                            @Override
+//                                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//
+//                                                                dataSnapshot.getRef().child("total_komisi").setValue(String.valueOf(finalHasil));
+//
+//                                                            }
+//
+//                                                            @Override
+//                                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                                                            }
+//
+//                                                        });
+//
+//                                                        reference7.addListenerForSingleValueEvent(new ValueEventListener() {
+//                                                            @Override
+//                                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                                                                dataSnapshot.getRef().child("kompensasi").setValue(String.valueOf(finalHasil));
+//                                                            }
+//
+//                                                            @Override
+//                                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                                                            }
+//                                                        });
+//
+//                                                    }catch (Exception e){
+//
+//                                                    }
+//
+//
+//
+//                                                }
+//
+//                                                @Override
+//                                                public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                                                }
+//                                            });
+//
+//                                        }
+//
+//                                    }catch (Exception e){
+//
+//                                    }
+//
+//
+//
+//                                }
+//
+//                                @Override
+//                                public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                                }
+//                            });
+
+                        }else{
+                            Toast.makeText(InputLaporanOwner.this,
+                                    tanggal+"Jumlah karyawan yang hadir "+count+", minimal 4 orang", Toast.LENGTH_LONG).show();
+                        }
 
 
-                            }
-                        }, 1000);
+
+
 
                     }
 
-                });
 
+
+                });
 
             }
 
@@ -615,14 +1599,7 @@ public class InputLaporanOwner extends AppCompatActivity {
         });
 
 
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent go = new Intent(InputLaporanOwner.this, LaporanOwnerAct.class);
-                go.putExtra("cabang",cabang);
-                startActivity(go);
-            }
-        });
+
 
 
     }
@@ -645,6 +1622,8 @@ public class InputLaporanOwner extends AppCompatActivity {
 
                 long date = System.currentTimeMillis();
                 xtgl.setText(dateFormatter.format(newDate.getTime()));
+                saveAction(dateFormatter.format(newDate.getTime()));
+
             }
 
         },newCalendar.get(Calendar.YEAR), newCalendar.get(Calendar.MONTH), newCalendar.get(Calendar.DAY_OF_MONTH));

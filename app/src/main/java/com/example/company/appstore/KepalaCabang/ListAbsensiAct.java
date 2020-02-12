@@ -23,6 +23,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.company.appstore.Owner.DataKaryawanConst;
 import com.example.company.appstore.Owner.RecapAbsen;
 import com.example.company.appstore.R;
 import com.google.firebase.database.DataSnapshot;
@@ -37,6 +38,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -186,6 +189,10 @@ public class ListAbsensiAct extends AppCompatActivity {
         DatabaseReference db5 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(username_key_new)
                 .child("CountKomisi").child(nKaryawan).child("Absensi").child(key);
         db5.removeValue();
+
+        DatabaseReference db6 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(username_key_new)
+                .child("CountKaryawan").child(key).child(nKaryawan);
+        db6.removeValue();
     }
 
     private void addAbsen(String tanggal, String sket) {
@@ -239,6 +246,34 @@ public class ListAbsensiAct extends AppCompatActivity {
         });
     }
 
+    private void addAbsenKaryawan(String tanggal, String sket) {
+        // tambahkan semua ke dialog
+        DateFormat dateFormat = new SimpleDateFormat("dd MMMM yyyy");
+        Date date = new Date();
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC+7"));
+
+
+        CountAbsen countAbsen = new CountAbsen(
+                nKaryawan,nKaryawan, sket
+        );
+
+        DatabaseReference db5 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(username_key_new)
+                .child("CountKaryawan");
+        db5.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                db5.child(tanggal).child(nKaryawan).setValue(countAbsen);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     //mengambil data local
     public void getUsernameLocal() {
         SharedPreferences sharedPreferences = getSharedPreferences(USERNAME_KEY, MODE_PRIVATE);
@@ -282,6 +317,41 @@ public class ListAbsensiAct extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                //khususKaryawan
+                DatabaseReference countKaryawan = FirebaseDatabase.getInstance().getReference()
+                        .child("Cabang").child(username_key_new).child("Karyawan");
+                countKaryawan.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+
+                        List<DataKaryawanConst> users = new ArrayList<>();
+                        while (iterator.hasNext()) {
+                            DataSnapshot dataSnapshotChild = iterator.next();
+                            DataKaryawanConst name = dataSnapshotChild.getValue(DataKaryawanConst.class);
+                            users.add(name);
+                        }
+
+                        int lengthK = (int) dataSnapshot.getChildrenCount();
+                        for (int i = 0; i<lengthK ; i++){
+
+                            if (users.get(i).getKey_name().equals(nKaryawan) && users.get(i).getPosisi().equals("Karyawan")){
+
+                                addAbsenKaryawan(tanggalAbsen.getText().toString(), sket.getSelectedItem().toString());
+                            }
+                        }
+
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+
+                });
+
+                //kepalacabang dan tukang
                 addAbsen(tanggalAbsen.getText().toString(), sket.getSelectedItem().toString());
                 alertDialog.hide();
 

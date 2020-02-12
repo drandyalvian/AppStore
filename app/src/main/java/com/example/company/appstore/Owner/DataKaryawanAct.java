@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.company.appstore.KepalaCabang.AbsensiConst;
+import com.example.company.appstore.KepalaCabang.LaporanUangConst;
 import com.example.company.appstore.KepalaCabang.ListAbsensiConst;
 import com.example.company.appstore.R;
 import com.google.firebase.database.DataSnapshot;
@@ -453,35 +454,81 @@ public class DataKaryawanAct extends AppCompatActivity implements DataKaryawanAd
 
                                             for (int i = 0, i2 = 4 ; i < users.size(); i++, i2++) {
 
-
                                                 final int x = i;
                                                 final int x2 = i2;
                                                 int angkaGaji = Integer.parseInt(users.get(i).getGaji_pokok());
                                                 int angkaUangMakan = Integer.parseInt(users.get(i).getUang_makan());
                                                 int angkaLembur = Integer.parseInt(users.get(i).getGaji_lembur());
                                                 int angkaKomisi = Integer.parseInt(users.get(i).getKompensasi());
-                                                reference4 = FirebaseDatabase.getInstance().getReference()
-                                                        .child("Cabang").child(cabang).child("Recap").child(String.valueOf(users.get(i).getKey_name())).child(fbulan+" "+ftahun);
-                                                Query query4 = reference4.orderByChild("keterangan").equalTo("Hadir");
 
-//                                                Log.d("karyawan"+i, String.valueOf(users.get(i).getKey())+" "+angkaku);
-                                                query4.addValueEventListener(new ValueEventListener() {
+                                                DatabaseReference reference7 = FirebaseDatabase.getInstance().getReference().child("Cabang")
+                                                        .child(cabang).child("Recap").child(users.get(i).getKey_name());
+                                                int finalI = i;
+                                                reference7.child(fbulan+" "+ftahun).addValueEventListener(new ValueEventListener() {
                                                     @Override
                                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                        Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
 
-                                                        int jumlahGaji = (int) (angkaGaji*dataSnapshot.getChildrenCount());
-                                                        int jumlahUangMakan = (int) (angkaUangMakan*dataSnapshot.getChildrenCount());
-                                                        String gajiTotal = NumberFormat.getNumberInstance().format(Double.parseDouble(String.valueOf(jumlahGaji+jumlahUangMakan+angkaLembur+angkaKomisi)));
+                                                        List<LaporanUangConst> komisis = new ArrayList<>();
+                                                        while (iterator.hasNext()) {
+                                                            DataSnapshot dataSnapshotChild = iterator.next();
+                                                            LaporanUangConst nkomisi = dataSnapshotChild.getValue(LaporanUangConst.class);
+                                                            komisis.add(nkomisi);
+                                                        }
 
-                                                        Label labelgaji2 = new Label(clength, x2, "Rp."+gajiTotal);
-                                                        Log.d("aKolom " +clength +" baris "+x2 ,"Rp. "+gajiTotal);
-//                                                        Log.d("aKolom " +clength +" baris "+x2 ,String.valueOf(dataSnapshot.getChildrenCount()));
+                                                        int lengthuang = (int) dataSnapshot.getChildrenCount();
+
+                                                        int hasil = 0;
 
                                                         try {
-                                                            sheet.addCell(labelgaji2);
-                                                        } catch (WriteException e) {
-                                                            e.printStackTrace();
+
+                                                            for (int u = 0 ; u < lengthuang; u++){
+
+                                                                hasil +=  Integer.valueOf(komisis.get(u).getNominal());
+
+
+                                                            }
+
+                                                        }catch (Exception e){
+
                                                         }
+
+                                                        int finalHasil = hasil;
+
+
+                                                        reference4 = FirebaseDatabase.getInstance().getReference()
+                                                                .child("Cabang").child(cabang).child("Recap").child(String.valueOf(users.get(finalI).getKey_name())).child(fbulan+" "+ftahun);
+                                                        Query query4 = reference4.orderByChild("keterangan").equalTo("Hadir");
+                                                        query4.addValueEventListener(new ValueEventListener() {
+                                                            @Override
+                                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                                                Log.d("komisiku", String.valueOf(finalHasil));
+
+                                                                int jumlahGaji = (int) (angkaGaji*dataSnapshot.getChildrenCount());
+                                                                int jumlahUangMakan = (int) (angkaUangMakan*dataSnapshot.getChildrenCount());
+                                                                int jumlahLembur = (int) (angkaLembur*dataSnapshot.getChildrenCount());
+                                                                String gajiTotal = NumberFormat.getNumberInstance().format(Double.parseDouble(String.valueOf(jumlahGaji+jumlahUangMakan+jumlahLembur+finalHasil)));
+                                                                Log.d("hasilnya", String.valueOf(gajiTotal));
+
+                                                                Label labelgaji2 = new Label(clength, x2, "Rp."+gajiTotal);
+                                                                Log.d("aKolom " +clength +" baris "+x2 ,"Rp. "+gajiTotal);
+//                                                        Log.d("aKolom " +clength +" baris "+x2 ,String.valueOf(dataSnapshot.getChildrenCount()));
+
+                                                                try {
+                                                                    sheet.addCell(labelgaji2);
+                                                                } catch (WriteException e) {
+                                                                    e.printStackTrace();
+                                                                }
+
+                                                            }
+
+                                                            @Override
+                                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                            }
+                                                        });
+
+
 
                                                     }
 
@@ -490,6 +537,8 @@ public class DataKaryawanAct extends AppCompatActivity implements DataKaryawanAd
 
                                                     }
                                                 });
+
+
 
 
                                             }

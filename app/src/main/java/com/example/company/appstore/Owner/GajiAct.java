@@ -1,8 +1,10 @@
 package com.example.company.appstore.Owner;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,6 +25,7 @@ import android.widget.Toast;
 import com.example.company.appstore.BluetoothHandler;
 import com.example.company.appstore.PrinterCommands;
 import com.example.company.appstore.R;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,6 +35,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.zj.btsdk.BluetoothService;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import butterknife.BindView;
@@ -41,11 +45,11 @@ import pub.devrel.easypermissions.EasyPermissions;
 
 public class GajiAct extends AppCompatActivity implements EasyPermissions.PermissionCallbacks, BluetoothHandler.HandlerInterface {
 
-    Button back, print;
+    Button back, print, btnReset;
     RelativeLayout inputgaji;
     EditText txtsearch;
 
-    DatabaseReference reference;
+    DatabaseReference reference, reference2;
     
 
     private RecyclerView rvView;
@@ -72,6 +76,7 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
         back = findViewById(R.id.back);
         inputgaji = findViewById(R.id.inputgaji);
         txtsearch = findViewById(R.id.txtsearch);
+        btnReset = findViewById(R.id.btnReset);
 
         rvView = (RecyclerView) findViewById(R.id.gaji_place);
         rvView.setHasFixedSize(true);
@@ -80,6 +85,8 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
 
         final String cabang = getIntent().getStringExtra("cabang");
 
+        reference2 = FirebaseDatabase.getInstance().getReference().child("Cabang")
+                .child(cabang).child("Karyawan");
 
         reference = FirebaseDatabase.getInstance().getReference()
                 .child("Cabang").child(cabang).child("Karyawan");
@@ -101,6 +108,95 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        btnReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                new AlertDialog.Builder(GajiAct.this)
+                        .setTitle("Reset Data Gaji")
+                        .setMessage("Hal ini dilakukan jika sudah berhasil melakukan print gaji")
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int whichButton) {
+
+                                reference2.addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                        Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+
+                                        List<DataKaryawanConst> users = new ArrayList<>();
+                                        while (iterator.hasNext()) {
+                                            DataSnapshot dataSnapshotChild = iterator.next();
+                                            DataKaryawanConst name = dataSnapshotChild.getValue(DataKaryawanConst.class);
+                                            users.add(name);
+                                        }
+
+                                        int lengthku = (int) dataSnapshot.getChildrenCount();
+
+                                        try {
+
+                                            for (int i = 0 ; i < lengthku; i++){
+
+
+                                                DatabaseReference db2 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabang)
+                                                        .child("Karyawan").child(users.get(i).getKey_name()).child("Count_gaji");
+                                                db2.removeValue();
+
+
+                                                DatabaseReference dbreference = FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabang)
+                                                        .child("Karyawan").child(users.get(i).getKey_name());
+                                                dbreference.addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                        dataSnapshot.getRef().child("kompensasi").setValue(String.valueOf(0));
+
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                                                });
+
+
+                                            }
+
+
+
+                                        }catch (Exception e){
+
+                                        }
+
+
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+
+
+
+                                DatabaseReference db3 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabang)
+                                        .child("CountKomisi");
+                                db3.removeValue();
+
+                                DatabaseReference db4 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabang)
+                                        .child("CountKaryawan");
+                                db4.removeValue();
+
+
+
+                            }})
+                        .setNegativeButton(android.R.string.no, null).show();
 
             }
         });

@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +47,7 @@ public class LaporanUangAct extends AppCompatActivity implements LaporanUangAdap
     EditText txtsearch;
     TextView xToday;
 
-    DatabaseReference reference, reference2, reference3, reference4;
+    DatabaseReference reference, reference2, reference3, reference4,reference5, reference7, reference10;
     private RecyclerView rvView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -56,6 +57,8 @@ public class LaporanUangAct extends AppCompatActivity implements LaporanUangAdap
     String USERNAME_KEY = "usernamekey";
     String username_key = "";
     String username_key_new = "";
+
+    String nkey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +88,18 @@ public class LaporanUangAct extends AppCompatActivity implements LaporanUangAdap
 
         xToday.setText(date);
 
+        try {
+
+            //mengambil data dari intent
+            Bundle bundle = getIntent().getExtras();
+            final String xkey = bundle.getString("key");
+            nkey = xkey;
+
+        }catch (Exception e){
+
+        }
+
+
 
         getUsernameLocal();
 
@@ -101,6 +116,9 @@ public class LaporanUangAct extends AppCompatActivity implements LaporanUangAdap
         reference4 = FirebaseDatabase.getInstance().getReference().child("Cabang")
                 .child(username_key_new).child("CountKomisi");
 
+        reference5 = FirebaseDatabase.getInstance().getReference().child("Cabang")
+                .child(username_key_new).child("Recap");
+
         reference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -116,6 +134,126 @@ public class LaporanUangAct extends AppCompatActivity implements LaporanUangAdap
                 adapter = new LaporanUangAdapter(laporanUangConsts, LaporanUangAct.this,
                         LaporanUangAct.this);
                 rvView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+        //total Komisi
+        reference3.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+
+                List<DataKaryawanConst> users = new ArrayList<>();
+                while (iterator.hasNext()) {
+                    DataSnapshot dataSnapshotChild = iterator.next();
+                    DataKaryawanConst name = dataSnapshotChild.getValue(DataKaryawanConst.class);
+                    users.add(name);
+                }
+
+                int lengthUser = (int) dataSnapshot.getChildrenCount();
+
+                try {
+
+                    for (int i = 0 ; i < lengthUser ; i++){
+
+                        DatabaseReference reference9 = FirebaseDatabase.getInstance().getReference().child("Cabang")
+                                .child(username_key_new).child("CountKomisi").child(users.get(i).getKey_name());
+
+                        reference9.child(nkey).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+
+                                List<LaporanUangConst> komisis = new ArrayList<>();
+                                while (iterator.hasNext()) {
+                                    DataSnapshot dataSnapshotChild = iterator.next();
+                                    LaporanUangConst nkomisi = dataSnapshotChild.getValue(LaporanUangConst.class);
+                                    komisis.add(nkomisi);
+                                }
+
+                                int lengthuang = (int) dataSnapshot.getChildrenCount();
+
+                                int hasil = 0;
+
+                                try {
+
+                                    for (int u = 0 ; u < lengthuang; u++){
+
+                                        hasil +=  Integer.valueOf(komisis.get(u).getNominal());
+                                        Log.d("Hasil", String.valueOf(hasil));
+//                                        reference10 = FirebaseDatabase.getInstance().getReference().child("Cabang")
+//
+//                                                .child(username_key_new).child("CountKomisi").child(komisis.get(u).getKey())
+//                                                .child("TotalKomisi");
+                                        reference7 = FirebaseDatabase.getInstance().getReference().child("Cabang")
+                                                .child(username_key_new).child("Karyawan").child(komisis.get(u).getKey());
+                                    }
+
+                                }catch (Exception e){
+
+                                }
+
+                                int finalHasil = hasil;
+
+                                Log.d("hasilnya", String.valueOf(finalHasil));
+
+                                try {
+
+//                                    reference10.addListenerForSingleValueEvent(new ValueEventListener() {
+//                                        @Override
+//                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//
+//                                            dataSnapshot.getRef().child("total_komisi").setValue(String.valueOf(finalHasil));
+//
+//                                        }
+//
+//                                        @Override
+//                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                                        }
+//
+//                                    });
+
+                                    reference7.addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            dataSnapshot.getRef().child("kompensasi").setValue(String.valueOf(finalHasil));
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
+
+                                }catch (Exception e){
+
+                                }
+
+
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+
+                    }
+
+                }catch (Exception e){
+
+                }
+
+
+
             }
 
             @Override
@@ -194,6 +332,27 @@ public class LaporanUangAct extends AppCompatActivity implements LaporanUangAdap
                             reference4.child(users.get(i).getKey_name()).child("KomisiPerhari").child(laporanUangConst.getKey()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
+
+                                }
+                            });
+
+                            reference4.child(users.get(i).getKey_name()).child("TotalKomisi").child(laporanUangConst.getKey()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+
+                                }
+                            });
+
+                            reference5.child(users.get(i).getKey_name()).child(laporanUangConst.getKey().substring(3))
+                                    .child(laporanUangConst.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(0));
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
 
                                 }
                             });

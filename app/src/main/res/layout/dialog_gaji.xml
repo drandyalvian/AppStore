@@ -60,7 +60,7 @@
             android:gravity="right"
             android:textColor="#FF0000"
             android:layout_marginTop="20dp"
-            android:text="Reset"/>
+            android:text=""/>
 
     </LinearLayout>
 

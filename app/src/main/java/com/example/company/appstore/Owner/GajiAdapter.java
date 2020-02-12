@@ -58,7 +58,7 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
 
     private int totalMasuk, cicilanKe;
 
-    private Double gajiPokok, gajiLembur, uangMakan, pinjaman, gajiTotal, gajiDiterima, komisi, jumlahGajiPokok, totalUangMakan, sisaPinjaman, cicilan;
+    private Double gajiPokok, gajiLembur, uangMakan, pinjaman, gajiTotal, gajiDiterima, komisi, jumlahGajiPokok,totalLembur, totalUangMakan, sisaPinjaman, cicilan;
 
     private String nama, namaCabang, fixGajiTotal;
 
@@ -131,7 +131,8 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
 
                 totalUangMakan = totalMasuk * uangMakan;
                 jumlahGajiPokok = gajiPokok * totalMasuk;
-                gajiTotal = totalUangMakan + komisi + jumlahGajiPokok + gajiLembur;
+                totalLembur = gajiLembur * totalMasuk;
+                gajiTotal = totalUangMakan + komisi + jumlahGajiPokok + totalLembur;
                 gajiDiterima = gajiTotal - pinjaman;
 
                 namaCabang = gajiConst.get(i).getNama_cabang();
@@ -221,7 +222,7 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 int countG = (int) dataSnapshot.getChildrenCount();
 
-                                viewTotalGaji.setText(formatRupiah.format(((Gpokok*countG)+(Umakan*countG))+Glembur+tKomisi));
+                                viewTotalGaji.setText(formatRupiah.format(((Gpokok*countG)+(Umakan*countG)+(Glembur*countG)+tKomisi)));
 
 //                                DatabaseReference reference5 =  FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabangkey)
 //                                        .child("Karyawan").child(getkey).child("Count_gaji");
@@ -485,42 +486,46 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
                     @Override
                     public void onClick(View view) {
 
-                        new AlertDialog.Builder(context)
-                                .setTitle("Reset Data Gaji")
-                                .setMessage("Hal ini dilakukan jika sudah berhasil melakukan print gaji")
-                                .setIcon(android.R.drawable.ic_dialog_alert)
-                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int whichButton) {
-
-                                        DatabaseReference db2 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabangkey)
-                                                .child("Karyawan").child(getkey).child("Count_gaji");
-                                        db2.removeValue();
-
-                                        DatabaseReference db3 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabangkey)
-                                                .child("CountKomisi").child(getkey);
-                                        db3.removeValue();
-
-                                        DatabaseReference dbreference = FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabangkey)
-                                                .child("Karyawan").child(getkey);
-                                        dbreference.addListenerForSingleValueEvent(new ValueEventListener() {
-                                            @Override
-                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                                                dataSnapshot.getRef().child("kompensasi").setValue(String.valueOf(0));
-
-                                            }
-
-                                            @Override
-                                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                                            }
-                                        });
-
-
-
-
-                                    }})
-                                .setNegativeButton(android.R.string.no, null).show();
+//                        new AlertDialog.Builder(context)
+//                                .setTitle("Reset Data Gaji")
+//                                .setMessage("Hal ini dilakukan jika sudah berhasil melakukan print gaji")
+//                                .setIcon(android.R.drawable.ic_dialog_alert)
+//                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+//                                    public void onClick(DialogInterface dialog, int whichButton) {
+//
+//                                        DatabaseReference db2 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabangkey)
+//                                                .child("Karyawan").child(getkey).child("Count_gaji");
+//                                        db2.removeValue();
+//
+//                                        DatabaseReference db3 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabangkey)
+//                                                .child("CountKomisi").child(getkey);
+//                                        db3.removeValue();
+//
+//                                        DatabaseReference db4 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabangkey)
+//                                                .child("CountKaryawan");
+//                                        db4.removeValue();
+//
+//                                        DatabaseReference dbreference = FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabangkey)
+//                                                .child("Karyawan").child(getkey);
+//                                        dbreference.addListenerForSingleValueEvent(new ValueEventListener() {
+//                                            @Override
+//                                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//
+//                                                dataSnapshot.getRef().child("kompensasi").setValue(String.valueOf(0));
+//
+//                                            }
+//
+//                                            @Override
+//                                            public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                                            }
+//                                        });
+//
+//
+//
+//
+//                                    }})
+//                                .setNegativeButton(android.R.string.no, null).show();
 
                     }
                 });
@@ -686,7 +691,6 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
 
                                     }
                                 });
-
 
 
                             }
