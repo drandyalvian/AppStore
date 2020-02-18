@@ -530,10 +530,15 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
 
             mService.write(PrinterCommands.ESC_ENTER);
         } else {
-            if (mService.isBTopen())
-                startActivityForResult(new Intent(this, DeviceAct.class), RC_CONNECT_DEVICE);
-            else
-                requestBluetooth();
+            try {
+                if (mService.isBTopen()) {
+                    startActivityForResult(new Intent(this, DeviceAct.class), RC_CONNECT_DEVICE);
+                }else {
+                    requestBluetooth();
+                }
+            }catch (Exception e ){
+                e.printStackTrace();
+            }
         }
     }
 
