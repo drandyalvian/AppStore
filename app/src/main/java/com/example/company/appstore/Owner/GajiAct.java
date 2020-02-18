@@ -32,6 +32,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Paragraph;
 import com.zj.btsdk.BluetoothService;
 
 import java.text.NumberFormat;
@@ -363,6 +365,9 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
     }
 
     public void printGaji(View view, String nama, String komisi, String gajiLembur, String gajiPokok, String pinjaman, Integer uangMakan, String gajiTotal, String gajiDiterima, String namaCabang, String totalMasuk, Integer totalUangMakan, String jumlahGajiPokok, String hitungCicilan, String sisaPinjaman, String checkedAngsuran, String tanggal) {
+
+
+
         try{
             if (!mService.isAvailable()) {
                 Log.i(TAG, "printText: perangkat tidak support bluetooth");
@@ -447,15 +452,13 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
                 mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
                 mService.sendMessage(lineHasilPinjaman, "");
 
-                if (pinjaman.contains("Rp") && !sisaPinjaman.contains("Rp")){
-                    sisaPinjaman = "Lunas";
-                }
+
 
                 String lineSisaPinjaman = "Sisa Pinjaman : ";
                 mService.write(PrinterCommands.ESC_ALIGN_LEFT);
                 mService.sendMessage(lineSisaPinjaman, "");
 
-                String lineHasilSisaPinjaman = sisaPinjaman + "\n";
+                String lineHasilSisaPinjaman = "Lunas" + "\n";
                 mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
                 mService.sendMessage(lineHasilSisaPinjaman, "");
 
@@ -467,9 +470,30 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
                 mService.write(PrinterCommands.ESC_ALIGN_LEFT);
                 mService.sendMessage(lineSisaPinjaman, "");
 
-                String lineHasilSisaPinjaman = sisaPinjaman + "\n";
+                String lineHasilSisaPinjaman = formatRupiah.format(Double.parseDouble(sisaPinjaman)) + "\n";
                 mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
                 mService.sendMessage(lineHasilSisaPinjaman, "");
+
+            }else if(!checkedAngsuran.equals("0")&& !sisaPinjaman.equals("0")){
+
+                String linePinjaman = "Bayar Angsuran :" ;
+                mService.write(PrinterCommands.ESC_ALIGN_LEFT);
+                mService.sendMessage(linePinjaman, "");
+
+                String lineHasilPinjaman = pinjaman;
+                mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
+                mService.sendMessage(lineHasilPinjaman, "");
+
+
+
+                String lineSisaPinjaman = "Sisa Pinjaman : ";
+                mService.write(PrinterCommands.ESC_ALIGN_LEFT);
+                mService.sendMessage(lineSisaPinjaman, "");
+
+                String lineHasilSisaPinjaman = formatRupiah.format(Double.parseDouble(sisaPinjaman))+ "\n";
+                mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
+                mService.sendMessage(lineHasilSisaPinjaman, "");
+
 
             }
 

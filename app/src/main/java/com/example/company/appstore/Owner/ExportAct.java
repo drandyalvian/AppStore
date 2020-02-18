@@ -35,6 +35,8 @@ import com.itextpdf.text.pdf.draw.VerticalPositionMark;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 import static com.example.company.appstore.LogUtils.LOGE;
 import static com.example.company.appstore.permission.PermissionsActivity.PERMISSION_REQUEST_CODE;
@@ -62,6 +64,7 @@ public class ExportAct extends AppCompatActivity {
         mContext = getApplicationContext();
 
         checker = new PermissionsChecker(this);
+
 
         pdf.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,6 +96,9 @@ public class ExportAct extends AppCompatActivity {
     }
 
     public void createPdf(String dest, String nama,String komisi, String gajiLembur, String gajiPokok, String pinjaman, String uangMakan, String gajiTotal, String gajiDiterima, String namaCabang, String totalMasuk, String totalUangMakan, String jumlahGajiPokok, String hitungCicilan, String sisaPinjaman, String checkedAngsuran, String tanggal) {
+
+        Locale localeID = new Locale("in", "ID");
+        NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
 
         if (new File(dest).exists()) {
             new File(dest).delete();
@@ -271,9 +277,27 @@ public class ExportAct extends AppCompatActivity {
                 Chunk mSisaPinjamanLabel = new Chunk("Sisa Pinjaman:", mOrderIdValueFont);
                 Paragraph mSisaPinjamanParagrap = new Paragraph(mSisaPinjamanLabel);
                 mSisaPinjamanParagrap.add(new Chunk(glue));
-                Chunk mSisaPinjamanNominal = new Chunk(sisaPinjaman + "", mOrderIdValueFont);
+                Chunk mSisaPinjamanNominal = new Chunk(formatRupiah.format(Double.parseDouble(sisaPinjaman)) + "", mOrderIdValueFont);
                 mSisaPinjamanParagrap.add(mSisaPinjamanNominal);
                 document.add(mSisaPinjamanParagrap);
+
+            }else if(!checkedAngsuran.equals("0")&& !sisaPinjaman.equals("0")){
+
+                Chunk mPeminjaman = new Chunk("Bayar Angsuran :", mOrderIdValueFont);
+                Paragraph mPeminjamanParagrap = new Paragraph(mPeminjaman);
+                mPeminjamanParagrap.add(new Chunk(glue));
+                Chunk mPeminjamanNominal = new Chunk(pinjaman + "", mOrderIdValueFont);
+                mPeminjamanParagrap.add(mPeminjamanNominal);
+                document.add(mPeminjamanParagrap);
+
+
+                Chunk mSisaPinjamanLabel = new Chunk("Sisa Pinjaman:", mOrderIdValueFont);
+                Paragraph mSisaPinjamanParagrap = new Paragraph(mSisaPinjamanLabel);
+                mSisaPinjamanParagrap.add(new Chunk(glue));
+                Chunk mSisaPinjamanNominal = new Chunk(formatRupiah.format(Double.parseDouble(sisaPinjaman)) + "", mOrderIdValueFont);
+                mSisaPinjamanParagrap.add(mSisaPinjamanNominal);
+                document.add(mSisaPinjamanParagrap);
+
 
             }
 
