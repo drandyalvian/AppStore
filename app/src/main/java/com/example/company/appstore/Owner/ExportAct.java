@@ -261,7 +261,7 @@ public class ExportAct extends AppCompatActivity {
                 document.add(mPeminjamanParagrap);
 
                 if (pinjaman.contains("Rp") && !sisaPinjaman.contains("Rp")){
-                    sisaPinjaman = "Lunas";
+                    sisaPinjaman = "LUNAS";
                 }
 
                 Chunk mSisaPinjamanLabel = new Chunk("Sisa Pinjaman:", mOrderIdValueFont);
@@ -331,10 +331,11 @@ public class ExportAct extends AppCompatActivity {
             document.add(new Chunk(lineSeparator));
             document.add(new Paragraph(""));
 
+            Font fontBold = new Font(urName, mValueFontSize, Font.BOLD, BaseColor.BLACK);
             Chunk mGajiDiterimaLabel= new Chunk("Gaji Diterima:", mOrderIdValueFont);
             Paragraph mGajiDiterimaParagrap = new Paragraph(mGajiDiterimaLabel);
             mGajiDiterimaParagrap .add(new Chunk(glue));
-            Chunk mGajiDiterimaNominal = new Chunk(gajiDiterima+"", mOrderIdValueFont);
+            Chunk mGajiDiterimaNominal = new Chunk(gajiDiterima+"", fontBold);
             mGajiDiterimaParagrap.add(mGajiDiterimaNominal);
             document.add(mGajiDiterimaParagrap);
 

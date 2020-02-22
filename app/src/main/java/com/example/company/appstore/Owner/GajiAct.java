@@ -385,7 +385,7 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
             mService.write(PrinterCommands.ESC_ALIGN_CENTER);
             mService.sendMessage(coba, "");
 
-            String lineNama = "\nnama : "+ nama;
+            String lineNama = "\nNama : "+ nama;
             mService.write(PrinterCommands.ESC_ALIGN_LEFT);
             mService.sendMessage(lineNama, "");
 
@@ -458,7 +458,7 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
                 mService.write(PrinterCommands.ESC_ALIGN_LEFT);
                 mService.sendMessage(lineSisaPinjaman, "");
 
-                String lineHasilSisaPinjaman = "Lunas" + "\n";
+                String lineHasilSisaPinjaman = "LUNAS" + "\n";
                 mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
                 mService.sendMessage(lineHasilSisaPinjaman, "");
 
