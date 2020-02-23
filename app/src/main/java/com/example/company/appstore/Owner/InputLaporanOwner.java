@@ -571,14 +571,14 @@ public class InputLaporanOwner extends AppCompatActivity {
                                                                                 int komisiTukang = Integer.parseInt(lapUang.get(i).getNominal());
 
                                                                                 Query query = reference2.child(tanggal).orderByChild("keterangan").equalTo("Hadir");
-                                                                                query.addValueEventListener(new ValueEventListener() {
+                                                                                query.addListenerForSingleValueEvent(new ValueEventListener() {
                                                                                     @Override
                                                                                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                                                                         long count = dataSnapshot.getChildrenCount();
 
                                                                                         Query queryKaryawan =  reference11.child(tanggal)
                                                                                                 .orderByChild("keterangan").equalTo("Hadir");
-                                                                                        queryKaryawan.addValueEventListener(new ValueEventListener() {
+                                                                                        queryKaryawan.addListenerForSingleValueEvent(new ValueEventListener() {
                                                                                             @Override
                                                                                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
@@ -989,7 +989,7 @@ public class InputLaporanOwner extends AppCompatActivity {
                                     //komisiKaryawan
                                     Query queryKaryawan =  reference11.child(tanggal)
                                             .orderByChild("keterangan").equalTo("Hadir");
-                                    queryKaryawan.addValueEventListener(new ValueEventListener() {
+                                    queryKaryawan.addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                             Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
@@ -1025,7 +1025,7 @@ public class InputLaporanOwner extends AppCompatActivity {
                                                             int komisiTukang = Integer.parseInt(lapUang.get(i).getNominal());
 
                                                             Query queryKep = reference4.orderByChild("posisi").equalTo("Kepala Cabang");
-                                                            queryKep.addValueEventListener(new ValueEventListener() {
+                                                            queryKep.addListenerForSingleValueEvent(new ValueEventListener() {
                                                                 @Override
                                                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 

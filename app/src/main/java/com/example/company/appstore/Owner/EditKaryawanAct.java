@@ -67,6 +67,8 @@ public class EditKaryawanAct extends AppCompatActivity {
 
 //        final ArrayAdapter cabangToko=ArrayAdapter.createFromResource(this, R.array.cabangToko, android.R.layout.simple_spinner_dropdown_item);
 //        xcabangtoko.setAdapter(cabangToko);
+        final ArrayAdapter pilihPosisi = ArrayAdapter.createFromResource(EditKaryawanAct.this, R.array.posisiSpinner, android.R.layout.simple_spinner_dropdown_item);
+        xposisi.setAdapter(pilihPosisi);
 
 
 

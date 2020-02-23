@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AppStore</string>
+    <string name="app_name">Gajian</string>
 
     <string-array name="pilih_gender">
         <item>Laki - laki</item>

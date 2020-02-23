@@ -320,7 +320,7 @@ public class ListAbsensiAct extends AppCompatActivity {
                 //khususKaryawan
                 DatabaseReference countKaryawan = FirebaseDatabase.getInstance().getReference()
                         .child("Cabang").child(username_key_new).child("Karyawan");
-                countKaryawan.addValueEventListener(new ValueEventListener() {
+                countKaryawan.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();

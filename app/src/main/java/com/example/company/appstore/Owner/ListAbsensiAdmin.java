@@ -252,13 +252,14 @@ public class ListAbsensiAdmin extends AppCompatActivity {
         Date date = new Date();
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC+7"));
 
+        DatabaseReference db5 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(nCabang)
+                .child("CountKaryawan");
 
         CountAbsen countAbsen = new CountAbsen(
                 nKaryawan,nKaryawan, sket
         );
 
-        DatabaseReference db5 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(nCabang)
-                .child("CountKaryawan");
+
         db5.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -322,7 +323,7 @@ public class ListAbsensiAdmin extends AppCompatActivity {
                 //khususKaryawan
                 DatabaseReference countKaryawan = FirebaseDatabase.getInstance().getReference()
                         .child("Cabang").child(nCabang).child("Karyawan");
-                countKaryawan.addValueEventListener(new ValueEventListener() {
+                countKaryawan.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();

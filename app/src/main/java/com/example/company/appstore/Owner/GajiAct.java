@@ -7,6 +7,7 @@ import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -193,9 +194,18 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
                                         .child("CountKomisi");
                                 db3.removeValue();
 
+
                                 DatabaseReference db4 = FirebaseDatabase.getInstance().getReference().child("Cabang").child(cabang)
                                         .child("CountKaryawan");
                                 db4.removeValue();
+                                final Handler handler = new Handler();
+                                handler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        db4.removeValue();
+                                    }
+                                }, 5000);
+
 
 
 
