@@ -1848,6 +1848,7 @@ public class InputLaporanUangAct extends AppCompatActivity  {
                         }else{
                             Toast.makeText(InputLaporanUangAct.this,
                                     tanggal+"Jumlah karyawan yang hadir "+count+", minimal 4 orang", Toast.LENGTH_LONG).show();
+                            btnsave.setText("SAVE");
                         }
 
 

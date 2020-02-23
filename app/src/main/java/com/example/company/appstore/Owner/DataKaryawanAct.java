@@ -419,13 +419,12 @@ public class DataKaryawanAct extends AppCompatActivity implements DataKaryawanAd
                                 Log.d("Gaji " ,"kolom"+clength+"baris"+2 );
                                 Label labelgaji = new Label(clength, 2, "Gaji Total");
 
-
                                 for (int j = 0, j2 = 1; j < lengthku; j++, j2++) {
 //                                    sampleString[j] = iterator.next().getKey().substring(0,2);
                                     sampleString[j] = users1.get(j).getKeterangan();
                                     Label labela2 = new Label(j2, 4, sampleString[j]);
                                     Label labeltgl = new Label(j2, 3, String.valueOf(j2));
-                                    Log.d("kolom"+j2+"baris"+4,sampleString[j] );
+
 
                                     try {
                                         sheet.addCell(labela2);

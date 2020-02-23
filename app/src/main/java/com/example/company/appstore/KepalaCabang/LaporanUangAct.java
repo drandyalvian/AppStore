@@ -344,18 +344,28 @@ public class LaporanUangAct extends AppCompatActivity implements LaporanUangAdap
                             });
 
                             reference5.child(users.get(i).getKey_name()).child(laporanUangConst.getKey().substring(3))
-                                    .child(laporanUangConst.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    .child(laporanUangConst.getKey()).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                public void onSuccess(Void aVoid) {
 
-                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(0));
-                                }
 
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
 
                                 }
                             });
+
+//                            reference5.child(users.get(i).getKey_name()).child(laporanUangConst.getKey().substring(3))
+//                                    .child(laporanUangConst.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+//                                @Override
+//                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//
+//                                    dataSnapshot.getRef().child("nominal").setValue(String.valueOf(0));
+//                                }
+//
+//                                @Override
+//                                public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                                }
+//                            });
 
 
                         }

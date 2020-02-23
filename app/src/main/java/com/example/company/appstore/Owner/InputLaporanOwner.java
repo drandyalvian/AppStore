@@ -1578,6 +1578,7 @@ public class InputLaporanOwner extends AppCompatActivity {
                         }else{
                             Toast.makeText(InputLaporanOwner.this,
                                     tanggal+"Jumlah karyawan yang hadir "+count+", minimal 4 orang", Toast.LENGTH_LONG).show();
+                            btnsave.setText("SAVE");
                         }
 
 
