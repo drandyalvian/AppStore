@@ -63,4 +63,6 @@ public class PrinterCommands {
 
     public static final byte[] TXT_2HEIGHT     = new byte[] {0x1b,0x21,0x10}; // Double height text
     public static final byte[] TXT_2WIDTH      = new byte[] {0x1b,0x21,0x20}; // Double width text
+
+
 }

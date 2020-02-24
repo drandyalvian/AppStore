@@ -403,6 +403,8 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
             mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
             mService.sendMessage(lineDate, "");
 
+            printText(leftRightAlign("\nGaji Pokok :", jumlahGajiPokok));
+
             String lineGajiPokok = "\nGaji Pokok : \n" + totalMasuk + " x " + gajiPokok;
             mService.write(PrinterCommands.ESC_ALIGN_LEFT);
             mService.sendMessage(lineGajiPokok, "");
@@ -411,6 +413,8 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
             mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
             mService.sendMessage(lineHasilGajiPokok, "");
 
+            printText(leftRightAlign("\nGaji Lembur :", gajiLembur));
+
             String lineGajiLembur = "GajiLembur :";
             mService.write(PrinterCommands.ESC_ALIGN_LEFT);
             mService.sendMessage(lineGajiLembur, "");
@@ -418,6 +422,8 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
             String lineHasilGajiLembur = gajiLembur ;
             mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
             mService.sendMessage(lineHasilGajiLembur, "");
+
+            printText(leftRightAlign("\nKomisi :", komisi));
 
             String lineKomisi = "Komisi :";
             mService.write(PrinterCommands.ESC_ALIGN_LEFT);
@@ -428,6 +434,8 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
             mService.sendMessage(lineHasilKomisi, "");
 
             if (uangMakan != 0) {
+
+                printText(leftRightAlign("\nUang Makan :", formatRupiah.format(Double.parseDouble(String.valueOf(totalUangMakan)))));
 
                 String lineUangMakan = "Uang Makan : \n";
                 mService.write(PrinterCommands.ESC_ALIGN_LEFT);
@@ -442,6 +450,8 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
             mService.write(PrinterCommands.ESC_ALIGN_CENTER);
             mService.sendMessage(garis, "");
 
+            printText(leftRightAlign("\nTotal Gaji :", gajiTotal));
+
             String lineTotalGaji = "Total Gaji :";
             mService.write(PrinterCommands.ESC_ALIGN_LEFT);
             mService.sendMessage(lineTotalGaji, "");
@@ -454,6 +464,8 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
 
             }else if(!checkedAngsuran.equals("0")&& sisaPinjaman.equals("0")){
 
+                printText(leftRightAlign("Bayar Angsuran :", pinjaman));
+
                 String linePinjaman = "Bayar Angsuran :" ;
                 mService.write(PrinterCommands.ESC_ALIGN_LEFT);
                 mService.sendMessage(linePinjaman, "");
@@ -463,6 +475,7 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
                 mService.sendMessage(lineHasilPinjaman, "");
 
 
+                printText(leftRightAlign("Sisa Pinjaman :", ":LUNAS"));
 
                 String lineSisaPinjaman = "Sisa Pinjaman : ";
                 mService.write(PrinterCommands.ESC_ALIGN_LEFT);
@@ -476,6 +489,8 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
 
             }else if (checkedAngsuran.equals("0") && !sisaPinjaman.equals("0")){
 
+                printText(leftRightAlign("Sisa Pinjaman :", formatRupiah.format(Double.parseDouble(sisaPinjaman))));
+
                 String lineSisaPinjaman = "Sisa Pinjaman : ";
                 mService.write(PrinterCommands.ESC_ALIGN_LEFT);
                 mService.sendMessage(lineSisaPinjaman, "");
@@ -486,6 +501,8 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
 
             }else if(!checkedAngsuran.equals("0")&& !sisaPinjaman.equals("0")){
 
+                printText(leftRightAlign("Bayar Angsuran :", pinjaman));
+
                 String linePinjaman = "Bayar Angsuran :" ;
                 mService.write(PrinterCommands.ESC_ALIGN_LEFT);
                 mService.sendMessage(linePinjaman, "");
@@ -494,6 +511,7 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
                 mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
                 mService.sendMessage(lineHasilPinjaman, "");
 
+                printText(leftRightAlign("Sisa Pinjaman :", formatRupiah.format(Double.parseDouble(sisaPinjaman))));
 
 
                 String lineSisaPinjaman = "Sisa Pinjaman : ";
@@ -528,6 +546,8 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
 
             mService.sendMessage(garis, "");
 
+            printText(leftRightAlign("Gaji Diterima :", gajiDiterima));
+
             String lineGajiDiterima = "Gaji Diterima : ";
             mService.write(PrinterCommands.ESC_ALIGN_LEFT);
             mService.write(PrinterCommands.TXT_BOLD_ON);
@@ -560,6 +580,24 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
             }
         }
     }
+
+    private String leftRightAlign(String leftText, String rightText) {
+        String textCounter = leftText + rightText;
+
+        if (textCounter.length() < 42) {
+            int n = 42 - (leftText.length() + rightText.length());
+            textCounter = leftText + new String(new char[n]).replace("\0", " ") + rightText;
+        }
+
+        return textCounter;
+    }
+
+    private void printText(String msg) {
+        mService.write(msg.getBytes());
+        mService.write(PrinterCommands.FEED_LINE);
+    }
+
+
 
 
 }
