@@ -536,7 +536,7 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
                                         int printGditerima = ((printGpokok2*countG)+(printUmakan2*countG)+(printGLembur2*countG)+printKomisi2)-Integer.parseInt(checkAngsuran[0]);
 //                                        Log.d("count", String.valueOf(dataSnapshot.getChildrenCount()+formatRupiah.format(pdfGpokok2*countG)));
 
-                                        ((GajiAct)context).printGaji(view, printnama, printKomisi, formatRupiah.format(printGLembur2*countG), printGpokok, formatRupiah.format(Double.parseDouble(checkAngsuran[0])),
+                                        ((GajiAct)context).printGajiNew(view, printnama, printKomisi, formatRupiah.format(printGLembur2*countG), printGpokok, formatRupiah.format(Double.parseDouble(checkAngsuran[0])),
                                                 printUmakan, formatRupiah.format(printGtotal), formatRupiah.format(printGditerima), ""+printnama_cabang,
                                                 Integer.toString(countG), printUmakan2*countG, formatRupiah.format(printGpokok2*countG), "", checkSisaPinjaman[0], checkAngsuran[0], dateString);
 

@@ -572,6 +572,76 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
         }
     }
 
+    public void printGajiNew(View view, String nama, String komisi, String gajiLembur, String gajiPokok, String pinjaman, Integer uangMakan, String gajiTotal, String gajiDiterima, String namaCabang, String totalMasuk, Integer totalUangMakan, String jumlahGajiPokok, String hitungCicilan, String sisaPinjaman, String checkedAngsuran, String tanggal) {
+
+        try{
+            if (!mService.isAvailable()) {
+                Log.i(TAG, "printText: perangkat tidak support bluetooth");
+                return;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if (isPrinterReady) {
+            Locale localeID = new Locale("in", "ID");
+            NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
+
+            printCustom(new String(new char[21]).replace("\0", "--"), 0, 1);
+
+            printText(leftRightAlign("Nama : "+nama, tanggal));
+
+            printText(leftRightAlign("Gaji Pokok :", jumlahGajiPokok));
+
+            printText(leftRightAlign("Gaji Lembur :", gajiLembur));
+
+            printText(leftRightAlign("Komisi :", komisi));
+
+            if (uangMakan != 0) {
+
+                printText(leftRightAlign("Uang Makan :", formatRupiah.format(Double.parseDouble(String.valueOf(totalUangMakan)))));
+
+            }
+
+            printCustom(new String(new char[21]).replace("\0", "--"), 0, 1);
+
+            printText(leftRightAlign("Total Gaji :", gajiTotal));
+
+            if(!checkedAngsuran.equals("0")&& sisaPinjaman.equals("0")){
+
+                printText(leftRightAlign("Bayar Angsuran :", pinjaman));
+
+                printText(leftRightAlign("Sisa Pinjaman :", ":LUNAS"));
+
+            }else if (checkedAngsuran.equals("0") && !sisaPinjaman.equals("0")){
+
+                printText(leftRightAlign("Sisa Pinjaman :", formatRupiah.format(Double.parseDouble(sisaPinjaman))));
+
+            }else if(!checkedAngsuran.equals("0")&& !sisaPinjaman.equals("0")){
+
+                printText(leftRightAlign("Bayar Angsuran :", pinjaman));
+
+                printText(leftRightAlign("Sisa Pinjaman :", formatRupiah.format(Double.parseDouble(sisaPinjaman))));
+
+            }
+
+            printCustom(new String(new char[21]).replace("\0", "--"), 0, 1);
+
+            printCustom(leftRightAlign("Gaji Diterima :", gajiDiterima), 3, 1);
+
+        } else {
+            try {
+                if (mService.isBTopen()) {
+                    startActivityForResult(new Intent(this, DeviceAct.class), RC_CONNECT_DEVICE);
+                }else {
+                    requestBluetooth();
+                }
+            }catch (Exception e ){
+                Toast.makeText(this, "Tidak terhubung dengan printer !", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+        }
+    }
+
     private void requestBluetooth() {
         if (mService != null) {
             if (!mService.isBTopen()) {
@@ -597,7 +667,55 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
         mService.write(PrinterCommands.FEED_LINE);
     }
 
+    private void printCustom(String msg, int size, int align) {
+        //Print config "mode"
+        byte[] cc = new byte[]{0x1B, 0x21, 0x03};  // 0- normal size text
+        byte[] bb = new byte[]{0x1B, 0x21, 0x08};  // 1- only bold text
+        byte[] bb2 = new byte[]{0x1B, 0x21, 0x20}; // 2- bold with medium text
+        byte[] bb3 = new byte[]{0x1B, 0x21, 0x10}; // 3- bold with large text
+        switch (size) {
+            case 0:
+                mService.write(cc);
+                break;
+            case 1:
+                mService.write(bb);
+                break;
+            case 2:
+                mService.write(bb2);
+                break;
+            case 3:
+                mService.write(bb3);
+                break;
+        }
 
+        switch (align) {
+            case 0:
+                //left align
+                mService.write(PrinterCommands.ESC_ALIGN_LEFT);
+                break;
+            case 1:
+                //center align
+                mService.write(PrinterCommands.ESC_ALIGN_CENTER);
+                break;
+            case 2:
+                //right align
+                mService.write(PrinterCommands.ESC_ALIGN_RIGHT);
+                break;
+        }
 
+        mService.write(msg.getBytes());
+        mService.write(new byte[]{0x0A});
+    }
+
+    private String centerRightAlign(String centerText, String rightText) {
+        String textCounter = centerText + rightText;
+
+        if (textCounter.length() < 42) {
+            int n = 32 - (centerText.length() + rightText.length());
+            textCounter = new String(new char[10]).replace("\0", " ") + centerText + new String(new char[n]).replace("\0", " ") + rightText;
+        }
+
+        return textCounter;
+    }
 
 }
