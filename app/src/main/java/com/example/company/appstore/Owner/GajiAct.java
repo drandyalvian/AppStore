@@ -592,7 +592,9 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
 
             printText(leftRightAlign("Nama : "+nama, tanggal));
 
-            printText(leftRightAlign("Gaji Pokok :", jumlahGajiPokok));
+            printText(leftRightAlign("Gaji Pokok :", ""));
+
+            printText(leftRightAlign(totalMasuk + " x " + gajiPokok, jumlahGajiPokok));
 
             printText(leftRightAlign("Gaji Lembur :", gajiLembur));
 
@@ -629,6 +631,10 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
             printCustom(new String(new char[21]).replace("\0", "--"), 0, 1);
 
             printCustom(leftRightAlignGaji("Gaji Diterima :", gajiDiterima), 3, 1);
+
+            printNewLine();
+            printNewLine();
+            printNewLine();
 
         } else {
             try {
@@ -730,5 +736,10 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
 
         return textCounter;
     }
+
+    private void printNewLine() {
+        mService.write(PrinterCommands.FEED_LINE);
+    }
+
 
 }
