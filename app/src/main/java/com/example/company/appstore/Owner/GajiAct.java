@@ -586,6 +586,8 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
             Locale localeID = new Locale("in", "ID");
             NumberFormat formatRupiah = NumberFormat.getCurrencyInstance(localeID);
 
+            printCustom(namaCabang, 2, 1);
+
             printCustom(new String(new char[21]).replace("\0", "--"), 0, 1);
 
             printText(leftRightAlign("Nama : "+nama, tanggal));
@@ -626,7 +628,7 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
 
             printCustom(new String(new char[21]).replace("\0", "--"), 0, 1);
 
-            printCustom(leftRightAlign("Gaji Diterima :", gajiDiterima), 3, 1);
+            printCustom(leftRightAlignGaji("Gaji Diterima :", gajiDiterima), 3, 1);
 
         } else {
             try {
@@ -636,7 +638,7 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
                     requestBluetooth();
                 }
             }catch (Exception e ){
-                Toast.makeText(this, "Tidak terhubung dengan printer !", Toast.LENGTH_SHORT).show();
+                requestBluetooth();
                 e.printStackTrace();
             }
         }
@@ -656,6 +658,17 @@ public class GajiAct extends AppCompatActivity implements EasyPermissions.Permis
 
         if (textCounter.length() < 42) {
             int n = 42 - (leftText.length() + rightText.length());
+            textCounter = leftText + new String(new char[n]).replace("\0", " ") + rightText;
+        }
+
+        return textCounter;
+    }
+
+    private String leftRightAlignGaji(String leftText, String rightText) {
+        String textCounter = leftText + rightText;
+
+        if (textCounter.length() < 30) {
+            int n = 30 - (leftText.length() + rightText.length());
             textCounter = leftText + new String(new char[n]).replace("\0", " ") + rightText;
         }
 

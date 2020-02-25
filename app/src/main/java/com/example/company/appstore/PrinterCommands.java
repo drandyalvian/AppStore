@@ -20,7 +20,7 @@ public class PrinterCommands {
     public static final byte EOT = 0x04;
 
     public static final byte[] INIT = {27, 64};
-    public static byte[] FEED_LINE = {10};
+    public static byte[] FEED_LINE = new byte[] { 0x1b, 'a', 0x02 };
 
     public static byte[] SELECT_FONT_A = {20, 33, 0};
 
