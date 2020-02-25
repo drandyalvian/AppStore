@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -47,7 +48,7 @@ public class LaporanUangAct extends AppCompatActivity implements LaporanUangAdap
     EditText txtsearch;
     TextView xToday;
 
-    DatabaseReference reference, reference2, reference3, reference4,reference5, reference7, reference10;
+    DatabaseReference reference, reference2, reference3, reference4,reference5,reference6, reference7, reference10;
     private RecyclerView rvView;
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -118,6 +119,9 @@ public class LaporanUangAct extends AppCompatActivity implements LaporanUangAdap
 
         reference5 = FirebaseDatabase.getInstance().getReference().child("Cabang")
                 .child(username_key_new).child("Recap");
+
+        reference6 = FirebaseDatabase.getInstance().getReference().child("Cabang")
+                .child(username_key_new).child("CountAbsen");
 
         reference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -352,6 +356,56 @@ public class LaporanUangAct extends AppCompatActivity implements LaporanUangAdap
 
                                 }
                             });
+                            final Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    reference6.child(laporanUangConst.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+
+                                            List<ListAbsensiConst> kets = new ArrayList<>();
+                                            while (iterator.hasNext()) {
+                                                DataSnapshot dataSnapshotChild = iterator.next();
+                                                ListAbsensiConst key = dataSnapshotChild.getValue(ListAbsensiConst.class);
+                                                kets.add(key);
+                                            }
+
+                                            int lengtKet = (int) dataSnapshot.getChildrenCount();
+                                            for (int a = 0 ; a<lengtKet; a++){
+//                                        Log.d(String.valueOf(finalI), "nama : "+users.get(a).getKey_name()+" keterangan : "+kets.get(a).getKeterangan() );
+                                                int finalA = a;
+                                                reference5.child(users.get(a).getKey_name()).child(laporanUangConst.getKey().substring(3))
+                                                        .child(laporanUangConst.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                        dataSnapshot.getRef().child("keterangan").setValue(kets.get(finalA).getKeterangan());
+                                                        dataSnapshot.getRef().child("key").setValue(laporanUangConst.getKey());
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                                                });
+
+                                            }
+
+
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
+
+
+                                }
+                            }, 2000);
 
 //                            reference5.child(users.get(i).getKey_name()).child(laporanUangConst.getKey().substring(3))
 //                                    .child(laporanUangConst.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {

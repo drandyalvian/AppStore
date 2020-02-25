@@ -2,6 +2,7 @@ package com.example.company.appstore.Owner;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,7 +19,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.company.appstore.KepalaCabang.AbsensiConst;
 import com.example.company.appstore.KepalaCabang.LaporanUangConst;
+import com.example.company.appstore.KepalaCabang.ListAbsensiConst;
 import com.example.company.appstore.R;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -47,7 +50,7 @@ public class LaporanOwnerAct extends AppCompatActivity implements LaporanUangAda
     private RecyclerView.Adapter adapter;
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<LaporanUangConst> laporanUangConsts;
-    DatabaseReference reference, reference2, reference3, reference4,reference5, reference7, reference10;
+    DatabaseReference reference, reference2, reference3, reference4,reference5,reference6, reference7, reference10;
 
     String cabangku;
     String nkey;
@@ -104,6 +107,65 @@ public class LaporanOwnerAct extends AppCompatActivity implements LaporanUangAda
 
         reference5 = FirebaseDatabase.getInstance().getReference().child("Cabang")
                 .child(cabang).child("Recap");
+        reference6 = FirebaseDatabase.getInstance().getReference().child("Cabang")
+                .child(cabang).child("CountAbsen");
+
+        reference3.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+
+                List<DataKaryawanConst> users = new ArrayList<>();
+                while (iterator.hasNext()) {
+                    DataSnapshot dataSnapshotChild = iterator.next();
+                    DataKaryawanConst name = dataSnapshotChild.getValue(DataKaryawanConst.class);
+                    users.add(name);
+                }
+
+                int lengtusers = (int) dataSnapshot.getChildrenCount();
+
+                for (int i = 0 ; i < lengtusers ; i++){
+
+//                    Log.d(String.valueOf(i), "nama : "+users.get(i).getKey_name()+" keterangan : "+users.get(i). );
+                    int finalI = i;
+                    reference6.child("23 February 2020").addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+
+                            List<ListAbsensiConst> kets = new ArrayList<>();
+                            while (iterator.hasNext()) {
+                                DataSnapshot dataSnapshotChild = iterator.next();
+                                ListAbsensiConst key = dataSnapshotChild.getValue(ListAbsensiConst.class);
+                                kets.add(key);
+                            }
+
+                            int lengtKet = (int) dataSnapshot.getChildrenCount();
+                            for (int a = 0 ; a<lengtKet; a++){
+                                Log.d(String.valueOf(finalI), "nama : "+users.get(a).getKey_name()+" keterangan : "+kets.get(a).getKeterangan() );
+
+                            }
+
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
         //total Komisi
         reference3.addValueEventListener(new ValueEventListener() {
@@ -328,6 +390,57 @@ public class LaporanOwnerAct extends AppCompatActivity implements LaporanUangAda
 
                                 }
                             });
+
+                            final Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+
+                                    reference6.child(laporanUangConst.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            Iterator<DataSnapshot> iterator = dataSnapshot.getChildren().iterator();
+
+                                            List<ListAbsensiConst> kets = new ArrayList<>();
+                                            while (iterator.hasNext()) {
+                                                DataSnapshot dataSnapshotChild = iterator.next();
+                                                ListAbsensiConst key = dataSnapshotChild.getValue(ListAbsensiConst.class);
+                                                kets.add(key);
+                                            }
+
+                                            int lengtKet = (int) dataSnapshot.getChildrenCount();
+                                            for (int a = 0 ; a<lengtKet; a++){
+//                                        Log.d(String.valueOf(finalI), "nama : "+users.get(a).getKey_name()+" keterangan : "+kets.get(a).getKeterangan() );
+                                                int finalA = a;
+                                                reference5.child(users.get(a).getKey_name()).child(laporanUangConst.getKey().substring(3))
+                                                        .child(laporanUangConst.getKey()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                                                        dataSnapshot.getRef().child("keterangan").setValue(kets.get(finalA).getKeterangan());
+                                                        dataSnapshot.getRef().child("key").setValue(laporanUangConst.getKey());
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                                    }
+                                                });
+
+                                            }
+
+
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                        }
+                                    });
+
+
+                                }
+                            }, 2000);
 
 
 //                            reference5.child(users.get(i).getKey_name()).child(laporanUangConst.getKey().substring(3))

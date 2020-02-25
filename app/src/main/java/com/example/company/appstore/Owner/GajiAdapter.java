@@ -367,17 +367,7 @@ public class GajiAdapter extends RecyclerView.Adapter<GajiAdapter.MyViewHolder> 
                             check_setor_pinjaman.animate().alpha(0).setDuration(200).start();
                             viewTotalCicilan.animate().alpha(0).setDuration(200).start();
 
-                            check_setor_pinjaman.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                                @Override
-                                public void onCheckedChanged(CompoundButton compoundButton, boolean checked) {
-
-                                    if (checked){
-
-                                        Toast.makeText(context, "Sisa pinjaman 0", Toast.LENGTH_SHORT).show();
-                                    }
-
-                                }
-                            });
+                            check_setor_pinjaman.setEnabled(false);
                         }
 
                     }
